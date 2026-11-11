@@ -85,15 +85,24 @@ function simTsunami(root){
   const fmt=(n,d=1)=>Number(n).toLocaleString("vi-VN",{minimumFractionDigits:d,maximumFractionDigits:d});
   const depthAt=x=>{
     const shore=17;
-    if(x>=shore) return 0;
+    if(x>=shore)return 0;
     const p=Math.max(0,Math.min(1,(shore-x)/77));
-    const shelf=Math.pow(p,0.72+(state.slope-3)*0.12);
-    return Math.max(30,Math.min(state.depth, state.depth*(0.015+0.985*shelf)));
+    const shelf=Math.pow(p,.72+(state.slope-3)*.12);
+    const basin=state.depth*(.015+.985*shelf);
+    // Rãnh sâu ngoài khơi và sống núi ngầm tạo địa hình đáy biển không phẳng.
+    const trench=state.depth*.17*Math.exp(-Math.pow((x+43)/7.5,2));
+    const ridge=state.depth*.075*Math.exp(-Math.pow((x+18)/10,2));
+    return Math.max(30,Math.min(state.depth*1.16,basin+trench-ridge));
   };
   const terrainHeight=x=>{
-    if(x<17) return -0.0035*depthAt(x);
+    if(x<17){
+      const d=depthAt(x);
+      const ridge=.85*Math.exp(-Math.pow((x+18)/8,2));
+      const trench=-.55*Math.exp(-Math.pow((x+43)/6,2));
+      return -.0035*d+ridge+trench;
+    }
     const inland=x-17;
-    return Math.min(7.5, Math.pow(inland/9,0.78)*1.9);
+    return Math.min(7.5,Math.pow(inland/9,.78)*1.9+.22*Math.sin(inland*.32));
   };
   function addMesh(geo,mat,parent=scene){geometries.push(geo);materials.push(mat);const m=new T.Mesh(geo,mat);parent.add(m);return m;}
   function mat(color,extra={}){const m=new T.MeshPhongMaterial({color,...extra});materials.push(m);return m;}
@@ -105,46 +114,62 @@ function simTsunami(root){
     const sprite=new T.Sprite(material);sprite.position.set(x,y,z);sprite.scale.set(width,width*.25,1);scene.add(sprite);
   }
   function makeTerrain(){
-    const nx=120,nz=70,x0=-60,x1=60,z0=-31,z1=31,positions=[],colors=[],indices=[];
-    const cDeep=new T.Color(0x123e68),cShelf=new T.Color(0x4d8d9c),cSand=new T.Color(0xd7c58d),cLand=new T.Color(0x54865b),cHigh=new T.Color(0x9c9b72);
+    const nx=180,nz=100,x0=-60,x1=60,z0=-31,z1=31,positions=[],colors=[],indices=[];
+    const deep=new T.Color(0x102f50),slope=new T.Color(0x285d78),shelf=new T.Color(0x71999a),
+          sand=new T.Color(0xd6c28b),land=new T.Color(0x557b50),high=new T.Color(0x9b9a76);
     for(let iz=0;iz<=nz;iz++)for(let ix=0;ix<=nx;ix++){
       const x=x0+(x1-x0)*ix/nx,z=z0+(z1-z0)*iz/nz,y=terrainHeight(x);
-      positions.push(x,y,z);
-      let col;
-      if(x<17){const d=depthAt(x)/Math.max(1,state.depth);col=cDeep.clone().lerp(cShelf,Math.pow(1-d,1.4));if(x>8)col.lerp(cSand,Math.max(0,(x-8)/9)*.75);}
-      else {const h=Math.max(0,y/7.5);col=cLand.clone().lerp(cHigh,h*.8);}
-      colors.push(col.r,col.g,col.b);
-      if(ix<nx&&iz<nz){const a=iz*(nx+1)+ix,b=a+1,c=a+nx+1,d=c+1;indices.push(a,c,b,b,c,d);}
+      const rough=.12*Math.sin(x*.43+z*.27)+.08*Math.sin(z*.82-x*.21)+.045*Math.cos(x*.91+z*.6);
+      positions.push(x,y+(x<17?rough:rough*.3),z);
+      let c;
+      if(x<17){
+        const d=depthAt(x)/Math.max(1,state.depth);
+        c=deep.clone().lerp(slope,Math.max(0,Math.min(1,(1-d)*1.35)));
+        if(x>-10)c.lerp(shelf,Math.max(0,(x+10)/27)*.7);
+        if(x>8)c.lerp(sand,Math.max(0,(x-8)/9)*.8);
+        if(x<-37)c.lerp(new T.Color(0x172d48),.4);
+      }else c=land.clone().lerp(high,Math.max(0,Math.min(1,y/7.5))*.8);
+      colors.push(c.r,c.g,c.b);
+      if(ix<nx&&iz<nz){const a=iz*(nx+1)+ix,b=a+1,c0=a+nx+1,d0=c0+1;indices.push(a,c0,b,b,c0,d0);}
     }
-    const g=new T.BufferGeometry();g.setAttribute("position",new T.Float32BufferAttribute(positions,3));g.setAttribute("color",new T.Float32BufferAttribute(colors,3));g.setIndex(indices);g.computeVertexNormals();
-    terrain=addMesh(g,new T.MeshLambertMaterial({vertexColors:true,side:T.DoubleSide}));
-    // Bờ cát và đường bờ để phân biệt đất liền với biển.
-    const shoreGeo=new T.BoxGeometry(.55,.18,62);const shore=addMesh(shoreGeo,mat(0xd7c58d));shore.position.set(17.1,.05,0);
-    // Hai mảng đáy biển ở vùng nguồn phát sinh.
-    plateA=addMesh(new T.BoxGeometry(24,.65,62),mat(0x455b6c));plateA.position.set(-35,-10.75,0);
-    plateB=addMesh(new T.BoxGeometry(24,.65,62),mat(0x607b88));plateB.position.set(-11,-7.0,0);
+    const g=new T.BufferGeometry();g.setAttribute("position",new T.Float32BufferAttribute(positions,3));
+    g.setAttribute("color",new T.Float32BufferAttribute(colors,3));g.setIndex(indices);g.computeVertexNormals();
+    terrain=addMesh(g,new T.MeshStandardMaterial({vertexColors:true,roughness:.95,side:T.DoubleSide}));
+    // Dải cát ven bờ và địa hình bờ biển chuyển tiếp lên đất liền.
+    const shore=addMesh(new T.BoxGeometry(.42,.16,62),mat(0xd8c58d));shore.position.set(17.05,.04,0);
+    // Mảng đáy biển được tạo từ bề mặt địa hình, có hai khối chuyển dịch ở hai phía đứt gãy.
+    function seabedPlate(x0,x1,color){
+      const nxp=44,nzp=38,verts=[],idx=[];
+      for(let iz=0;iz<=nzp;iz++)for(let ix=0;ix<=nxp;ix++){
+        const x=x0+(x1-x0)*ix/nxp,z=-30+60*iz/nzp;
+        verts.push(x,terrainHeight(x)-.12,z);
+        if(ix<nxp&&iz<nzp){const a=iz*(nxp+1)+ix,b=a+1,c=a+nxp+1,d=c+1;idx.push(a,c,b,b,c,d);}
+      }
+      const pg=new T.BufferGeometry();pg.setAttribute("position",new T.Float32BufferAttribute(verts,3));pg.setIndex(idx);pg.computeVertexNormals();
+      return addMesh(pg,mat(color,{side:T.DoubleSide}));
+    }
+    plateA=seabedPlate(-47,-23,0x526b75);plateB=seabedPlate(-23,1,0x6d8182);
     quakeGroup=new T.Group();scene.add(quakeGroup);
-    const fault=addMesh(new T.BoxGeometry(1.2,1.15,62),mat(0xb77b4d));fault.position.set(-23,-8.6,0);quakeGroup.add(fault);
-    const epic=addMesh(new T.SphereGeometry(.8,18,12),mat(0xffbd43,{emissive:0x8c3900}));epic.position.set(-23,-7.3,0);quakeGroup.add(epic);
-    const pulse=addMesh(new T.SphereGeometry(1.2,20,14),new T.MeshBasicMaterial({color:0xffa33c,transparent:true,opacity:.24,wireframe:true}));pulse.position.copy(epic.position);quakeGroup.add(pulse);
-    quakeGroup.userData.pulse=pulse;
-    // Khu dân cư ven biển giản lược làm mốc nhận biết tác động.
+    const fault=addMesh(new T.PlaneGeometry(1.2,60,2,24),mat(0x9d7656,{side:T.DoubleSide}));fault.rotation.y=Math.PI/2;fault.position.set(-23,terrainHeight(-23)-.1,0);quakeGroup.add(fault);
+    const epic=addMesh(new T.SphereGeometry(.72,24,16),mat(0xffbd43,{emissive:0x8c3900,emissiveIntensity:.6}));
+    epic.position.set(-23,terrainHeight(-23)+.8,0);quakeGroup.add(epic);
+    const pulse=addMesh(new T.SphereGeometry(1.1,24,16),new T.MeshBasicMaterial({color:0xffa33c,transparent:true,opacity:.3,wireframe:true}));
+    pulse.position.copy(epic.position);quakeGroup.add(pulse);quakeGroup.userData.pulse=pulse;
     const town=new T.Group();scene.add(town);
-    for(let i=0;i<7;i++){
-      const x=27+(i%4)*5,z=-12+Math.floor(i/4)*10,h=1.2+(i%3)*.45;
-      const house=addMesh(new T.BoxGeometry(2.1,h,2),mat(i%2?0xe7dfc7:0xd9e5ee));house.position.set(x,terrainHeight(x)+h/2,z);town.add(house);
-      const roof=addMesh(new T.ConeGeometry(1.55,.8,4),mat(0x9a5948));roof.position.set(x,terrainHeight(x)+h+.4,z);roof.rotation.y=Math.PI/4;town.add(roof);
+    for(let i=0;i<8;i++){
+      const x=25+(i%4)*5,z=-13+Math.floor(i/4)*11,h=1.2+(i%3)*.45,base=terrainHeight(x);
+      const house=addMesh(new T.BoxGeometry(2.1,h,2),mat(i%2?0xe7dfc7:0xd9e5ee));house.position.set(x,base+h/2,z);town.add(house);
+      const roof=addMesh(new T.ConeGeometry(1.55,.8,4),mat(0x9a5948));roof.position.set(x,base+h+.4,z);roof.rotation.y=Math.PI/4;town.add(roof);
     }
-    addMapLabel("RÃNH ĐẠI DƯƠNG",-52,terrainHeight(-52)+1,-19,13);
-    addMapLabel("ĐỒNG BẰNG ĐÁY BIỂN",-34,terrainHeight(-34)+1,17,17);
-    addMapLabel("TÂM ĐỘNG ĐẤT",-23,-5.7,0,11);
-    addMapLabel("SƯỜN LỤC ĐỊA",-3,terrainHeight(-3)+1,-18,12);
+    addMapLabel("RÃNH ĐẠI DƯƠNG",-47,terrainHeight(-47)+1,-19,13);
+    addMapLabel("SỐNG NÚI NGẦM",-18,terrainHeight(-18)+1,18,13);
+    addMapLabel("SƯỜN LỤC ĐỊA",3,terrainHeight(3)+1,-18,12);
     addMapLabel("THỀM LỤC ĐỊA",11,terrainHeight(11)+1,16,11);
     addMapLabel("ĐƯỜNG BỜ",19,1.5,-19,8);
     addMapLabel("ĐẤT LIỀN",39,terrainHeight(39)+2,18,9);
-    const route=new T.ArrowHelper(new T.Vector3(1,.12,0),new T.Vector3(21,1.6,14),13,0x38a66b,3,1.5);scene.add(route);
-    // Vùng ngập là một lớp phủ minh họa trên bề mặt đất liền.
-    const fg=new T.PlaneGeometry(1,1);flood=addMesh(fg,new T.MeshBasicMaterial({color:0x48c9e8,transparent:true,opacity:.28,side:T.DoubleSide,depthWrite:false}));
+    const route=new T.ArrowHelper(new T.Vector3(1,.12,0),new T.Vector3(-18,1.8,14),30,0x38a66b,4,2);scene.add(route);
+    const fg=new T.PlaneGeometry(1,1);
+    flood=addMesh(fg,new T.MeshBasicMaterial({color:0x48c9e8,transparent:true,opacity:.3,side:T.DoubleSide,depthWrite:false}));
     flood.rotation.x=-Math.PI/2;flood.position.set(20,.13,0);flood.scale.set(1,48,1);
   }
   function updateTerrain(){
