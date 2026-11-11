@@ -835,3 +835,103 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 @media (prefers-reduced-motion:reduce){
   #app>.top::before,#app>.top::after{animation:none}
 }
+
+
+/* ===== Final desktop header sizing: enforce total rendered height ===== */
+@media (min-width:820px){
+  #app>.top{
+    box-sizing:border-box!important;
+    height:78px!important;
+    min-height:78px!important;
+    max-height:78px!important;
+    padding:0 24px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:18px!important;
+    overflow:hidden!important;
+    position:relative!important;
+    isolation:isolate!important;
+  }
+  #app>.top>.brand{
+    box-sizing:border-box!important;
+    height:74px!important;
+    min-height:0!important;
+    max-height:74px!important;
+    margin:0!important;
+    padding:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:12px!important;
+    flex:0 1 auto!important;
+  }
+  #app>.top>.brand>svg.logo{
+    box-sizing:border-box!important;
+    width:62px!important;
+    height:62px!important;
+    flex:0 0 62px!important;
+  }
+  #app>.top>.brand>.name{
+    font-size:27px!important;
+    line-height:.9!important;
+    margin:0!important;
+  }
+  #app>.top>.brand>.tag{
+    font-size:18px!important;
+    line-height:1.02!important;
+    margin:0!important;
+  }
+  #app>.top>.auth{
+    box-sizing:border-box!important;
+    height:74px!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:12px!important;
+    flex:0 0 auto!important;
+  }
+  #app>.top .pill-auth{
+    box-sizing:border-box!important;
+    height:40px!important;
+    min-height:40px!important;
+    padding:6px 17px!important;
+    font-size:15px!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+  #app>.top::before{
+    content:""!important;
+    position:absolute!important;
+    z-index:0!important;
+    inset:0!important;
+    pointer-events:none!important;
+    opacity:.62!important;
+    background:
+      radial-gradient(ellipse 95px 25px at 32% 25%,rgba(232,246,255,.34) 0 52%,transparent 78%),
+      radial-gradient(ellipse 130px 30px at 38% 15%,rgba(232,246,255,.22) 0 52%,transparent 78%),
+      radial-gradient(ellipse 110px 28px at 69% 82%,rgba(232,246,255,.23) 0 52%,transparent 78%),
+      radial-gradient(circle at 17% 24%,#fff 0 1px,transparent 2px),
+      radial-gradient(circle at 25% 72%,#fff 0 1px,transparent 2px),
+      radial-gradient(circle at 57% 24%,#fff 0 1px,transparent 2px),
+      radial-gradient(circle at 68% 62%,#fff 0 1px,transparent 2px),
+      radial-gradient(circle at 84% 22%,#fff 0 1px,transparent 2px),
+      radial-gradient(circle at 93% 72%,#fff 0 1px,transparent 2px)!important;
+    animation:eduverse-header-sky 18s ease-in-out infinite alternate!important;
+  }
+  #app>.top::after{
+    content:"✦     ✧        ·       ✦       ·       ✧"!important;
+    position:absolute!important;
+    z-index:0!important;
+    inset:8px 20% auto 28%!important;
+    color:rgba(255,255,255,.62)!important;
+    font-size:11px!important;
+    letter-spacing:15px!important;
+    pointer-events:none!important;
+    text-shadow:0 0 8px rgba(255,255,255,.9)!important;
+    animation:eduverse-star-glow 3.5s ease-in-out infinite alternate!important;
+  }
+  #app>.top>.brand,#app>.top>.auth{position:relative!important;z-index:1!important}
+}
