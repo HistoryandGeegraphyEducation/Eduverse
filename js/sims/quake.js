@@ -82,27 +82,86 @@ function simQuake(root){
     materials.push(mat);const s=new T.Sprite(mat);s.position.copy(pos);s.scale.set(7.2*scale,1.8*scale,1);scene.add(s);labels.push(s);return s;
   }
   function makeLayers(){
-    const width=52,depth=24;
-    const layers=[{y:-1.2,h:2.4,c:0x9a7048},{y:-3.4,h:2.0,c:0x806c5d},{y:-5.6,h:2.2,c:0x66545a},{y:-8.1,h:2.8,c:0x51465a}];
+    const width=52,depth=24,nx=96,nz=44;
+    const surface=(x,z)=>.34*Math.sin(x*.16)*Math.cos(z*.2)+.12*Math.sin(x*.43+z*.17);
+    const layers=[
+      {base:-.25,thick:2.1,color:0x9b7955},
+      {base:-2.35,thick:2.2,color:0x826b58},
+      {base:-4.65,thick:2.3,color:0x6d5b5a},
+      {base:-7.05,thick:2.5,color:0x574b5c},
+      {base:-9.65,thick:2.8,color:0x493f50}
+    ];
+    function geologicalSheet(base,amplitude,color){
+      const g=new T.PlaneGeometry(width,depth,nx,nz);g.rotateX(-Math.PI/2);
+      const p=g.attributes.position;
+      for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getZ(i);p.setY(i,base+surface(x,z)*amplitude);}
+      g.computeVertexNormals();
+      const m=mesh(g,material(color,{side:T.DoubleSide,roughness:1}));
+      return m;
+    }
+    // Các tầng đá uốn lượn theo địa hình, có mặt cắt lộ ra ở phía trước.
     layers.forEach((l,i)=>{
-      const m=mesh(new T.BoxGeometry(width,l.h,depth),material(l.c));m.position.set(0,l.y,0);
-      for(let j=0;j<5;j++){const vein=mesh(new T.BoxGeometry(width*.94,.035,depth*.94),material(i%2?0x9d8970:0xb08a5d));vein.position.set(0,l.y-l.h*.35+j*l.h*.16,0);}
+      geologicalSheet(l.base,l.thick*.12,l.color);
+      const edge=mesh(new T.BoxGeometry(width,l.thick*.78,.16),material([0xb18a61,0x9c846d,0x827477,0x716579,0x62566b][i]));
+      edge.position.set(0,l.base-l.thick*.45,depth/2);
     });
-    const top=mesh(new T.BoxGeometry(width,.35,depth),material(0x477c4b));top.position.set(0,.12,0);
-    rupture=mesh(new T.BoxGeometry(.38,10.6,depth+.3),material(0x332b2b,{roughness:1}));rupture.position.set(0,-4.8,0);rupture.rotation.z=-.38;
+    const topGeo=new T.PlaneGeometry(width,depth,nx,nz);topGeo.rotateX(-Math.PI/2);
+    const tp=topGeo.attributes.position,cols=[];
+    const grass=new T.Color(0x52764b),rock=new T.Color(0x9a8668);
+    for(let i=0;i<tp.count;i++){
+      const x=tp.getX(i),z=tp.getZ(i),h=surface(x,z);
+      tp.setY(i,.42+h);
+      const c=grass.clone().lerp(rock,Math.max(0,Math.min(1,(h+.3)*.85)));
+      cols.push(c.r,c.g,c.b);
+    }
+    topGeo.setAttribute("color",new T.Float32BufferAttribute(cols,3));topGeo.computeVertexNormals();
+    mesh(topGeo,new T.MeshStandardMaterial({vertexColors:true,roughness:1,side:T.DoubleSide}));
+    // Mặt đứt gãy nghiêng cắt qua toàn bộ các tầng đá.
+    const faultGeo=new T.PlaneGeometry(13,11,16,16);faultGeo.rotateY(-.35);faultGeo.rotateX(-.12);
+    const fp=faultGeo.attributes.position;
+    for(let i=0;i<fp.count;i++){const x=fp.getX(i),y=fp.getY(i);fp.setZ(i,.08*Math.sin(x*1.3+y*.8));}
+    faultGeo.computeVertexNormals();
+    rupture=mesh(faultGeo,material(0x332d2c,{side:T.DoubleSide,roughness:1}));
+    rupture.position.set(0,-5.1,0);
     plateLeft=new T.Group();plateRight=new T.Group();scene.add(plateLeft,plateRight);
-    const left=mesh(new T.BoxGeometry(25,8.9,depth),material(0x9b7652));left.position.set(-13,-4.45,0);plateLeft.add(left);
-    const right=mesh(new T.BoxGeometry(25,8.9,depth),material(0x75645d));right.position.set(13,-4.45,0);plateRight.add(right);
-    const capL=mesh(new T.BoxGeometry(25,.28,depth),material(0x5b9257));capL.position.set(-13,.08,0);plateLeft.add(capL);
-    const capR=mesh(new T.BoxGeometry(25,.28,depth),material(0x5b9257));capR.position.set(13,.08,0);plateRight.add(capR);
+    function plate(group,x0,x1,color){
+      const g=new T.PlaneGeometry(x1-x0,depth*.98,48,32);g.rotateX(-Math.PI/2);
+      const p=g.attributes.position;
+      for(let i=0;i<p.count;i++){const x=p.getX(i)+(x0+x1)/2,z=p.getZ(i);p.setY(i,.48+surface(x,z));}
+      g.computeVertexNormals();
+      const top=mesh(g,material(color,{roughness:.95,side:T.DoubleSide}),group);
+      top.position.x=(x0+x1)/2;
+      const side=mesh(new T.BoxGeometry(x1-x0,8.5,.22),material(color===0x68865a?0x80694f:0x6d5d56),group);
+      side.position.set((x0+x1)/2,-4.2,depth/2);
+    }
+    plate(plateLeft,-26,-.48,0x68865a);plate(plateRight,.48,26,0x71805b);
+    // Vệt địa tầng lộ trên mặt cắt, hơi uốn theo bề mặt.
+    layers.forEach((l,i)=>{
+      const pts=[];for(let x=-26;x<=26;x+=.35)pts.push(V(x,l.base+surface(x,depth/2)*.12,depth/2+.12));
+      const line=new T.Line(new T.BufferGeometry().setFromPoints(pts),new T.LineBasicMaterial({color:[0xd2ad7b,0xc2a17b,0xa28a83,0x8a7e8c,0x74687c][i],transparent:true,opacity:.9}));
+      scene.add(line);geometries.push(line.geometry);materials.push(line.material);
+    });
     houseGroup=new T.Group();scene.add(houseGroup);
-    for(let i=0;i<7;i++){const x=-22+i*7,z=(i%2?5:-5),h=1.4+(i%3)*.55;const b=mesh(new T.BoxGeometry(2.1,h,2),material(i%2?0xe2d9c4:0xd4e2ec));b.position.set(x,h/2+.32,z);houseGroup.add(b);const roof=mesh(new T.ConeGeometry(1.55,.8,4),material(0x9b5948));roof.position.set(x,h+.72,z);roof.rotation.y=Math.PI/4;houseGroup.add(roof);}
+    for(let i=0;i<8;i++){
+      const x=-23+i*6,z=(i%2?5:-5),h=1.3+(i%3)*.5,y=.55+surface(x,z);
+      const body=mesh(new T.BoxGeometry(1.8,h,1.7),material(i%2?0xe0d8c9:0xd5e0e8),houseGroup);
+      body.position.set(x,y+h/2,z);
+      const roof=mesh(new T.ConeGeometry(1.35,.72,4),material(0x985b48),houseGroup);
+      roof.position.set(x,y+h+.36,z);roof.rotation.y=Math.PI/4;
+    }
     focus=new T.Group();scene.add(focus);
-    const core=mesh(new T.SphereGeometry(.55,24,18),material(0xff4c35,{emissive:0x8d1608,emissiveIntensity:.7}));focus.add(core);
-    sourceGlow=mesh(new T.SphereGeometry(1.05,20,16),new T.MeshBasicMaterial({color:0xff6a35,wireframe:true,transparent:true,opacity:.45}));focus.add(sourceGlow);
-    epicenter=mesh(new T.SphereGeometry(.34,20,14),material(0xffd34e,{emissive:0x8a5b00,emissiveIntensity:.6}));epicenter.position.set(-.8,.42,0);scene.add(epicenter);
-    for(let i=0;i<4;i++){const m=new T.MeshBasicMaterial({color:i%2?0x8ce7ff:0xffdc70,wireframe:true,transparent:true,opacity:.36,depthWrite:false});materials.push(m);const s=mesh(new T.SphereGeometry(1,28,18),m);s.visible=false;waveShells.push(s);}
-    for(let i=0;i<3;i++){const m=new T.MeshBasicMaterial({color:0xffe28a,transparent:true,opacity:.8,side:T.DoubleSide});materials.push(m);const ring=mesh(new T.RingGeometry(.94,1,96),m);ring.rotation.x=-Math.PI/2;ring.position.y=.36;ring.visible=false;surfaceWaves.push(ring);}
+    mesh(new T.SphereGeometry(.52,24,18),material(0xff4c35,{emissive:0x8d1608,emissiveIntensity:.8}),focus);
+    sourceGlow=mesh(new T.SphereGeometry(1.05,24,18),new T.MeshBasicMaterial({color:0xff6a35,wireframe:true,transparent:true,opacity:.42}),focus);
+    epicenter=mesh(new T.SphereGeometry(.32,20,14),material(0xffd34e,{emissive:0x8a5b00,emissiveIntensity:.6}));
+    epicenter.position.set(-.8,.82,0);
+    for(let i=0;i<5;i++){
+      const m=new T.MeshBasicMaterial({color:i%2?0x8ce7ff:0xffdc70,wireframe:true,transparent:true,opacity:.4,depthWrite:false});
+      const s=mesh(new T.SphereGeometry(1,32,22),m);s.visible=false;waveShells.push(s);
+    }
+    for(let i=0;i<4;i++){
+      const m=new T.MeshBasicMaterial({color:0xffe28a,transparent:true,opacity:.8,side:T.DoubleSide,depthWrite:false});
+      const ring=mesh(new T.RingGeometry(.94,1,96),m);ring.rotation.x=-Math.PI/2;ring.position.y=.76;ring.visible=false;surfaceWaves.push(ring);
+    }
   }
   function addLabels(){
     label("MẢNG ĐÁ PHÍA TÂY",V(-17,2.2,-13),.78);
