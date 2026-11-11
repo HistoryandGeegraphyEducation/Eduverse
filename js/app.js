@@ -29,7 +29,7 @@ const esc=s=>String(s??"").replace(
 const STATUS_TAGS={
   "coming-soon":["Coming Soon","coming"],
   "open-test":["Open Test","test"],
-  "new":["New","new"],
+  "new":["NEW","new"],
   "new-version":["New Version","version"]
 };
 
@@ -46,7 +46,8 @@ const statusTag=status=>{
     :"";
 };
 function getSimStatusTag(sim){
-  const status=sim.status||"coming-soon";
+  const status=sim.status;
+  if(!status) return "";
 
   if(status==="coming-soon"){
     return statusTag(status);
