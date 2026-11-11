@@ -171,7 +171,7 @@
     };
   }
 
-  function addLabel(root, text, x, y) {
+  function addLabel(view, text, x, y) {
     const el = document.createElement("span");
     el.className = "evgeo-label";
     el.textContent = text;
@@ -245,7 +245,7 @@
       .evgeo-lead{font-size:12px;line-height:1.55;color:#c7dce8;margin:9px 0 12px}
       .evgeo-view{height:clamp(300px,56vh,510px);min-height:280px;position:relative;overflow:hidden;border-radius:13px;background:linear-gradient(#9fc5d8,#d5e0d9 66%,#657d61);box-shadow:inset 0 0 35px #173a4d55}
       .evgeo-view canvas{width:100%;height:100%;display:block;touch-action:none}
-      .evgeo-viewtag,.evgeo-readout{position:absolute;top:10px;background:#071b2cce;color:#e2f3fb;border:1px solid #ffffff24;border-radius:7px;padding:7px 9px;font-size:9px;letter-spacing:.5px;pointer-events:none}
+      .evgeo-label{position:absolute;z-index:2;transform:translate(-8%,-50%);padding:5px 8px;border-radius:6px;background:#08283bcf;border:1px solid #ffffff42;color:#f5fbff;font-size:9px;font-weight:700;letter-spacing:.4px;pointer-events:none;white-space:nowrap;text-shadow:0 1px 2px #000}.evgeo-viewtag,.evgeo-readout{position:absolute;top:10px;background:#071b2cce;color:#e2f3fb;border:1px solid #ffffff24;border-radius:7px;padding:7px 9px;font-size:9px;letter-spacing:.5px;pointer-events:none}
       .evgeo-viewtag{left:10px}.evgeo-readout{right:10px}
       .evgeo-buttons{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
       .evgeo button{border:1px solid #4e7e95;background:#17445d;color:#f2f8fb;border-radius:9px;padding:8px 11px;font-size:11px;cursor:pointer}
@@ -467,7 +467,7 @@
           p.left.rotation.z=0;p.right.rotation.z=0;
           if(action==="diverge"){p.left.position.x=-3.05;p.right.position.x=3.05;}
           if(action==="converge"){p.left.position.x=-2.25;p.right.position.x=2.25;p.right.rotation.z=.06;}
-          if(action==="transform"){p.left.position.z=-.35;p.right.position.z=.35;}
+          if(action==="transform"){p.left.position.z=-.35;p.right.position.z=.35;p.topLeft.position.z=-.35;p.topRight.position.z=.35;}
         }
         if(kind==="water" && objects.cycle){
           const o=objects.cycle;
@@ -529,20 +529,20 @@
           updateParticles(objects.cycle.evaporation,dt*speed,"rise");
           updateParticles(objects.cycle.rainfall,dt*speed,"fall");
         }
-        if(kind==="river"&&objects.river)updateParticles(objects.river.gravel,dt*speed,"drift");
-        if(kind==="coast"&&objects.coast)updateParticles(objects.coast.sandParticles,dt*speed,"drift");
+        if(playing&&kind==="river"&&objects.river)updateParticles(objects.river.gravel,dt*speed,"drift");
+        if(playing&&kind==="coast"&&objects.coast)updateParticles(objects.coast.sandParticles,dt*speed,"drift");
         if(kind==="climate"&&objects.climate){
           updateParticles(objects.climate.rain,dt*speed,"fall");
           updateParticles(objects.climate.dryDust,dt*speed,"drift");
         }
-        if(kind==="tectonic"&&objects.plates&&playing){
+        if(kind==="coast"&&objects.coast&&playing){objects.coast.waveFoam.forEach((line,i)=>line.position.z=Math.sin(elapsed*1.2+i*.7)*.08);}\n        if(kind==="tectonic"&&objects.plates&&playing){
           const p=objects.plates;
           if(scenario==="diverge"){p.left.position.x-=dt*.035*speed;p.right.position.x+=dt*.035*speed;}
           if(scenario==="converge"){p.left.position.x+=dt*.025*speed;p.right.position.x-=dt*.025*speed;}
           if(scenario==="transform"){p.left.position.z-=dt*.04*speed;p.right.position.z+=dt*.04*speed;}
-          p.quakes.forEach((r,i)=>{r.scale.setScalar(1+((elapsed*.7+i*.22)%1)*1.6);r.material.opacity=.55*(1-((elapsed*.7+i*.22)%1));});
+          p.topLeft.position.x=p.left.position.x;p.topRight.position.x=p.right.position.x;p.topLeft.position.z=p.left.position.z;p.topRight.position.z=p.right.position.z;\n          p.quakes.forEach((r,i)=>{r.scale.setScalar(1+((elapsed*.7+i*.22)%1)*1.6);r.material.opacity=.55*(1-((elapsed*.7+i*.22)%1));});
         }
-        animated.forEach(fn=>fn(elapsed));
+        if(playing)animated.forEach(fn=>fn(elapsed));
         if(orbit)orbit.update();
         renderer.render(scene,camera);
       }
