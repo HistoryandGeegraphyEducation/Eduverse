@@ -374,7 +374,14 @@ nav button.on svg{width:60%;height:60%}
   box-shadow:0 2px 5px rgba(0,0,0,.2)
 }
 .status-ribbon.coming{background:#64748b}
-.status-ribbon.new{background:#ef4444}
+.status-ribbon.new{
+  top:12px;right:12px;width:auto;padding:6px 11px;
+  border:1px solid rgba(255,255,255,.72);border-radius:999px;
+  transform:none;background:linear-gradient(135deg,#ff7043,#e53935);
+  color:#fff;font:800 10px/1 Arial,sans-serif;letter-spacing:.8px;
+  box-shadow:0 3px 9px rgba(180,35,35,.28),inset 0 1px 0 rgba(255,255,255,.28)
+}
+.status-ribbon.new::before{content:"✦";margin-right:5px;font-size:10px}
 .status-ribbon.version{background:#eab308}
 .status-ribbon.test{background:#f97316}
 .subj,.simrow{position:relative;overflow:hidden}
