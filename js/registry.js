@@ -17,10 +17,8 @@ const SIMS = {
   icon: "🪐",
   title: "Khám phá các hành tinh",
   type: "MÔ PHỎNG",
-  status: "new",
-statusAt: "2026-11-06T19:46:00+07:00",
-  status: "new",
-statusAt: "2026-11-06T19:46:00+07:00",
+
+
   mount: (root) => simPlanetExplorer(root)
 },
     {id:"traidat-tu-quay-quanh-truc", grade:6, icon:"🌍", title:"Trái Đất tự quay quanh trục", type:"MÔ PHỎNG"},
@@ -84,8 +82,7 @@ statusAt: "2026-11-06T19:46:00+07:00",
   title:"Động đất",
   lesson:"Bài 12. Núi lửa và động đất",
   type:"MÔ PHỎNG",
-  status:"new",
-  statusAt:"2026-11-06T19:46:00+07:00",
+
   mount:simQuake},
     {id:"song-than",
   grade:6,
@@ -93,8 +90,7 @@ statusAt: "2026-11-06T19:46:00+07:00",
   title:"Mô phỏng sóng thần 3D",
   lesson:"Bài 12. Núi lửa và động đất",
   type:"MÔ PHỎNG",
-  status:"new",
-  statusAt:"2026-11-06T19:46:00+07:00",
+
   mount:simTsunami},
     {id:"traidat",
   grade:6,
@@ -103,8 +99,7 @@ statusAt: "2026-11-06T19:46:00+07:00",
   title:"Trái Đất tự quay",
   lesson:"Bài 7. Chuyển động tự quay quanh trục của Trái Đất và hệ quả",
   type:"MÔ PHỎNG",
-  status:"new",
-  statusAt:"2026-11-06T19:46:00+07:00",
+
   mount:simEarth},
     {id:"nuilua",
   grade:6,
@@ -112,8 +107,7 @@ statusAt: "2026-11-06T19:46:00+07:00",
   title:"Núi lửa",
   lesson:"Bài 12. Núi lửa và động đất",
   type:"MÔ PHỎNG",
-  status:"new",
-  statusAt:"2026-11-06T19:46:00+07:00",
+
   mount:simVolcano}
   ]
 };
