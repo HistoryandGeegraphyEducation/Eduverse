@@ -310,9 +310,12 @@ function simTsunami(root){
     if(renderer){renderer.dispose();renderer.forceContextLoss();}
     root.classList.remove("tsunami-root");
   }
-  loadScript("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",()=>window.THREE)
-    .then(()=>loadScript("https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js",()=>window.THREE&&THREE.OrbitControls))
-    .then(()=>{if(!state.dead)init();})
-    .catch(()=>{if(!state.dead){loading.hidden=false;loading.textContent="Không tải được thư viện 3D. Hãy kiểm tra kết nối Internet rồi mở lại mô hình.";}});
+  // index.html đã nạp Three.js và OrbitControls trước mô-đun này; dùng chung một phiên bản để tránh xung đột.
+  if(window.THREE && THREE.OrbitControls){
+    init();
+  }else{
+    loading.hidden=false;
+    loading.textContent="Không tải được Three.js hoặc OrbitControls. Hãy kiểm tra kết nối Internet rồi mở lại mô hình.";
+  }
   return {destroy};
 }
