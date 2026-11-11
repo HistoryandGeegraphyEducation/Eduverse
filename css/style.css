@@ -689,3 +689,66 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
   .main.fill{padding:16px 24px 24px}
   .main.fill>*{max-width:none}
 }
+
+
+/* ===== EDUVERSE desktop header: compact, balanced, celestial ===== */
+@media (min-width:820px){
+  .top{
+    position:relative;
+    isolation:isolate;
+    overflow:hidden;
+    min-height:88px;
+    padding:6px 28px;
+    background:linear-gradient(105deg,#263bc0 0%,#3547d4 48%,#4b4ce2 100%);
+  }
+  .top::before,.top::after{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    pointer-events:none;
+    width:340px;
+    height:110px;
+    border-radius:50%;
+    opacity:.3;
+    background:
+      radial-gradient(ellipse at 22% 70%,rgba(220,239,255,.55) 0 9%,transparent 28%),
+      radial-gradient(ellipse at 39% 56%,rgba(220,239,255,.42) 0 13%,transparent 31%),
+      radial-gradient(ellipse at 59% 72%,rgba(220,239,255,.34) 0 10%,transparent 28%),
+      radial-gradient(ellipse at 78% 60%,rgba(220,239,255,.28) 0 8%,transparent 25%);
+    animation:header-cloud-drift 22s ease-in-out infinite alternate;
+  }
+  .top::before{left:34%;top:-45px}
+  .top::after{right:-55px;bottom:-64px;transform:scale(.8);opacity:.22;animation-delay:-11s}
+  .top>.brand,.top>.auth{position:relative;z-index:1}
+  .top .brand{
+    gap:14px;
+    min-height:72px;
+  }
+  .top .brand>svg.logo{
+    width:70px;
+    height:70px;
+    margin:0 2px 0 0;
+  }
+  .top .name{font-size:30px;line-height:.94;letter-spacing:.25px}
+  .top .tag{font-size:20px;line-height:1.08}
+  .top .auth{gap:14px}
+  .top .pill-auth{
+    min-width:0;
+    min-height:42px;
+    padding:8px 19px;
+    gap:7px;
+    font-size:16px;
+    letter-spacing:.2px;
+    box-shadow:0 4px 9px rgba(8,12,90,.32),inset 0 1px 0 rgba(255,255,255,.3);
+  }
+  .top .pill-auth svg{width:18px;height:18px}
+  .top .stars .star{opacity:.38}
+  .top .stars .shoot{opacity:0}
+}
+@keyframes header-cloud-drift{
+  from{translate:-10px 0}
+  to{translate:22px 5px}
+}
+@media (prefers-reduced-motion:reduce){
+  .top::before,.top::after{animation:none}
+}
