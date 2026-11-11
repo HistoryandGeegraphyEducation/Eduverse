@@ -239,11 +239,7 @@ function simTsunami(root){
     if(!renderer||!camera)return;const w=Math.max(1,canvas.clientWidth),h=Math.max(1,canvas.clientHeight);
     renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
   }
-  function localDepth(x){
-    if(x>=17)return 30;
-    const f=Math.max(0,Math.min(1,(17-x)/77));
-    return Math.max(30,state.depth*(.015+.985*Math.pow(f,.85+(state.slope-3)*.12)));
-  }
+  function localDepth(x){return x>=17?30:Math.max(30,depthAt(x));}
   function waveSpeed(x){return Math.sqrt(9.81*localDepth(x))/1000;}
   function waveAmplitude(x){
     const deep=state.depth,shallow=localDepth(x),base=(.24+state.shift*.105)*(.65+(state.magnitude-6)*.2);
