@@ -175,15 +175,33 @@ function simTsunami(root){
   function updateTerrain(){
     if(!terrain)return;
     const p=terrain.geometry.attributes.position.array,c=terrain.geometry.attributes.color.array;
-    const cDeep=new T.Color(0x123e68),cShelf=new T.Color(0x4d8d9c),cSand=new T.Color(0xd7c58d),cLand=new T.Color(0x54865b),cHigh=new T.Color(0x9c9b72);
+    const deep=new T.Color(0x102f50),slope=new T.Color(0x285d78),shelf=new T.Color(0x71999a),
+          sand=new T.Color(0xd6c28b),land=new T.Color(0x557b50),high=new T.Color(0x9b9a76);
     for(let i=0;i<p.length;i+=3){
-      const x=p[i],y=terrainHeight(x);p[i+1]=y;
+      const x=p[i],z=p[i+2],y=terrainHeight(x);
+      p[i+1]=y+.12*Math.sin(x*.43+z*.27)+.08*Math.sin(z*.82-x*.21)+.045*Math.cos(x*.91+z*.6);
       let col;
-      if(x<17){const d=depthAt(x)/Math.max(1,state.depth);col=cDeep.clone().lerp(cShelf,Math.pow(1-d,1.4));if(x>8)col.lerp(cSand,Math.max(0,(x-8)/9)*.75);}
-      else col=cLand.clone().lerp(cHigh,Math.max(0,y/7.5)*.8);
+      if(x<17){
+        const d=depthAt(x)/Math.max(1,state.depth);
+        col=deep.clone().lerp(slope,Math.max(0,Math.min(1,(1-d)*1.35)));
+        if(x>-10)col.lerp(shelf,Math.max(0,(x+10)/27)*.7);
+        if(x>8)col.lerp(sand,Math.max(0,(x-8)/9)*.8);
+        if(x<-37)col.lerp(new T.Color(0x172d48),.4);
+      }else col=land.clone().lerp(high,Math.max(0,Math.min(1,y/7.5))*.8);
       c[i]=col.r;c[i+1]=col.g;c[i+2]=col.b;
     }
-    terrain.geometry.attributes.position.needsUpdate=true;terrain.geometry.attributes.color.needsUpdate=true;terrain.geometry.computeVertexNormals();
+    terrain.geometry.attributes.position.needsUpdate=true;
+    terrain.geometry.attributes.color.needsUpdate=true;
+    terrain.geometry.computeVertexNormals();
+    [plateA,plateB].forEach(plate=>{
+      if(!plate)return;
+      const a=plate.geometry.attributes.position;
+      for(let i=0;i<a.count;i++){
+        const x=a.getX(i),z=a.getZ(i);
+        a.setY(i,terrainHeight(x)-.12);
+      }
+      a.needsUpdate=true;plate.geometry.computeVertexNormals();
+    });
   }
   function makeWater(){
     const nx=110,nz=66,x0=-60,x1=17,z0=-31,z1=31,positions=[],indices=[];
