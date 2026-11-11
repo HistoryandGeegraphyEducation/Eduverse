@@ -1,141 +1,198 @@
-// ---------- ĐỘNG ĐẤT ----------
+// ---------- MO PHONG DONG DAT 3D ----------
 function simQuake(root){
+  root.classList.add("quake3d-root");
   root.innerHTML = `
-    <div class="simcv"><canvas></canvas></div>
-    <div class="simctl">
-      <label>Cường độ động đất <b id="qmv">6.0</b><input id="qm" type="range" min="3" max="9" step="0.1" value="6"></label>
-      <label>Độ sâu chấn tiêu <b id="qdv">20 km</b><input id="qd" type="range" min="5" max="60" step="1" value="20"></label>
-      <div class="simst" id="qs">Kéo thanh trượt rồi bấm “Gây động đất”.</div>
-      <div class="simbtns"><button class="cta" id="qgo">Gây động đất</button><button class="no" id="qrs">Đặt lại</button><button class="chip" id="qlb">Tên gọi: Bật</button></div>
+    <style>
+      .quake3d-root{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+      .quake3d-root .q3-stage{position:relative;min-width:0;overflow:hidden;border-radius:18px;background:#091d32;border:1px solid rgba(255,255,255,.55);box-shadow:0 8px 18px rgba(6,50,120,.2)}
+      .quake3d-root .q3-canvas{display:block;width:100%;height:clamp(300px,62vw,500px);touch-action:none;outline:none}
+      .quake3d-root .q3-loading{position:absolute;inset:0;display:grid;place-items:center;padding:20px;color:#fff;text-align:center;background:rgba(3,17,39,.82);z-index:2}
+      .quake3d-root .q3-loading[hidden]{display:none}
+      .quake3d-root .q3-hud{position:absolute;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}
+      .quake3d-root .q3-tag{padding:6px 9px;border-radius:9px;background:rgba(3,20,43,.8);color:#fff;font-size:11px;font-weight:800}
+      .quake3d-root .q3-legend{position:absolute;bottom:10px;left:10px;display:flex;flex-wrap:wrap;gap:6px;pointer-events:none}
+      .quake3d-root .q3-legend span{padding:5px 7px;border-radius:7px;background:rgba(3,20,43,.8);color:#fff;font-size:10px}
+      .quake3d-root .q3-controls{display:flex;flex-direction:column;gap:11px;padding:13px;border-radius:18px;background:linear-gradient(180deg,#fff,#eaf0ff);color:#142b62;box-shadow:0 6px 14px rgba(6,50,120,.16)}
+      .quake3d-root .q3-section{padding-bottom:10px;border-bottom:1px solid #d9e0f1}
+      .quake3d-root .q3-section:last-child{padding:0;border:0}
+      .quake3d-root .q3-label{margin:0 0 7px;color:#344879;font-size:12px;font-weight:800}
+      .quake3d-root .q3-range{display:block;margin:9px 0}
+      .quake3d-root .q3-range div{display:flex;justify-content:space-between;gap:8px;margin-bottom:4px;color:#35466d;font-size:12px}
+      .quake3d-root .q3-range b{color:#123d83;font-variant-numeric:tabular-nums}
+      .quake3d-root input[type=range]{display:block;width:100%;margin:0;accent-color:#1768a9}
+      .quake3d-root .q3-actions,.quake3d-root .q3-views{display:flex;flex-wrap:wrap;gap:6px}
+      .quake3d-root button{flex:1;min-width:78px;border:0;border-radius:10px;padding:9px 10px;background:#e5ebfa;color:#263d76;font-size:12px;font-weight:800}
+      .quake3d-root button.q3-primary{background:#1266a7;color:#fff}
+      .quake3d-root button.q3-active{background:#173f83;color:#fff}
+      .quake3d-root .q3-readout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+      .quake3d-root .q3-metric{min-width:0;padding:8px 9px;border-radius:10px;background:#f1f4fb}
+      .quake3d-root .q3-metric small{display:block;margin-bottom:3px;color:#64708c;font-size:10px}
+      .quake3d-root .q3-metric strong{display:block;overflow:hidden;color:#173d78;font-size:14px;text-overflow:ellipsis;white-space:nowrap}
+      .quake3d-root .q3-info{padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.96);color:#27324b;font-size:13px;line-height:1.55;box-shadow:0 4px 10px rgba(6,50,120,.12)}
+      .quake3d-root .q3-info strong{color:#173d78}
+      @media(min-width:820px){.quake3d-root{grid-template-columns:minmax(0,1.5fr) minmax(260px,.8fr);grid-template-areas:"stage controls" "info controls";align-items:start}.quake3d-root .q3-stage{grid-area:stage}.quake3d-root .q3-controls{grid-area:controls}.quake3d-root .q3-info{grid-area:info}.quake3d-root .q3-canvas{height:490px}}
+    </style>
+    <div class="q3-stage">
+      <canvas class="q3-canvas" aria-label="Mô hình 3D cấu trúc vỏ Trái Đất và động đất"></canvas>
+      <div class="q3-loading">Đang khởi tạo mô hình 3D…</div>
+      <div class="q3-hud"><span class="q3-tag">MẶT CẮT CẤU TRÚC VỎ TRÁI ĐẤT</span><span class="q3-tag" data-role="clock">TRẠNG THÁI TĨNH</span></div>
+      <div class="q3-legend"><span>● Mảng kiến tạo</span><span>● Mặt đứt gãy</span><span>● Chấn tiêu</span><span>● Sóng địa chấn</span></div>
     </div>
-    <div class="siminfo"><b>Chấn tiêu</b> là nơi phát sinh động đất ở dưới sâu. <b>Chấn tâm</b> là điểm trên mặt đất nằm ngay phía trên chấn tiêu, nơi rung mạnh nhất. <b>Sóng địa chấn</b> lan từ chấn tiêu ra mọi phía, càng xa chấn tâm thì rung càng yếu.</div>`;
-  const cv = root.querySelector("canvas"), ctx = cv.getContext("2d");
-  const W=360, H=260, SY=110, V=110;
-  const GR = ctx.createPattern(makeGrain(),"repeat");
-  const q = s=>root.querySelector(s);
-  let mag=6, dep=20, showLab=true, t0=null, raf=0, k=1, dead=false, qMag=6, qF=null;
-  const houses = [38,92,140,238,288,334].map((x,i)=>({x, col:["#e8c97a","#d98b6a","#9fc5e8","#e8c97a","#c9a0dc","#d98b6a"][i], will:false, ta:0}));
-  const faultX = y => 190-(y-SY)*0.28;
-  const focusAt = d => { const y = SY+12+(d-5)/55*130; return {x:faultX(y), y}; };
-  let F = focusAt(dep), M = mag;
-  const att = x => { const d = Math.hypot(x-F.x, SY-F.y); return {d, A:Math.pow(Math.max(M-2,0),1.3)*0.7*Math.exp(-d/200)}; };
-  const disp = (x,t) => {
-    if(t<0) return {y:0,a:0};
-    const {d,A} = att(x), dt = t-d/V;
-    if(dt<0) return {y:0,a:0};
-    const a = A*Math.exp(-dt*0.9);
-    return {y:a*Math.sin(dt*28), a};
-  };
-  function house(h,base,tilt,fallen){
-    ctx.save(); ctx.translate(h.x,base);
-    if(fallen){
-      ctx.fillStyle="#7f746c"; ctx.beginPath(); ctx.moveTo(-17,0); ctx.lineTo(-10,-11); ctx.lineTo(0,-6); ctx.lineTo(9,-13); ctx.lineTo(17,0); ctx.closePath(); ctx.fill();
-      ctx.save(); ctx.translate(14,-6); ctx.rotate(.9); ctx.fillStyle="#b4563c"; ctx.fillRect(-9,-3,18,6); ctx.restore();
-    } else {
-      ctx.rotate(tilt);
-      ctx.fillStyle=h.col; ctx.fillRect(-13,-26,26,26);
-      ctx.fillStyle="#b4563c"; ctx.beginPath(); ctx.moveTo(-17,-26); ctx.lineTo(0,-40); ctx.lineTo(17,-26); ctx.closePath(); ctx.fill();
-      ctx.fillStyle="#6b4a2f"; ctx.fillRect(-4,-14,8,14);
-      ctx.fillStyle="#bfe6ff"; ctx.fillRect(-11,-22,6,6); ctx.fillRect(5,-22,6,6);
-    }
-    ctx.restore();
-  }
-  function draw(){
-    let t = t0==null ? -1 : (performance.now()-t0)/1000;
-    if(t>6.5) t = 99;
-    if(t0==null){ F = focusAt(dep); M = mag; } else { F = qF; M = qMag; }
-    const slip = t0==null ? 0 : Math.max(0,M-3.5)*0.9*Math.min(1,t/0.5);
-    ctx.setTransform(k,0,0,k,0,0); ctx.clearRect(0,0,W,H);
-    let g = ctx.createLinearGradient(0,0,0,SY); g.addColorStop(0,"#79c4f7"); g.addColorStop(1,"#dff3ff");
-    ctx.fillStyle = g; ctx.fillRect(0,0,W,SY+2);
-    const ground = dy => {
-      ctx.fillStyle="#9b6b3c"; ctx.fillRect(0,SY+2+dy,W,38);
-      ctx.fillStyle="#7d6a58"; ctx.fillRect(0,SY+40+dy,W,72);
-      ctx.fillStyle="#5d4a49"; ctx.fillRect(0,SY+112+dy,W,H-SY-102);
-      ctx.strokeStyle="rgba(0,0,0,.12)"; ctx.lineWidth=1;
-      for(let i=0;i<5;i++){ ctx.beginPath(); ctx.moveTo(0,SY+52+i*26+dy); ctx.lineTo(W,SY+52+i*26+dy); ctx.stroke(); }
-      ctx.save(); ctx.globalCompositeOperation="multiply"; ctx.globalAlpha=.4; ctx.fillStyle=GR; ctx.fillRect(0,SY+2+dy,W,H-SY+8); ctx.restore();
-    };
-    ctx.save(); ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(190,0); ctx.lineTo(190,SY); ctx.lineTo(faultX(H),H); ctx.lineTo(0,H); ctx.closePath(); ctx.clip(); ground(0); ctx.restore();
-    ctx.save(); ctx.beginPath(); ctx.moveTo(190,0); ctx.lineTo(W,0); ctx.lineTo(W,H); ctx.lineTo(faultX(H),H); ctx.lineTo(190,SY); ctx.closePath(); ctx.clip(); ground(-slip); ctx.restore();
-    ctx.strokeStyle="rgba(30,15,10,.85)"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(190,SY); ctx.lineTo(faultX(H),H); ctx.stroke();
-    // sóng địa chấn
-    if(t>=0 && t<99){
-      ctx.save(); ctx.beginPath(); ctx.rect(0,SY-slip-4,W,H); ctx.clip();
-      for(let e=0;e<=1.4;e+=0.35){
-        const tt = t-e; if(tt<=0 || tt>3.4) continue;
-        const r = V*tt;
-        ctx.strokeStyle = `rgba(255,238,120,${Math.max(0,.9*(1-r/280))})`; ctx.lineWidth = 2.6;
-        ctx.beginPath(); ctx.arc(F.x,F.y,r,0,TAU); ctx.stroke();
-      }
-      ctx.restore();
-    }
-    // mặt đất rung
-    const top = x => SY-(x>190?slip:0)+disp(x,t).y;
-    ctx.fillStyle="#9b6b3c"; ctx.beginPath(); ctx.moveTo(0,SY+16);
-    for(let x=0;x<=W;x+=6) ctx.lineTo(x,top(x));
-    ctx.lineTo(W,SY+16); ctx.closePath(); ctx.fill();
-    ctx.fillStyle="#5cb85c"; ctx.beginPath();
-    for(let x=0;x<=W;x+=6) ctx.lineTo(x,top(x));
-    for(let x=W;x>=0;x-=6) ctx.lineTo(x,top(x)+6);
-    ctx.closePath(); ctx.fill();
-    if(t0!=null && M>=5.5){
-      ctx.strokeStyle="rgba(40,20,10,.8)"; ctx.lineWidth=1.4;
-      const n = Math.round((M-5)*2);
-      for(let i=0;i<n;i++){ const cx = 190+(i-n/2)*9, cy = top(cx); ctx.beginPath(); ctx.moveTo(cx,cy+6); ctx.lineTo(cx+2,cy+12); ctx.lineTo(cx-1,cy+17); ctx.stroke(); }
-    }
-    // nhà
-    houses.forEach((h,i)=>{
-      const d = disp(h.x,t), fallen = h.will && t>=h.ta;
-      house(h, top(h.x), d.y*0.012*(i%2?-1:1), fallen);
-    });
-    // chấn tiêu, chấn tâm
-    const pulse = (t>=0&&t<99) ? 1+0.5*Math.sin(t*14) : 1;
-    ctx.fillStyle="rgba(255,60,40,.35)"; ctx.beginPath(); ctx.arc(F.x,F.y,9*pulse,0,TAU); ctx.fill();
-    ctx.fillStyle="#ff3b30"; ctx.beginPath(); ctx.arc(F.x,F.y,4.5,0,TAU); ctx.fill();
-    ctx.strokeStyle="#fff"; ctx.lineWidth=1.5; ctx.stroke();
-    const ex = F.x, ey = top(ex);
-    ctx.setLineDash([3,3]); ctx.strokeStyle="rgba(255,255,255,.85)"; ctx.lineWidth=1.2;
-    ctx.beginPath(); ctx.moveTo(F.x,F.y); ctx.lineTo(ex,ey+2); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle="#ffd23f"; ctx.strokeStyle="rgba(60,30,0,.8)"; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.moveTo(ex,ey+1); ctx.lineTo(ex-6,ey-10); ctx.lineTo(ex+6,ey-10); ctx.closePath(); ctx.fill(); ctx.stroke();
-    if(showLab){
-      const left = F.x>W-70;
-      simLabel(ctx,"Chấn tiêu", left?F.x-12:F.x+12, F.y+4, left?"right":"left");
-      ctx.setLineDash([2,3]); ctx.strokeStyle="rgba(255,255,255,.7)"; ctx.beginPath(); ctx.moveTo(ex,SY-46); ctx.lineTo(ex,ey-12); ctx.stroke(); ctx.setLineDash([]);
-      simLabel(ctx,"Chấn tâm", ex, SY-50, "center");
-      ctx.strokeStyle="rgba(255,238,120,.95)"; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(12,H-13,5,0,TAU); ctx.stroke();
-      simLabel(ctx,"Sóng địa chấn", 22, H-9, "left");
-    }
-  }
-  function loop(){ raf=0; if(dead) return; draw(); if(t0!=null && (performance.now()-t0)/1000<6.6) raf = requestAnimationFrame(loop); }
-  function fit(){
-    const w = cv.parentNode.clientWidth || 320, d = Math.min(window.devicePixelRatio||1,2);
-    const nw = Math.round(w*d); if(cv.width!==nw){ cv.width = nw; cv.height = Math.round(w*H/W*d); }
-    k = cv.width/W; draw();
-  }
-  const ro = window.ResizeObserver ? new ResizeObserver(fit) : null;
-  if(ro) ro.observe(cv.parentNode); else window.addEventListener("resize",fit);
-  const note = m => m<4 ? "rung nhẹ, hầu như không hư hại." : m<5.5 ? "rung rõ, hư hại nhẹ." : m<7 ? "rung mạnh, nhà yếu gần chấn tâm hư hại." : "rung dữ dội, nhà gần chấn tâm đổ sập.";
-  function resetQ(){ if(raf){ cancelAnimationFrame(raf); raf=0; } t0=null; houses.forEach(h=>h.will=false); }
-  function upd(){
-    mag = +q("#qm").value; dep = +q("#qd").value;
-    q("#qmv").textContent = mag.toFixed(1); q("#qdv").textContent = dep+" km";
-    if(t0!=null && !raf){ t0=null; houses.forEach(h=>h.will=false); q("#qs").textContent = "Kéo thanh trượt rồi bấm “Gây động đất”."; }
-    if(t0==null) draw();
-  }
-  q("#qm").oninput = upd; q("#qd").oninput = upd;
-  q("#qgo").onclick = ()=>{
-    if(raf){ cancelAnimationFrame(raf); raf=0; }
-    qMag = mag; qF = focusAt(dep); F = qF; M = qMag;
-    houses.forEach(h=>{ const a = att(h.x); h.ta = a.d/V; h.will = a.A>4.3; });
-    t0 = performance.now();
-    q("#qs").textContent = "Cường độ "+mag.toFixed(1)+": "+note(mag);
-    try{ navigator.vibrate && navigator.vibrate([Math.round(20+mag*8),60,Math.round(20+mag*6)]); }catch(e){}
-    raf = requestAnimationFrame(loop);
-  };
-  q("#qrs").onclick = ()=>{ resetQ(); q("#qs").textContent = "Kéo thanh trượt rồi bấm “Gây động đất”."; draw(); };
-  q("#qlb").onclick = e=>{ showLab=!showLab; e.currentTarget.textContent = "Tên gọi: "+(showLab?"Bật":"Tắt"); draw(); };
-  return { destroy(){ dead=true; if(raf) cancelAnimationFrame(raf); if(ro) ro.disconnect(); else window.removeEventListener("resize",fit); } };
-}
+    <div class="q3-controls">
+      <section class="q3-section">
+        <div class="q3-label">THÔNG SỐ ĐỘNG ĐẤT</div>
+        <label class="q3-range"><div><span>Độ lớn động đất</span><b data-value="magnitude">6,0 Mw</b></div><input data-param="magnitude" type="range" min="3" max="9.5" step=".1" value="6"></label>
+        <label class="q3-range"><div><span>Độ sâu chấn tiêu</span><b data-value="depth">20 km</b></div><input data-param="depth" type="range" min="5" max="60" step="1" value="20"></label>
+        <label class="q3-range"><div><span>Độ trượt mô hình</span><b data-value="slip">2,0 m</b></div><input data-param="slip" type="range" min=".2" max="8" step=".1" value="2"></label>
+      </section>
+      <section class="q3-section">
+        <div class="q3-label">ĐIỀU KHIỂN MÔ PHỎNG</div>
+        <div class="q3-actions"><button class="q3-primary" data-action="trigger">▶ Gây động đất</button><button data-action="reset">↺ Đặt lại</button><button data-action="labels">Tên gọi: Bật</button></div>
+      </section>
+      <section class="q3-section">
+        <div class="q3-label">GÓC QUAN SÁT</div>
+        <div class="q3-views"><button class="q3-active" data-view="section">Mặt cắt</button><button data-view="surface">Bề mặt</button><button data-view="fault">Đứt gãy</button></div>
+      </section>
+      <section>
+        <div class="q3-label">THÔNG TIN HIỆN TƯỢNG</div>
+        <div class="q3-readout">
+          <div class="q3-metric"><small>Vị trí nguồn phát</small><strong data-stat="focus">20 km</strong></div>
+          <div class="q3-metric"><small>Sóng địa chấn</small><strong data-stat="wave">Chưa phát</strong></div>
+          <div class="q3-metric"><small>Độ lớn</small><strong data-stat="magnitude">6,0 Mw</strong></div>
+          <div class="q3-metric"><small>Trạng thái</small><strong data-stat="status">Ổn định</strong></div>
+        </div>
+      </section>
+    </div>
+    <div class="q3-info"><strong>Chấn tiêu</strong> là nơi bắt đầu sự phá vỡ và trượt đột ngột trên đứt gãy bên trong Trái Đất. <strong>Chấn tâm</strong> là điểm trên bề mặt nằm thẳng đứng phía trên chấn tiêu. Năng lượng giải phóng truyền đi dưới dạng sóng địa chấn. Mô hình minh họa cơ chế đứt gãy và sự lan truyền của sóng; kích thước, độ trượt và tốc độ hoạt ảnh không theo tỉ lệ thực.</div>
+  `;
 
+  const $=s=>root.querySelector(s),canvas=$(".q3-canvas"),loading=$(".q3-loading");
+  const state={magnitude:6,depth:20,slip:2,elapsed:0,playing:false,showLabels:true,dead:false,last:0,view:"section"};
+  let T=null,renderer=null,scene=null,camera=null,controls=null,raf=0,resizeObs=null,resizeFn=null;
+  let plateLeft=null,plateRight=null,rupture=null,focus=null,epicenter=null,sourceGlow=null,houseGroup=null;
+  const waveShells=[],surfaceWaves=[],labels=[],geometries=[],materials=[];
+  const V=(x,y,z)=>new T.Vector3(x,y,z);
+  function material(color,opts={}){const m=new T.MeshStandardMaterial({color,roughness:.82,...opts});materials.push(m);return m;}
+  function mesh(geo,mat,parent=scene){geometries.push(geo);const o=new T.Mesh(geo,mat);parent.add(o);return o;}
+  function label(text,pos,scale=1){
+    const c=document.createElement("canvas");c.width=512;c.height=128;
+    const g=c.getContext("2d");g.fillStyle="rgba(4,20,38,.82)";g.fillRect(8,15,496,98);
+    g.font="bold 34px Arial,sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillStyle="#fff";g.fillText(text,256,64,470);
+    const tex=new T.CanvasTexture(c),mat=new T.SpriteMaterial({map:tex,transparent:true,depthTest:false,depthWrite:false});
+    materials.push(mat);const s=new T.Sprite(mat);s.position.copy(pos);s.scale.set(7.2*scale,1.8*scale,1);scene.add(s);labels.push(s);return s;
+  }
+  function makeLayers(){
+    const width=52,depth=24;
+    const layers=[{y:-1.2,h:2.4,c:0x9a7048},{y:-3.4,h:2.0,c:0x806c5d},{y:-5.6,h:2.2,c:0x66545a},{y:-8.1,h:2.8,c:0x51465a}];
+    layers.forEach((l,i)=>{
+      const m=mesh(new T.BoxGeometry(width,l.h,depth),material(l.c));m.position.set(0,l.y,0);
+      for(let j=0;j<5;j++){const vein=mesh(new T.BoxGeometry(width*.94,.035,depth*.94),material(i%2?0x9d8970:0xb08a5d));vein.position.set(0,l.y-l.h*.35+j*l.h*.16,0);}
+    });
+    const top=mesh(new T.BoxGeometry(width,.35,depth),material(0x477c4b));top.position.set(0,.12,0);
+    rupture=mesh(new T.BoxGeometry(.38,10.6,depth+.3),material(0x332b2b,{roughness:1}));rupture.position.set(0,-4.8,0);rupture.rotation.z=-.38;
+    plateLeft=new T.Group();plateRight=new T.Group();scene.add(plateLeft,plateRight);
+    const left=mesh(new T.BoxGeometry(25,8.9,depth),material(0x9b7652));left.position.set(-13,-4.45,0);plateLeft.add(left);
+    const right=mesh(new T.BoxGeometry(25,8.9,depth),material(0x75645d));right.position.set(13,-4.45,0);plateRight.add(right);
+    const capL=mesh(new T.BoxGeometry(25,.28,depth),material(0x5b9257));capL.position.set(-13,.08,0);plateLeft.add(capL);
+    const capR=mesh(new T.BoxGeometry(25,.28,depth),material(0x5b9257));capR.position.set(13,.08,0);plateRight.add(capR);
+    houseGroup=new T.Group();scene.add(houseGroup);
+    for(let i=0;i<7;i++){const x=-22+i*7,z=(i%2?5:-5),h=1.4+(i%3)*.55;const b=mesh(new T.BoxGeometry(2.1,h,2),material(i%2?0xe2d9c4:0xd4e2ec));b.position.set(x,h/2+.32,z);houseGroup.add(b);const roof=mesh(new T.ConeGeometry(1.55,.8,4),material(0x9b5948));roof.position.set(x,h+.72,z);roof.rotation.y=Math.PI/4;houseGroup.add(roof);}
+    focus=new T.Group();scene.add(focus);
+    const core=mesh(new T.SphereGeometry(.55,24,18),material(0xff4c35,{emissive:0x8d1608,emissiveIntensity:.7}));focus.add(core);
+    sourceGlow=mesh(new T.SphereGeometry(1.05,20,16),new T.MeshBasicMaterial({color:0xff6a35,wireframe:true,transparent:true,opacity:.45}));focus.add(sourceGlow);
+    epicenter=mesh(new T.SphereGeometry(.34,20,14),material(0xffd34e,{emissive:0x8a5b00,emissiveIntensity:.6}));epicenter.position.set(-.8,.42,0);scene.add(epicenter);
+    for(let i=0;i<4;i++){const m=new T.MeshBasicMaterial({color:i%2?0x8ce7ff:0xffdc70,wireframe:true,transparent:true,opacity:.36,depthWrite:false});materials.push(m);const s=mesh(new T.SphereGeometry(1,28,18),m);s.visible=false;waveShells.push(s);}
+    for(let i=0;i<3;i++){const m=new T.MeshBasicMaterial({color:0xffe28a,transparent:true,opacity:.8,side:T.DoubleSide});materials.push(m);const ring=mesh(new T.RingGeometry(.94,1,96),m);ring.rotation.x=-Math.PI/2;ring.position.y=.36;ring.visible=false;surfaceWaves.push(ring);}
+  }
+  function addLabels(){
+    label("MẢNG ĐÁ PHÍA TÂY",V(-17,2.2,-13),.78);
+    label("MẢNG ĐÁ PHÍA ĐÔNG",V(17,2.2,-13),.78);
+    label("MẶT ĐỨT GÃY",V(3,-3.4,12),.78);
+    label("CHẤN TIÊU",V(-1,-5.2,3),.72);
+    label("CHẤN TÂM",V(1,2.4,3),.72);
+    label("SÓNG ĐỊA CHẤN",V(-17,-1.4,12),.72);
+  }
+  function positionFocus(){
+    const y=-Math.max(.8,Math.min(7.6,state.depth/8));
+    focus.position.set(-.8,y,0);epicenter.position.set(-.8,.42,0);
+    waveShells.forEach(o=>o.position.copy(focus.position));
+    surfaceWaves.forEach(o=>o.position.x=-.8);
+  }
+  function updateValues(){
+    const fmt=(n,d=1)=>Number(n).toLocaleString("vi-VN",{minimumFractionDigits:d,maximumFractionDigits:d});
+    $("[data-value=magnitude]").textContent=fmt(state.magnitude,1)+" Mw";
+    $("[data-value=depth]").textContent=state.depth+" km";
+    $("[data-value=slip]").textContent=fmt(state.slip,1)+" m";
+    $("[data-stat=focus]").textContent=state.depth+" km";
+    $("[data-stat=magnitude]").textContent=fmt(state.magnitude,1)+" Mw";
+    $("[data-stat=wave]").textContent=state.elapsed>0?"Đang lan truyền":"Chưa phát";
+    $("[data-stat=status]").textContent=state.playing?"Đang giải phóng năng lượng":state.elapsed>0?"Đã phát sóng":"Ổn định";
+    $("[data-role=clock]").textContent=state.playing?"ĐANG LAN TRUYỀN":"TRẠNG THÁI TĨNH";
+  }
+  function reset(){
+    state.elapsed=0;state.playing=false;state.magnitude=6;state.depth=20;state.slip=2;
+    root.querySelectorAll("[data-param]").forEach(el=>el.value=state[el.dataset.param]);
+    plateLeft.position.set(0,0,0);plateRight.position.set(0,0,0);houseGroup.position.set(0,0,0);
+    waveShells.forEach(o=>o.visible=false);surfaceWaves.forEach(o=>o.visible=false);
+    positionFocus();updateValues();renderOnce();
+  }
+  function trigger(){
+    state.elapsed=0;state.playing=true;state.last=performance.now();
+    waveShells.forEach((o,i)=>{o.visible=true;o.scale.setScalar(.1+i*.12);});
+    surfaceWaves.forEach(o=>{o.visible=true;o.scale.set(.1,.1,1);});
+    updateValues();try{if(navigator.vibrate)navigator.vibrate([45,55,45]);}catch(e){}
+    if(!raf)raf=requestAnimationFrame(animate);
+  }
+  function animate(now){
+    raf=0;if(state.dead)return;
+    const dt=Math.min(.05,Math.max(0,(now-(state.last||now))/1000));state.last=now;
+    if(state.playing){
+      state.elapsed+=dt;
+      const strength=Math.max(0,state.magnitude-3)/6.5,ramp=Math.min(1,state.elapsed/.55),offset=state.slip*.12*strength*ramp;
+      plateLeft.position.x=-offset*.5;plateRight.position.x=offset*.5;
+      plateLeft.position.y=Math.sin(state.elapsed*18)*.035*strength;plateRight.position.y=-Math.sin(state.elapsed*18)*.035*strength;
+      houseGroup.position.y=Math.sin(state.elapsed*22)*.025*strength;
+      waveShells.forEach((o,i)=>{const radius=Math.max(.1,(state.elapsed-i*.24)*5.2);o.scale.set(radius,radius,radius);o.material.opacity=Math.max(0,.5-radius/42);});
+      surfaceWaves.forEach((o,i)=>{const radius=Math.max(.1,(state.elapsed-i*.42)*6.4);o.scale.set(radius,radius,1);o.material.opacity=Math.max(0,.8-radius/48);});
+      sourceGlow.scale.setScalar(1+.28*Math.sin(state.elapsed*14));
+      if(state.elapsed>8){state.playing=false;updateValues();}
+      if(Math.floor(now/160)!==Math.floor((now-dt*1000)/160))updateValues();
+    }
+    controls.update();renderer.render(scene,camera);if(state.playing)raf=requestAnimationFrame(animate);
+  }
+  function renderOnce(){if(renderer&&scene&&camera){controls.update();renderer.render(scene,camera);}}
+  function resize(){if(!renderer||!camera)return;const w=Math.max(1,canvas.clientWidth),h=Math.max(1,canvas.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();renderOnce();}
+  function setView(view){
+    state.view=view;const views={section:{p:[34,25,46],t:[0,-3,0]},surface:{p:[0,43,54],t:[0,-1,0]},fault:{p:[17,8,24],t:[0,-4,0]}};
+    const v=views[view]||views.section;camera.position.set(...v.p);controls.target.set(...v.t);controls.update();
+    root.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("q3-active",b.dataset.view===view));renderOnce();
+  }
+  function init(){
+    if(state.dead)return;
+    if(!window.THREE||!THREE.OrbitControls){loading.textContent="Không tải được Three.js hoặc OrbitControls. Kiểm tra kết nối Internet rồi mở lại mô hình.";return;}
+    T=THREE;
+    try{
+      renderer=new T.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:"low-power"});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));renderer.setClearColor(0x9ac8dc,1);
+      scene=new T.Scene();scene.background=new T.Color(0x9ac8dc);scene.fog=new T.Fog(0x9ac8dc,75,140);
+      camera=new T.PerspectiveCamera(43,1,.1,180);camera.position.set(34,25,46);
+      controls=new T.OrbitControls(camera,canvas);controls.enableDamping=true;controls.dampingFactor=.07;controls.target.set(0,-3,0);controls.minDistance=15;controls.maxDistance=110;controls.maxPolarAngle=Math.PI*.92;
+      scene.add(new T.HemisphereLight(0xe4f6ff,0x55463c,1.35));const sun=new T.DirectionalLight(0xfff1d7,1.25);sun.position.set(-25,38,25);scene.add(sun);
+      makeLayers();addLabels();positionFocus();
+      const grid=new T.GridHelper(52,26,0x748d96,0x748d96);grid.position.y=-8.25;grid.material.transparent=true;grid.material.opacity=.18;scene.add(grid);
+      loading.hidden=true;resize();setView("section");resizeFn=resize;window.addEventListener("resize",resizeFn);
+      if(window.ResizeObserver){resizeObs=new ResizeObserver(resize);resizeObs.observe(canvas.parentElement);}renderOnce();
+    }catch(err){loading.textContent="Không thể khởi tạo WebGL trên thiết bị này. Hãy thử trình duyệt hỗ trợ WebGL.";loading.hidden=false;}
+  }
+  root.querySelectorAll("[data-param]").forEach(el=>el.addEventListener("input",()=>{state[el.dataset.param]=Number(el.value);if(el.dataset.param==="depth")positionFocus();updateValues();renderOnce();}));
+  $("[data-action=trigger]").addEventListener("click",trigger);$("[data-action=reset]").addEventListener("click",reset);
+  $("[data-action=labels]").addEventListener("click",e=>{state.showLabels=!state.showLabels;labels.forEach(o=>o.visible=state.showLabels);e.currentTarget.textContent="Tên gọi: "+(state.showLabels?"Bật":"Tắt");renderOnce();});
+  root.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>setView(b.dataset.view)));
+  function destroy(){
+    if(state.dead)return;state.dead=true;cancelAnimationFrame(raf);
+    if(resizeFn)window.removeEventListener("resize",resizeFn);if(resizeObs)resizeObs.disconnect();if(controls)controls.dispose();
+    if(scene)scene.traverse(o=>{if(o.geometry&&!geometries.includes(o.geometry))o.geometry.dispose();if(o.material){const list=Array.isArray(o.material)?o.material:[o.material];list.forEach(m=>{if(m.map&&m.map.dispose)m.map.dispose();if(!materials.includes(m))m.dispose();});}});
+    geometries.forEach(g=>g.dispose());materials.forEach(m=>{if(m.map&&m.map.dispose)m.map.dispose();m.dispose();});
+    if(renderer){renderer.dispose();renderer.forceContextLoss();}root.classList.remove("quake3d-root");
+  }
+  init();return {destroy};
+}
