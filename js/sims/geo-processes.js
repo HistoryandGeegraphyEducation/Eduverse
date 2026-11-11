@@ -535,12 +535,14 @@
           updateParticles(objects.climate.rain,dt*speed,"fall");
           updateParticles(objects.climate.dryDust,dt*speed,"drift");
         }
-        if(kind==="coast"&&objects.coast&&playing){objects.coast.waveFoam.forEach((line,i)=>line.position.z=Math.sin(elapsed*1.2+i*.7)*.08);}\n        if(kind==="tectonic"&&objects.plates&&playing){
+        if(kind==="coast"&&objects.coast&&playing){objects.coast.waveFoam.forEach((line,i)=>line.position.z=Math.sin(elapsed*1.2+i*.7)*.08);}
+        if(kind==="tectonic"&&objects.plates&&playing){
           const p=objects.plates;
           if(scenario==="diverge"){p.left.position.x-=dt*.035*speed;p.right.position.x+=dt*.035*speed;}
           if(scenario==="converge"){p.left.position.x+=dt*.025*speed;p.right.position.x-=dt*.025*speed;}
           if(scenario==="transform"){p.left.position.z-=dt*.04*speed;p.right.position.z+=dt*.04*speed;}
-          p.topLeft.position.x=p.left.position.x;p.topRight.position.x=p.right.position.x;p.topLeft.position.z=p.left.position.z;p.topRight.position.z=p.right.position.z;\n          p.quakes.forEach((r,i)=>{r.scale.setScalar(1+((elapsed*.7+i*.22)%1)*1.6);r.material.opacity=.55*(1-((elapsed*.7+i*.22)%1));});
+          p.topLeft.position.x=p.left.position.x;p.topRight.position.x=p.right.position.x;p.topLeft.position.z=p.left.position.z;p.topRight.position.z=p.right.position.z;
+          p.quakes.forEach((r,i)=>{r.scale.setScalar(1+((elapsed*.7+i*.22)%1)*1.6);r.material.opacity=.55*(1-((elapsed*.7+i*.22)%1));});
         }
         if(playing)animated.forEach(fn=>fn(elapsed));
         if(orbit)orbit.update();
