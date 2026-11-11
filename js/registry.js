@@ -31,9 +31,9 @@ const SIMS = {
     {id:"la-ban-dien-tu-3d", grade:6, icon:"🧭", title:"La bàn điện tử 3D", type:"TRƯNG BÀY"},
     {id:"dinh-huong-ngoai-thuc-dia", grade:6, icon:"🧭", title:"Định hướng ngoài thực địa", type:"MÔ PHỎNG"},
     {id:"cau-tao-ben-trong-trai-dat", grade:6, icon:"🌎", title:"Cấu tạo bên trong Trái Đất 3D", lesson:"Bài 10. Cấu tạo của Trái Đất. Các mảng kiến tạo", type:"MÔ PHỎNG", mount:simInteriorEarth},
-    {id:"chuyen-dong-mang-kien-tao", grade:6, icon:"🌐", title:"Chuyển động các mảng kiến tạo", type:"MÔ PHỎNG"},
+    {id:"chuyen-dong-mang-kien-tao", grade:6, icon:"🌐", title:"Chuyển động các mảng kiến tạo", type:"MÔ PHỎNG", status:"new", statusAt:"2026-11-12T00:00:00+07:00", mount:simTectonics},
     {id:"hinh-thanh-nui-nen-ep", grade:6, icon:"⛰️", title:"Mô hình hình thành núi do nén ép", type:"TRƯNG BÀY"},
-    {id:"phong-hoa-xam-thuc-boi-tu", grade:6, icon:"🏞️", title:"Phong hóa, xâm thực và bồi tụ", type:"MÔ PHỎNG"},
+    {id:"phong-hoa-xam-thuc-boi-tu", grade:6, icon:"🏞️", title:"Phong hóa, xâm thực và bồi tụ", type:"MÔ PHỎNG", status:"new", statusAt:"2026-11-12T00:00:00+07:00", mount:simRiverProcess},
     {id:"cau-tao-nui-lua-3d", grade:6, icon:"🌋", title:"Cấu tạo núi lửa 3D", type:"TRƯNG BÀY"},
     {id:"song-dia-chan", grade:6, icon:"〰️", title:"Sóng địa chấn", type:"MÔ PHỎNG"},
     {id:"dut-gay-dia-chat", grade:6, icon:"🪨", title:"Các dạng đứt gãy địa chất", type:"TRƯNG BÀY"},
@@ -43,19 +43,19 @@ const SIMS = {
     {id:"dia-hinh-duong-dong-muc", grade:6, icon:"🗺️", title:"Địa hình 3D và đường đồng mức", type:"MÔ PHỎNG"},
     {id:"luoc-do-lat-cat-dia-hinh", grade:6, icon:"📊", title:"Chuyển lược đồ thành lát cắt địa hình", type:"MÔ PHỎNG"},
     {id:"cac-tang-khi-quyen-3d", grade:6, icon:"☁️", title:"Các tầng khí quyển 3D", type:"TRƯNG BÀY"},
-    {id:"khi-ap-huong-gio", grade:6, icon:"💨", title:"Khí áp và hướng gió", type:"MÔ PHỎNG"},
+    {id:"khi-ap-huong-gio", grade:6, icon:"💨", title:"Khí áp và hướng gió", type:"MÔ PHỎNG", status:"new", statusAt:"2026-11-12T00:00:00+07:00", mount:simClimateRelief},
     {id:"dung-cu-do-nhiet-do", grade:6, icon:"🌡️", title:"Bộ dụng cụ đo nhiệt độ không khí", type:"TRƯNG BÀY"},
     {id:"hinh-thanh-may-mua", grade:6, icon:"🌧️", title:"Quá trình hình thành mây và mưa", type:"MÔ PHỎNG"},
     {id:"ngung-tu-hoi-nuoc", grade:6, icon:"💧", title:"Thí nghiệm ngưng tụ hơi nước", type:"MÔ PHỎNG"},
     {id:"tram-thoi-tiet-mini", grade:6, icon:"🌤️", title:"Trạm thời tiết mini", type:"TRƯNG BÀY"},
     {id:"hieu-ung-nha-kinh-bien-doi-khi-hau", grade:6, icon:"🌡️", title:"Hiệu ứng nhà kính và biến đổi khí hậu", type:"MÔ PHỎNG"},
     {id:"bieu-do-khi-hau-tuong-tac", grade:6, icon:"📈", title:"Biểu đồ khí hậu tương tác", type:"MÔ PHỎNG"},
-    {id:"vong-tuan-hoan-nuoc", grade:6, icon:"💧", title:"Vòng tuần hoàn nước tự động", type:"MÔ PHỎNG"},
+    {id:"vong-tuan-hoan-nuoc", grade:6, icon:"💧", title:"Vòng tuần hoàn nước tự động", type:"MÔ PHỎNG", status:"new", statusAt:"2026-11-12T00:00:00+07:00", mount:simWaterCycle},
     {id:"luu-vuc-song-3d", grade:6, icon:"🏞️", title:"Mô hình lưu vực sông 3D", type:"TRƯNG BÀY"},
     {id:"nuoc-ngam-cat-lop", grade:6, icon:"💦", title:"Mô hình nước ngầm cắt lớp", type:"TRƯNG BÀY"},
     {id:"hinh-thanh-van-dong-bang-ha", grade:6, icon:"🧊", title:"Quá trình hình thành và vận động của băng hà", type:"MÔ PHỎNG"},
     {id:"day-dai-duong-3d", grade:6, icon:"🌊", title:"Địa hình đáy đại dương 3D", type:"TRƯNG BÀY"},
-    {id:"song-thuy-trieu-dong-bien", grade:6, icon:"🌊", title:"Sóng biển, thủy triều và dòng biển", type:"MÔ PHỎNG"},
+    {id:"song-thuy-trieu-dong-bien", grade:6, icon:"🌊", title:"Sóng biển, thủy triều và dòng biển", type:"MÔ PHỎNG", status:"new", statusAt:"2026-11-12T00:00:00+07:00", mount:simCoastalLandforms},
     {id:"phau-dien-dat-3d", grade:6, icon:"🟫", title:"Phẫu diện đất 3D", type:"TRƯNG BÀY"},
     {id:"hinh-thanh-thoai-hoa-dat", grade:6, icon:"🌱", title:"Quá trình hình thành và thoái hóa đất", type:"MÔ PHỎNG"},
     {id:"he-sinh-thai-3d", grade:6, icon:"🌿", title:"Hệ sinh thái 3D", type:"TRƯNG BÀY"},
@@ -91,6 +91,7 @@ const SIMS = {
   lesson:"Bài 12. Núi lửa và động đất",
   type:"MÔ PHỎNG",
 
+  status:"new-version", statusAt:"2026-11-12T00:00:00+07:00",
   mount:simTsunami},
     {id:"traidat",
   grade:6,
@@ -108,7 +109,13 @@ const SIMS = {
   lesson:"Bài 12. Núi lửa và động đất",
   type:"MÔ PHỎNG",
 
+  status:"new-version", statusAt:"2026-11-12T00:00:00+07:00",
   mount:simVolcano}
   ]
 };
+
+// Các đăng ký chưa có mô-đun mount được hiển thị trạng thái Coming Soon.
+SIMS.lsdl.forEach(sim=>{
+  if(typeof sim.mount!=="function"&&!sim.status) sim.status="coming-soon";
+});
 let curSim = null;
