@@ -243,7 +243,7 @@ function simTsunami(root){
   function waveSpeed(x){return Math.sqrt(9.81*localDepth(x))/1000;}
   function waveAmplitude(x){
     const deep=state.depth,shallow=localDepth(x),base=(.24+state.shift*.105)*(.65+(state.magnitude-6)*.2);
-    return Math.min(4.8,base*Math.sqrt(deep/shallow));
+    return Math.min(4.8,base*Math.pow(deep/shallow,.25));
   }
   function updateWave(dt){
     const speed=waveSpeed(state.front)*1000/1000*45*state.speed;
