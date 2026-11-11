@@ -211,7 +211,7 @@ function simQuake(root){
       plateLeft.position.x=-offset*.5;plateRight.position.x=offset*.5;
       plateLeft.position.y=Math.sin(state.elapsed*18)*.035*strength;plateRight.position.y=-Math.sin(state.elapsed*18)*.035*strength;
       houseGroup.position.y=Math.sin(state.elapsed*22)*.025*strength;
-      waveShells.forEach((o,i)=>{const radius=Math.max(.1,(state.elapsed-i*.24)*5.2);o.scale.set(radius,radius,radius);o.material.opacity=Math.max(0,.5-radius/42);});
+      waveShells.forEach((o,i)=>{const speed=i%2?3.1:5.2;const radius=Math.max(.1,(state.elapsed-i*.24)*speed);o.scale.set(radius,radius*.78,radius);o.material.opacity=Math.max(0,.5-radius/42);});
       surfaceWaves.forEach((o,i)=>{const radius=Math.max(.1,(state.elapsed-i*.42)*6.4);o.scale.set(radius,radius,1);o.material.opacity=Math.max(0,.8-radius/48);});
       sourceGlow.scale.setScalar(1+.28*Math.sin(state.elapsed*14));
       if(state.elapsed>8){state.playing=false;updateValues();}
