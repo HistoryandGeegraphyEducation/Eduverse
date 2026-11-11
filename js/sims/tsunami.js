@@ -254,15 +254,20 @@ function simTsunami(root){
       const x=waterBase[i],z=waterBase[i+2],dx=x+23,r=Math.sqrt(dx*dx+z*z),dist=r-radius;
       const env=Math.exp(-(dist*dist)/(2*width*width));
       const amp=waveAmplitude(x<17?x:16);
-      const longWave=Math.sin(dist*.22+phaseShift);
+      // Phóng đại độ lồi lõm theo phương đứng để học sinh nhìn rõ sóng trên mặt biển.
+      // Giá trị đọc ở bảng thông số vẫn là biên độ ước tính, không phải độ phóng đại hình ảnh.
+      const visualAmp=amp*2.6;
       const leading=Math.exp(-Math.max(0,dist)*.035);
-      waterPos[i+1]=state.sea+amp*env*longWave*leading;
+      const mainCrest=Math.sin(dist*.34+phaseShift)*env*leading;
+      const followingCrest=.28*Math.sin((dist+7)*.34+phaseShift)*Math.exp(-Math.pow(dist+7,2)/(2*width*width))*leading;
+      waterPos[i+1]=state.sea+visualAmp*(mainCrest+followingCrest);
     }
     waterGeo.attributes.position.needsUpdate=true;waterGeo.computeVertexNormals();
     const arr=foamGeo.attributes.position.array,n=foam.userData.count;
     for(let i=0;i<n;i++){
       const a=i/n*Math.PI*2,x=-23+Math.cos(a)*radius,z=Math.sin(a)*radius;
-      const y=state.sea+waveAmplitude(Math.min(16,x))*Math.sin(phaseShift)*Math.exp(-.5)+.08;
+      const localAmp=waveAmplitude(Math.min(16,x))*2.6;
+      const y=state.sea+localAmp*Math.sin(phaseShift)+.22;
       arr[i*3]=x;arr[i*3+1]=y;arr[i*3+2]=z;
     }
     foamGeo.attributes.position.needsUpdate=true;
