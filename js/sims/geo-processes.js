@@ -524,14 +524,14 @@
         raf=requestAnimationFrame(tick);
         const dt=Math.min(.04,(now-last)/1000||0);last=now;
         if(playing)elapsed+=dt*speed;
-        waterSurfaces.forEach(w=>w.update(elapsed,playing?.075:.025));
-        if(kind==="water"&&objects.cycle){
+        waterSurfaces.forEach(w=>w.update(elapsed,playing ? .075 : .025));
+        if(playing&&kind==="water"&&objects.cycle){
           updateParticles(objects.cycle.evaporation,dt*speed,"rise");
           updateParticles(objects.cycle.rainfall,dt*speed,"fall");
         }
         if(playing&&kind==="river"&&objects.river)updateParticles(objects.river.gravel,dt*speed,"drift");
         if(playing&&kind==="coast"&&objects.coast)updateParticles(objects.coast.sandParticles,dt*speed,"drift");
-        if(kind==="climate"&&objects.climate){
+        if(playing&&kind==="climate"&&objects.climate){
           updateParticles(objects.climate.rain,dt*speed,"fall");
           updateParticles(objects.climate.dryDust,dt*speed,"drift");
         }
