@@ -236,17 +236,17 @@
       water: {
         title: "CHU TRÌNH NƯỚC TRONG TỰ NHIÊN",
         lead: "Theo dõi nước tuần hoàn giữa đại dương, khí quyển, lục địa, sông hồ và nước ngầm.",
-        controls: [["Toàn chu trình","cycle"],["Bốc hơi – ngưng tụ","evaporation"],["Mưa – dòng chảy","precipitation"],["Thấm xuống đất","infiltration"]]
+        controls: [["Toàn chu trình","cycle"],["Bốc hơi – ngưng tụ","evaporation"],["Thoát hơi thực vật","transpiration"],["Mưa – dòng chảy","precipitation"],["Thấm xuống đất","infiltration"]]
       },
       river: {
         title: "XÂM THỰC, VẬN CHUYỂN VÀ BỒI TỤ CỦA DÒNG SÔNG",
         lead: "Quan sát sự thay đổi của dòng chảy và vật liệu từ thượng lưu đến hạ lưu.",
-        controls: [["Thượng lưu","upper"],["Trung lưu","middle"],["Hạ lưu","lower"],["Vận chuyển phù sa","load"]]
+        controls: [["Thượng lưu","upper"],["Xâm thực","erosion"],["Vận chuyển","transport"],["Trung lưu","middle"],["Bồi tụ","deposition"],["Hạ lưu","lower"]]
       },
       coast: {
         title: "HÌNH THÀNH ĐỊA HÌNH VEN BIỂN",
         lead: "Sóng và dòng ven bờ làm biến đổi bờ đá, bãi cát và các dạng địa hình tích tụ.",
-        controls: [["Bờ xâm thực","erosion"],["Dòng ven bờ","drift"],["Bờ bồi tụ","deposition"]]
+        controls: [["Bờ xâm thực","erosion"],["Dòng ven bờ","drift"],["Bờ bồi tụ","deposition"],["Thủy triều","tide"]]
       },
       climate: {
         title: "ẢNH HƯỞNG CỦA ĐỊA HÌNH ĐẾN KHÍ HẬU",
@@ -445,7 +445,7 @@
         const outerBank=meshBox(scene,1.05,.34,.85,MAT(0x9b7651),-2.25,.5,-.25);
         const bankFace=meshBox(scene,.12,.62,.9,MAT(0x76563e),-2.72,.47,-.25);
         const delta=new THREE.Group();
-        for(let i=0;i<5;i++){const lobe=new THREE.Mesh(new THREE.ConeGeometry(.62,.16,3),MAT(i%2?0xb99a68:0xc7aa78));lobe.rotation.x=Math.PI/2;lobe.rotation.z=(i-2)*.22;lobe.position.set(-.55+(i-2)*.38,.02,3.95+(i%2)*.38);delta.add(lobe);}scene.add(delta);
+        for(let i=0;i<5;i++){const lobe=new THREE.Mesh(new THREE.CircleGeometry(.62,3),MAT(i%2?0xb99a68:0xc7aa78));lobe.rotation.x=-Math.PI/2;lobe.rotation.z=(i-2)*.22;lobe.position.set(-.55+(i-2)*.38,.02,3.95+(i%2)*.38);delta.add(lobe);}scene.add(delta);
         const sedimentLayers=[];
         for(let i=0;i<3;i++)sedimentLayers.push(meshBox(scene,2.4,.045,1.1,MAT(i%2?0x9c805d:0xc4a574),.4,-.55-i*.09,4.05));
 
@@ -539,16 +539,21 @@
           islandarc:"Hội tụ đại dương – đại dương: một mảng chìm xuống dưới mảng kia, tạo rãnh sâu và cung đảo núi lửa.",
           transform:"Ranh giới chuyển dạng: hai mảng trượt ngang ngược chiều nhau dọc theo đứt gãy; động đất có thể phát sinh khi ứng suất được giải phóng.",
           cycle:"Năng lượng Mặt Trời làm nước bốc hơi; hơi nước ngưng tụ thành mây, rơi xuống dưới dạng mưa và trở lại biển qua dòng chảy hoặc thấm xuống đất.",
-          evaporation:"Bốc hơi chuyển nước lỏng thành hơi nước. Khi không khí ẩm lên cao và lạnh đi, hơi nước ngưng tụ thành những giọt nước nhỏ tạo mây.",
+          evaporation:"Nước từ biển, sông và hồ bốc hơi; hơi nước đi lên khí quyển và có thể ngưng tụ khi gặp điều kiện thích hợp.",
+          transpiration:"Thực vật giải phóng hơi nước qua lá. Quá trình thoát hơi nước bổ sung hơi ẩm vào khí quyển.",
           precipitation:"Nước từ mây rơi xuống mặt đất. Một phần chảy trên bề mặt theo sườn dốc, tập trung vào suối và sông rồi đổ ra biển.",
           infiltration:"Một phần nước mưa thấm qua đất và khe nứt của đá, bổ sung cho nước ngầm; nước ngầm có thể di chuyển chậm và thoát ra suối.",
           upper:"Thượng lưu thường có độ dốc lớn, dòng chảy nhanh và xâm thực sâu mạnh; lòng sông thường hẹp, có nhiều ghềnh thác.",
           middle:"Trung lưu có độ dốc giảm. Dòng sông uốn khúc rõ hơn; bờ lõm thường bị xói mòn, bờ lồi có xu hướng bồi tụ.",
           lower:"Hạ lưu có độ dốc nhỏ, dòng chảy chậm hơn; phù sa dễ lắng đọng, có thể hình thành bãi bồi và châu thổ.",
           load:"Dòng nước vận chuyển vật liệu bằng cách hòa tan, cuốn lăn hoặc kéo lê hạt đáy và giữ các hạt mịn lơ lửng.",
+          erosion:"Dòng chảy tác động vào lòng và bờ sông, bóc tách vật liệu và làm thay đổi hình dạng lòng dẫn.",
+          transport:"Các hạt bùn, cát và sỏi di chuyển theo dòng nước bằng những hình thức vận chuyển khác nhau.",
+          deposition:"Khi dòng chảy giảm khả năng vận chuyển, vật liệu lắng đọng và tích tụ thành bãi bồi hoặc châu thổ.",
           erosion:"Sóng liên tục tác động vào chân vách đá. Đá bị nứt vỡ, mài mòn và vật liệu được đưa ra khỏi vị trí ban đầu, làm bờ lùi dần.",
           drift:"Sóng tới bờ theo góc xiên tạo dòng vận chuyển dọc bờ. Cát và sỏi được dịch chuyển theo hướng dòng ven bờ.",
           deposition:"Khi năng lượng sóng và dòng ven bờ giảm, vật liệu lắng đọng, tạo bãi cát, doi cát hoặc các dạng bờ tích tụ.",
+          tide:"Thủy triều làm mực nước biển dâng lên và hạ xuống theo chu kỳ. Đây là biến đổi mực nước, khác với dao động của sóng biển.",
           windward:"Ở sườn đón gió, không khí ẩm bị địa hình buộc nâng lên. Không khí lạnh đi, hơi nước ngưng tụ và có thể gây mưa địa hình.",
           leeward:"Sau khi vượt qua đỉnh núi, không khí hạ xuống, ấm lên và độ ẩm tương đối giảm. Sườn khuất gió thường khô hơn.",
           reverse:"Đổi hướng gió làm thay đổi sườn đón gió và sườn khuất gió. Mưa địa hình có thể chuyển sang phía đối diện."
@@ -569,15 +574,15 @@
           const o=objects.cycle;
           o.evaporation.points.visible=action==="cycle"||action==="evaporation";
           o.rainfall.points.visible=action==="cycle"||action==="precipitation";
-          o.infiltration.forEach(x=>x.visible=action==="cycle"||action==="infiltration");if(o.transpiration)o.transpiration.points.visible=action==="cycle"||action==="evaporation";
+          o.infiltration.forEach(x=>x.visible=action==="cycle"||action==="infiltration");if(o.transpiration)o.transpiration.points.visible=action==="cycle"||action==="evaporation"||action==="transpiration";
         }
         if(kind==="river" && objects.river){
           objects.river.bars.forEach((b,i)=>b.visible=action==="lower"||action==="middle"||action==="load" ? i>2 : action==="upper" ? i<3 : true);
-          objects.river.gravel.points.visible=action==="load"||action==="cycle";objects.river.delta.visible=action==="lower"||action==="load";objects.river.bankFace.visible=action==="upper"||action==="middle";
+          objects.river.gravel.points.visible=action==="load"||action==="transport"||action==="cycle";objects.river.delta.visible=action==="lower"||action==="load"||action==="deposition";objects.river.bankFace.visible=action==="upper"||action==="middle"||action==="erosion";
         }
         if(kind==="coast" && objects.coast){
           objects.coast.cliff.position.x=-2.6;objects.coast.spit.scale.x=1.9;
-          objects.coast.sandParticles.points.visible=action==="drift"||action==="deposition";objects.coast.caveMouth.visible=action==="erosion";objects.coast.archLeft.visible=action==="erosion";objects.coast.archRight.visible=action==="erosion";objects.coast.archTop.visible=action==="erosion";objects.coast.stack.visible=action==="erosion";
+          objects.coast.sandParticles.points.visible=action==="drift"||action==="deposition";objects.coast.sea.mesh.visible=true;objects.coast.caveMouth.visible=action==="erosion";objects.coast.archLeft.visible=action==="erosion";objects.coast.archRight.visible=action==="erosion";objects.coast.archTop.visible=action==="erosion";objects.coast.stack.visible=action==="erosion";
           objects.coast.spit.visible=action==="deposition"||action==="drift"||action==="erosion";
         }
         if(kind==="climate" && objects.climate){
@@ -637,7 +642,7 @@
         if(kind==="coast"&&objects.coast&&playing){const o=objects.coast,wave=Math.sin(elapsed*2.1*speed)*.16*force;o.sea.mesh.position.y=-.08+Math.sin(elapsed*.42*speed)*.13*force;o.waveFoam.forEach((line,i)=>{line.position.z=wave+i*.035;line.position.x=Math.sin(elapsed*1.2+i*.4)*.12;});if(scenario==="erosion")o.cliff.position.x=-2.6-Math.min(.28,elapsed*.012*force);else o.cliff.position.x=-2.6;if(scenario==="deposition")o.spit.scale.x=1.9+Math.min(.55,elapsed*.06*force);else o.spit.scale.x=1.9;updateParticles(o.sandParticles,dt*speed*force,"drift");}
         if(kind==="tectonic"&&objects.plates&&playing){
           const p=objects.plates,travel=Math.min(1.15,elapsed*.12*speed*force);
-          p.left.position.x=p.baseLeft+(scenario==="diverge"?-travel:scenario==="converge"?travel*.62:0);p.right.position.x=p.baseRight+(scenario==="diverge"?travel:scenario==="converge"?-travel*.62:0);
+          p.left.position.x=p.baseLeft+(scenario==="diverge"?-travel:(scenario==="converge"||scenario==="collision"||scenario==="islandarc")?travel*.62:0);p.right.position.x=p.baseRight+(scenario==="diverge"?travel:(scenario==="converge"||scenario==="collision"||scenario==="islandarc")?-travel*.62:0);
           if(scenario==="transform"){p.left.position.z=-.28-Math.min(.65,elapsed*.09*speed*force);p.right.position.z=.28+Math.min(.65,elapsed*.09*speed*force);}
           p.topLeft.position.x=p.left.position.x;p.topRight.position.x=p.right.position.x;p.topLeft.position.z=p.left.position.z;p.topRight.position.z=p.right.position.z;
           p.ridge.scale.y=.7+Math.min(.8,travel*.6);p.uplift.scale.y=1+Math.min(.8,travel*.7);p.hot.position.y=-.05+Math.min(.55,elapsed*.08*speed*force);p.crustNew.position.y=.98+Math.min(.28,travel*.2);p.subducted.rotation.z=-.28-Math.min(.12,travel*.08);
