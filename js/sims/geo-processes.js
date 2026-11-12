@@ -513,7 +513,8 @@
           const x=-2.8+i*.39,line=addLine(scene,[[x,.02,4.48],[x+.07,-.36,4.7],[x+.02,-.78,4.7],[x+.13,-1.18,4.7]],0x83d4e8,.78,.018);
           line.visible=false;infiltrationLines.push(line);
         }
-        const runoff=addLine(scene,[[-2.9,.18,3.35],[-1.6,.1,3.55],[.0,-.04,3.6],[1.65,-.12,3.25],[3.1,-.16,2.5]],0x9bd9e8,.8,.026);
+        const runoffCoords=[[-2.9,3.35],[-1.6,3.55],[.0,3.6],[1.65,3.25],[3.1,2.5]];
+        const runoff=addLine(scene,runoffCoords.map(([x,z])=>[x,heightAt(x,z)+.105,z]),0x9bd9e8,.9,.032);
         runoff.visible=false;
 
         // Solar energy and surface heating: visible 3D beams terminate at the ocean surface.
@@ -523,8 +524,12 @@
             new THREE.CylinderGeometry(.025,.075,2.25,8,1,true),
             new THREE.MeshBasicMaterial({color:0xffd47a,transparent:true,opacity:.34,side:THREE.DoubleSide,depthWrite:false})
           );
-          ray.position.set(4.35+i*.43,1.22,-1.55+i*.78);
-          ray.rotation.z=-.12;
+          const start=new THREE.Vector3(-6.1,4.8,-3.9);
+          const end=new THREE.Vector3(4.35+i*.36,-.12,-2.1+i*.78);
+          const direction=end.clone().sub(start);
+          ray.position.copy(start.clone().add(end).multiplyScalar(.5));
+          ray.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),direction.clone().normalize());
+          ray.scale.y=direction.length()/2.25;
           scene.add(ray);heatRays.push(ray);
         }
         const heatedSurface=new THREE.Mesh(
@@ -545,11 +550,9 @@
 
         // Surface runoff follows the visible slope and joins the river channel.
         const runoffCurve=new THREE.CatmullRomCurve3([
-          new THREE.Vector3(-2.9,.28,3.35),new THREE.Vector3(-2.0,.19,3.55),
-          new THREE.Vector3(-1.1,.11,3.62),new THREE.Vector3(-.1,.015,3.55),
-          new THREE.Vector3(1.0,-.08,3.28),new THREE.Vector3(2.0,-.14,2.92),
-          new THREE.Vector3(3.0,-.15,2.48),new THREE.Vector3(4.15,-.16,1.8)
-        ]);
+          [-2.9,3.35],[-2.0,3.58],[-1.1,3.62],[-.1,3.55],
+          [1.0,3.28],[2.0,2.92],[3.0,2.48],[4.15,1.8]
+        ].map(([x,z])=>new THREE.Vector3(x,heightAt(x,z)+.13,z)));
         const runoffPts=addParticles(74,0xcaf5ff,{x:5,y:1,z:2},.045);
         runoffPts.points.visible=false;
 
