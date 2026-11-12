@@ -277,8 +277,11 @@
       .evgeo button.active,.evgeo button:focus-visible{background:#147c9d;border-color:#9be1f2;outline:none}
       .evgeo-water-groups{display:grid;gap:6px;margin-top:6px}
       .evgeo-water-group{border:1px solid #31566b;border-radius:8px;padding:6px;background:#0d2b3d}
-      .evgeo-water-group h4{font-size:10px;line-height:1.2;color:#b8d9e7;margin:0 0 5px;font-weight:800}
-      .evgeo-water-children{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+      .evgeo-water-toggle{display:flex!important;align-items:center;justify-content:space-between;width:100%;font-size:10px!important;font-weight:800;background:#0d2b3d!important;padding:7px 8px!important}
+      .evgeo-water-toggle i{font-style:normal;color:#9fd9e9;font-size:13px}
+      .evgeo-water-toggle[aria-expanded="true"]{background:#17445d!important}
+      .evgeo-water-children{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding-top:5px}
+      .evgeo-water-children[hidden]{display:none!important}
       .evgeo-water-children button{font-size:9px;padding:6px 7px;border-radius:6px;background:#183f54}
       .evgeo-water-children button.active{background:#147c9d;border-color:#9be1f2}
       .evgeo-water-all{width:100%;font-weight:800}
@@ -517,20 +520,22 @@
         const runoff=addLine(scene,runoffCoords.map(([x,z])=>[x,heightAt(x,z)+.105,z]),0x9bd9e8,.9,.032);
         runoff.visible=false;
 
-        // Solar energy and surface heating: visible 3D beams terminate at the ocean surface.
+        // Broad, translucent undulating bands represent incoming solar radiation.
         const heatRays=[];
-        for(let i=0;i<5;i++){
-          const ray=new THREE.Mesh(
-            new THREE.CylinderGeometry(.025,.075,2.25,8,1,true),
-            new THREE.MeshBasicMaterial({color:0xffd47a,transparent:true,opacity:.34,side:THREE.DoubleSide,depthWrite:false})
-          );
-          const start=new THREE.Vector3(-6.1,4.8,-3.9);
-          const end=new THREE.Vector3(4.35+i*.36,-.12,-2.1+i*.78);
-          const direction=end.clone().sub(start);
-          ray.position.copy(start.clone().add(end).multiplyScalar(.5));
-          ray.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),direction.clone().normalize());
-          ray.scale.y=direction.length()/2.25;
-          scene.add(ray);heatRays.push(ray);
+        for(let band=0;band<3;band++){
+          const cols=56,rows=5,positions=[],indices=[];
+          for(let r=0;r<=rows;r++)for(let c=0;c<=cols;c++){
+            const u=c/cols,v=r/rows,x=-5.9+u*10.8;
+            const z=-2.65+band*1.05+(v-.5)*.72+Math.sin(u*9+band)*.12;
+            const y=4.35-u*4.25+Math.sin(u*11+band*.8)*.16+(v-.5)*.08;
+            positions.push(x,y,z);
+          }
+          for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+            const a=r*(cols+1)+c,b=a+1,d=(r+1)*(cols+1)+c,e=d+1;indices.push(a,d,b,b,d,e);
+          }
+          const geo=new THREE.BufferGeometry();geo.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));geo.setIndex(indices);geo.computeVertexNormals();
+          const material=new THREE.MeshBasicMaterial({color:band===1?0xffdf9a:0xffc96e,transparent:true,opacity:.105,side:THREE.DoubleSide,depthWrite:false});
+          const wave=new THREE.Mesh(geo,material);scene.add(wave);heatRays.push({mesh:wave,base:positions.slice(),band,cols,rows});
         }
         const heatedSurface=new THREE.Mesh(
           new THREE.CircleGeometry(.92,40),
@@ -553,8 +558,12 @@
           [-2.9,3.35],[-2.0,3.58],[-1.1,3.62],[-.1,3.55],
           [1.0,3.28],[2.0,2.92],[3.0,2.48],[4.15,1.8]
         ].map(([x,z])=>new THREE.Vector3(x,heightAt(x,z)+.13,z)));
-        const runoffPts=addParticles(74,0xcaf5ff,{x:5,y:1,z:2},.075);
-        runoffPts.points.visible=false;
+        const runoffPts=addParticles(74,0xcaf5ff,{x:5,y:1,z:2},.075);runoffPts.points.visible=false;
+        const runoffFoam=addParticles(110,0xf0ffff,{x:5,y:1,z:2},.055);runoffFoam.points.material.opacity=.92;runoffFoam.points.visible=false;
+        const runoffBed=addLine(scene,runoffCurve.getPoints(90).map(p=>[p.x,p.y-.045,p.z]),0x126e91,.82,.115);runoffBed.visible=false;
+        const runoffRills=[];
+        for(let i=0;i<7;i++){const drop=new THREE.Mesh(new THREE.SphereGeometry(.075,8,6),new THREE.MeshBasicMaterial({color:0xc7f4ff,transparent:true,opacity:.8}));scene.add(drop);runoffRills.push(drop);}
+        runoffRills.forEach(x=>x.visible=false);
 
         // Groundwater percolates through the strata, then moves laterally toward the coast.
         const groundwaterCurve=new THREE.CatmullRomCurve3([
@@ -563,13 +572,13 @@
           new THREE.Vector3(.85,-1.58,5.08),new THREE.Vector3(2.0,-1.48,5.08),
           new THREE.Vector3(3.15,-1.12,5.08)
         ]);
-        const groundwaterPath=addLine(scene,groundwaterCurve.getPoints(70).map(p=>[p.x,p.y,p.z]),0x6bc5df,.85,.035);
-        groundwaterPath.visible=false;
-        const groundwaterFlowPts=addParticles(58,0xb6efff,{x:5,y:1,z:1},.075);
-        groundwaterFlowPts.points.visible=false;
+        const groundwaterPath=addLine(scene,groundwaterCurve.getPoints(70).map(p=>[p.x,p.y,p.z]),0x55b9df,.95,.075);groundwaterPath.visible=false;
+        const groundwaterFlowPts=addParticles(58,0xb6efff,{x:5,y:1,z:1},.075);groundwaterFlowPts.points.visible=false;
+        const aquiferGlow=addLine(scene,groundwaterCurve.getPoints(70).map(p=>[p.x,p.y-.13,p.z]),0x328db7,.22,.23);aquiferGlow.visible=false;
+        const seepagePoints=addParticles(34,0xd4f4ff,{x:4,y:1,z:1},.055);seepagePoints.points.visible=false;
 
         objects.cycle={ocean,clouds,evaporation,rainfall,transpiration,infiltrationPts,infiltrationLines,flowPoints,riverCurve,runoff,fallsGroup,sunGlow,
-          heatRays,heatedSurface,coolingColumn,condensationPts,runoffCurve,runoffPts,groundwaterCurve,groundwaterPath,groundwaterFlowPts,
+          heatRays,heatedSurface,coolingColumn,condensationPts,runoffCurve,runoffPts,runoffFoam,runoffBed,runoffRills,groundwaterCurve,groundwaterPath,groundwaterFlowPts,aquiferGlow,seepagePoints,
           soil:{soilTop,soilBody,weatheredRock,groundwater,bedrock,rootLines}};
         camera.position.set(11.8,9.2,14.5);
         addLabel(view,"BỐC HƠI",76,48);addLabel(view,"NGƯNG TỤ",42,13);addLabel(view,"MƯA",33,40);
@@ -752,8 +761,10 @@
           o.coolingColumn.visible=all||action==="condensation"||action==="cloud_formation";
           o.condensationPts.points.visible=all||action==="condensation"||action==="cloud_formation";
           o.runoffPts.points.visible=all||action==="surface_runoff";
-          o.groundwaterPath.visible=all||action==="groundwater_flow";
-          o.groundwaterFlowPts.points.visible=all||action==="groundwater_flow";
+          o.runoffFoam.points.visible=all||action==="surface_runoff";o.runoffBed.visible=all||action==="surface_runoff";
+          o.runoffRills.forEach(x=>x.visible=all||action==="surface_runoff");
+          o.groundwaterPath.visible=all||action==="groundwater_flow";o.aquiferGlow.visible=all||action==="groundwater_flow";
+          o.groundwaterFlowPts.points.visible=all||action==="groundwater_flow";o.seepagePoints.points.visible=all||action==="groundwater_flow";
           o.clouds.forEach(x=>x.visible=all||action==="condensation"||action==="cloud_formation"||action==="precipitation_rain");
           if(action==="evaporation_sea")seedParticles(o.evaporation,{x:[3.4,8.1],y:[.08,2.4],z:[-3.8,3.8]});
           if(action==="evaporation_inland")seedParticles(o.evaporation,{x:[-1.8,2.2],y:[.08,2.1],z:[-3.6,3.6]});
@@ -783,13 +794,12 @@
         const groups=document.createElement("div");groups.className="evgeo-water-groups";
         cfg.groups.forEach(group=>{
           const card=document.createElement("section");card.className="evgeo-water-group";
-          const heading=document.createElement("h4");heading.textContent=group.title;card.appendChild(heading);
-          const children=document.createElement("div");children.className="evgeo-water-children";
-          group.items.forEach(([label,action])=>{
-            const b=document.createElement("button");b.type="button";b.textContent=label;b.dataset.scenario=action;
-            b.addEventListener("click",()=>select(action));children.appendChild(b);
-          });
-          card.appendChild(children);groups.appendChild(card);
+          const heading=document.createElement("button");heading.type="button";heading.className="evgeo-water-toggle";
+          heading.innerHTML='<span></span><i aria-hidden="true">＋</i>';heading.querySelector("span").textContent=group.title;heading.setAttribute("aria-expanded","false");
+          const children=document.createElement("div");children.className="evgeo-water-children";children.hidden=true;
+          group.items.forEach(([label,action])=>{const b=document.createElement("button");b.type="button";b.textContent=label;b.dataset.scenario=action;b.addEventListener("click",()=>select(action));children.appendChild(b);});
+          heading.addEventListener("click",()=>{const open=heading.getAttribute("aria-expanded")!=="true";groups.querySelectorAll(".evgeo-water-toggle").forEach(t=>{t.setAttribute("aria-expanded","false");t.querySelector("i").textContent="＋";t.nextElementSibling.hidden=true;});if(open){heading.setAttribute("aria-expanded","true");heading.querySelector("i").textContent="−";children.hidden=false;}});
+          card.appendChild(heading);card.appendChild(children);groups.appendChild(card);
         });
         buttons.appendChild(groups);
       }else{
@@ -847,11 +857,11 @@
             o.clouds.forEach(x=>x.visible=stage>=2);
             o.rainfall.points.visible=stage===3;
             o.runoff.visible=stage===4;
-            o.runoffPts.points.visible=stage===4;
+            o.runoffPts.points.visible=stage===4;o.runoffFoam.points.visible=stage===4;o.runoffBed.visible=stage===4;o.runoffRills.forEach(x=>x.visible=stage===4);
             o.infiltrationPts.points.visible=stage===5;
             o.infiltrationLines.forEach(x=>x.visible=stage===5);
-            o.groundwaterPath.visible=stage===6;
-            o.groundwaterFlowPts.points.visible=stage===6;
+            o.groundwaterPath.visible=stage===6;o.aquiferGlow.visible=stage===6;
+            o.groundwaterFlowPts.points.visible=stage===6;o.seepagePoints.points.visible=stage===6;
           }
           o.transpiration.points.visible=false;
           updateParticles(o.evaporation,dt*speed*force,"rise");
@@ -866,7 +876,16 @@
               c.scale.setScalar(growth*(1+Math.sin(elapsed*.7+i)*.018));
             }
           });
-          o.heatRays.forEach((ray,i)=>{ray.material.opacity=.22+.16*(.5+.5*Math.sin(elapsed*2.2+i));});
+          o.heatRays.forEach((band,i)=>{
+            const attr=band.mesh.geometry.attributes.position,base=band.base;
+            for(let v=0;v<attr.count;v++){const x=base[v*3],y=base[v*3+1],z=base[v*3+2];attr.setXYZ(v,x,y+Math.sin(elapsed*1.15+x*.72+i)*.045,z+Math.sin(elapsed*.8+x*.45+i)*.035);}
+            attr.needsUpdate=true;band.mesh.material.opacity=.07+.045*(.5+.5*Math.sin(elapsed*1.1+i));
+          });
+          const foamAttr=o.runoffFoam.points.geometry.attributes.position;
+          for(let i=0;i<foamAttr.count;i++){const p=o.runoffCurve.getPointAt((i/foamAttr.count+elapsed*.075)%1);foamAttr.setXYZ(i,p.x,p.y+.075,p.z);}foamAttr.needsUpdate=true;
+          o.runoffRills.forEach((drop,i)=>{const p=o.runoffCurve.getPointAt((i/7+elapsed*.045)%1);drop.position.set(p.x,p.y+.06,p.z);});
+          const seepAttr=o.seepagePoints.points.geometry.attributes.position;
+          for(let i=0;i<seepAttr.count;i++){const p=o.groundwaterCurve.getPointAt((i/seepAttr.count+elapsed*.024)%1);seepAttr.setXYZ(i,p.x,p.y,p.z);}seepAttr.needsUpdate=true;
           const runoffAttr=o.runoffPts.points.geometry.attributes.position;
           for(let i=0;i<runoffAttr.count;i++){
             const p=o.runoffCurve.getPointAt((i/runoffAttr.count+elapsed*.055)%1);
