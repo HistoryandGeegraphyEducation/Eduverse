@@ -194,9 +194,15 @@
         controls: [["Tách giãn","diverge"],["Hội tụ: ĐD–LĐ","converge"],["Va chạm: LĐ–LĐ","collision"],["Hội tụ: ĐD–ĐD","islandarc"],["Trượt ngang","transform"]]
       },
       water: {
-        title: "CHU TRÌNH NƯỚC TRONG TỰ NHIÊN",
-        lead: "Theo dõi nước tuần hoàn giữa đại dương, khí quyển, lục địa, sông hồ và nước ngầm.",
-        controls: [["Toàn chu trình","cycle"],["Bốc hơi – ngưng tụ","evaporation"],["Thoát hơi thực vật","transpiration"],["Mưa – dòng chảy","precipitation"],["Thấm xuống đất","infiltration"]]
+        title: "VÒNG TUẦN HOÀN LỚN CỦA NƯỚC",
+        lead: "Theo dõi nước bốc hơi chủ yếu từ đại dương, ngưng tụ thành mây, rơi xuống lục địa rồi trở lại biển qua dòng chảy mặt và nước ngầm.",
+        controls: [["Toàn chu trình","cycle"]],
+        groups: [
+          {title:"Bốc hơi",items:[["Từ đại dương","evaporation_sea"],["Từ sông, hồ và đất ẩm","evaporation_inland"]]},
+          {title:"Ngưng tụ",items:[["Hơi nước ngưng tụ","condensation"],["Hình thành mây","cloud_formation"]]},
+          {title:"Giáng thủy",items:[["Mưa xuống lục địa","precipitation_rain"]]},
+          {title:"Nước trở về đại dương",items:[["Dòng chảy mặt","surface_runoff"],["Thấm và dòng chảy ngầm","groundwater_flow"]]}
+        ]
       },
       river: {
         title: "XÂM THỰC, VẬN CHUYỂN VÀ BỒI TỤ CỦA DÒNG SÔNG",
@@ -262,14 +268,20 @@
       .evgeo-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:stretch}
       .evgeo-view{height:clamp(500px,70vh,760px);min-height:460px;position:relative;overflow:hidden;border-radius:13px;background:linear-gradient(#9fc5d8,#d5e0d9 66%,#657d61);box-shadow:inset 0 0 35px #173a4d55}
       .evgeo-view canvas{width:100%;height:100%;display:block;touch-action:none}
-      .evgeo-label{position:absolute;z-index:2;transform:translate(-8%,-50%);padding:5px 8px;border-radius:6px;background:#08283bcf;border:1px solid #ffffff42;color:#f5fbff;font-size:9px;font-weight:700;letter-spacing:.4px;pointer-events:none;white-space:nowrap;text-shadow:0 1px 2px #000}
-      .evgeo-viewtag,.evgeo-readout{position:absolute;top:10px;background:#071b2cce;color:#e2f3fb;border:1px solid #ffffff24;border-radius:7px;padding:7px 9px;font-size:9px;letter-spacing:.5px;pointer-events:none}
-      .evgeo-viewtag{left:10px}.evgeo-readout{right:10px}
-      .evgeo-controls{min-width:0;display:flex;flex-direction:column;gap:10px;padding:12px;border:1px solid #ffffff1c;border-radius:13px;background:#061725a8}
+      .evgeo-label,.evgeo-readout{display:none!important}
+      .evgeo-viewtag{position:absolute;top:9px;left:9px;background:#071b2cce;color:#e2f3fb;border:1px solid #ffffff24;border-radius:7px;padding:6px 8px;font-size:9px;letter-spacing:.35px;pointer-events:none}
+      .evgeo-controls{min-width:0;display:flex;flex-direction:column;gap:8px;padding:10px;border:1px solid #ffffff1c;border-radius:13px;background:#061725a8}
       .evgeo-control-section{min-width:0}.evgeo-section-title{font-size:10px;letter-spacing:1px;color:#91c9df}
-      .evgeo-buttons{display:grid;grid-template-columns:1fr;gap:7px;margin-top:9px}
-      .evgeo button{border:1px solid #4e7e95;background:#17445d;color:#f2f8fb;border-radius:9px;padding:9px 11px;font-size:11px;cursor:pointer;text-align:left}
+      .evgeo-buttons{display:grid;grid-template-columns:1fr;gap:5px;margin-top:7px}
+      .evgeo button{border:1px solid #4e7e95;background:#17445d;color:#f2f8fb;border-radius:7px;padding:7px 9px;font-size:10px;line-height:1.25;cursor:pointer;text-align:left}
       .evgeo button.active,.evgeo button:focus-visible{background:#147c9d;border-color:#9be1f2;outline:none}
+      .evgeo-water-groups{display:grid;gap:6px;margin-top:6px}
+      .evgeo-water-group{border:1px solid #31566b;border-radius:8px;padding:6px;background:#0d2b3d}
+      .evgeo-water-group h4{font-size:10px;line-height:1.2;color:#b8d9e7;margin:0 0 5px;font-weight:800}
+      .evgeo-water-children{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+      .evgeo-water-children button{font-size:9px;padding:6px 7px;border-radius:6px;background:#183f54}
+      .evgeo-water-children button.active{background:#147c9d;border-color:#9be1f2}
+      .evgeo-water-all{width:100%;font-weight:800}
       .evgeo-explain{padding:11px 12px;border-radius:10px;background:#ffffff10;border-left:3px solid #58b5d0;color:#d9eaf2;font-size:12px;line-height:1.6;min-height:72px}
       .evgeo-footer{display:flex;flex-direction:column;align-items:stretch;gap:9px;margin-top:auto}
       .evgeo-actions{display:grid;grid-template-columns:1fr;gap:6px}
@@ -637,10 +649,13 @@
           islandarc:"Hội tụ đại dương – đại dương: một mảng chìm xuống dưới mảng kia, tạo rãnh sâu và cung đảo núi lửa.",
           transform:"Ranh giới chuyển dạng: hai mảng trượt ngang ngược chiều nhau dọc theo đứt gãy; động đất có thể phát sinh khi ứng suất được giải phóng.",
           cycle:"Năng lượng Mặt Trời làm nước bốc hơi; hơi nước ngưng tụ thành mây, rơi xuống dưới dạng mưa và trở lại biển qua dòng chảy hoặc thấm xuống đất.",
-          evaporation:"Nước từ biển, sông và hồ bốc hơi; hơi nước đi lên khí quyển và có thể ngưng tụ khi gặp điều kiện thích hợp.",
-          transpiration:"Thực vật giải phóng hơi nước qua lá. Quá trình thoát hơi nước bổ sung hơi ẩm vào khí quyển.",
-          precipitation:"Nước từ mây rơi xuống mặt đất. Một phần chảy trên bề mặt theo sườn dốc, tập trung vào suối và sông rồi đổ ra biển.",
-          infiltration:"Một phần nước mưa thấm qua đất và khe nứt của đá, bổ sung cho nước ngầm; nước ngầm có thể di chuyển chậm và thoát ra suối.",
+          evaporation_sea:"Bức xạ Mặt Trời làm nước ở bề mặt đại dương nóng lên và chuyển thành hơi nước. Hơi nước bốc lên khí quyển, là nguồn cung cấp ẩm chủ yếu cho vòng tuần hoàn lớn.",
+          evaporation_inland:"Nước ở sông, hồ và bề mặt đất ẩm nhận nhiệt, chuyển thành hơi nước rồi khuếch tán lên khí quyển. Lượng hơi nước này bổ sung cho khối khí phía trên lục địa.",
+          condensation:"Không khí chứa hơi nước bốc lên cao và lạnh đi. Khi đạt trạng thái bão hòa, hơi nước ngưng tụ thành những giọt nước rất nhỏ hoặc tinh thể băng.",
+          cloud_formation:"Các giọt nước nhỏ và tinh thể băng tập hợp trong khí quyển tạo thành mây. Những hạt nước va chạm, kết hợp và lớn dần trước khi có thể rơi xuống.",
+          precipitation_rain:"Khi các giọt nước trong mây đủ lớn và nặng, chúng rơi xuống bề mặt dưới dạng mưa. Nước mưa có thể chảy trên mặt đất, thấm xuống đất hoặc tạm thời tích trữ trong ao hồ.",
+          surface_runoff:"Nước mưa không thấm hết sẽ chảy theo sườn dốc, tập trung thành dòng nhỏ, suối và sông. Dòng chảy đưa nước từ lục địa trở lại biển.",
+          groundwater_flow:"Một phần nước mưa thấm qua đất, đi xuống các lớp vật liệu thấm nước và bổ sung cho tầng nước ngầm. Nước ngầm di chuyển chậm theo độ dốc thủy lực, có thể thoát ra sông, suối hoặc biển.",
           upper:"Thượng lưu thường có độ dốc lớn, dòng chảy nhanh và xâm thực sâu mạnh; lòng sông thường hẹp, có nhiều ghềnh thác.",
           middle:"Trung lưu có độ dốc giảm. Dòng sông uốn khúc rõ hơn; bờ lõm thường bị xói mòn, bờ lồi có xu hướng bồi tụ.",
           lower:"Hạ lưu có độ dốc nhỏ, dòng chảy chậm hơn; phù sa dễ lắng đọng, có thể hình thành bãi bồi và châu thổ.",
@@ -657,7 +672,8 @@
           reverse:"Đổi hướng gió làm thay đổi sườn đón gió và sườn khuất gió. Mưa địa hình có thể chuyển sang phía đối diện."
         };
         explain.textContent=descriptions[action]||cfg.lead;
-        readout.textContent=(cfg.controls.find(x=>x[1]===action)||["TOÀN CẢNH"])[0].toUpperCase();
+        const selectedControl=cfg.controls.find(x=>x[1]===action)||cfg.groups?.flatMap(g=>g.items).find(x=>x[1]===action);
+        readout.textContent=(selectedControl||["TOÀN CẢNH"])[0].toUpperCase();
 
         if(kind==="tectonic" && objects.plates){
           const p=objects.plates;
@@ -670,12 +686,18 @@
         }
         if(kind==="water" && objects.cycle){
           const o=objects.cycle;
-          o.evaporation.points.visible=action==="cycle"||action==="evaporation";
-          o.rainfall.points.visible=action==="cycle"||action==="precipitation";
-          o.transpiration.points.visible=action==="cycle"||action==="transpiration";
-          o.infiltrationPts.points.visible=action==="cycle"||action==="infiltration";
-          o.infiltrationLines.forEach(x=>x.visible=action==="cycle"||action==="infiltration");
-          o.runoff.visible=action==="cycle"||action==="precipitation";
+          const all=action==="cycle";
+          o.evaporation.points.visible=all||action==="evaporation_sea"||action==="evaporation_inland"||action==="condensation"||action==="cloud_formation";
+          o.rainfall.points.visible=all||action==="precipitation_rain";
+          o.transpiration.points.visible=false;
+          o.infiltrationPts.points.visible=all||action==="groundwater_flow";
+          o.infiltrationLines.forEach(x=>x.visible=all||action==="groundwater_flow");
+          o.runoff.visible=all||action==="surface_runoff";
+          o.clouds.forEach(x=>x.visible=all||action==="condensation"||action==="cloud_formation"||action==="precipitation_rain");
+          if(action==="evaporation_sea")seedParticles(o.evaporation,{x:[3.4,8.1],y:[.08,2.4],z:[-3.8,3.8]});
+          if(action==="evaporation_inland")seedParticles(o.evaporation,{x:[-1.8,2.2],y:[.08,2.1],z:[-3.6,3.6]});
+          if(action==="condensation"||action==="cloud_formation")seedParticles(o.evaporation,{x:[-1.8,3.2],y:[2.1,3.8],z:[-2.8,1.8]});
+          if(action==="groundwater_flow")seedParticles(o.infiltrationPts,{x:[-2.8,2.5],y:[-.25,.7],z:[4.55,4.95]});
         }
         if(kind==="river" && objects.river){
           objects.river.bars.forEach((b,i)=>b.visible=action==="lower"||action==="middle"||action==="load" ? i>2 : action==="upper" ? i<3 : true);
@@ -693,10 +715,28 @@
         }
       }
 
-      cfg.controls.forEach(([label,action])=>{
-        const b=document.createElement("button");b.type="button";b.textContent=label;b.dataset.scenario=action;
-        b.addEventListener("click",()=>select(action));buttons.appendChild(b);
-      });
+      if(kind==="water"&&cfg.groups){
+        const allButton=document.createElement("button");
+        allButton.type="button";allButton.className="evgeo-water-all";allButton.textContent="Toàn chu trình";
+        allButton.dataset.scenario="cycle";allButton.addEventListener("click",()=>select("cycle"));buttons.appendChild(allButton);
+        const groups=document.createElement("div");groups.className="evgeo-water-groups";
+        cfg.groups.forEach(group=>{
+          const card=document.createElement("section");card.className="evgeo-water-group";
+          const heading=document.createElement("h4");heading.textContent=group.title;card.appendChild(heading);
+          const children=document.createElement("div");children.className="evgeo-water-children";
+          group.items.forEach(([label,action])=>{
+            const b=document.createElement("button");b.type="button";b.textContent=label;b.dataset.scenario=action;
+            b.addEventListener("click",()=>select(action));children.appendChild(b);
+          });
+          card.appendChild(children);groups.appendChild(card);
+        });
+        buttons.appendChild(groups);
+      }else{
+        cfg.controls.forEach(([label,action])=>{
+          const b=document.createElement("button");b.type="button";b.textContent=label;b.dataset.scenario=action;
+          b.addEventListener("click",()=>select(action));buttons.appendChild(b);
+        });
+      }
       root.querySelector('[data-run="play"]').addEventListener("click",()=>{playing=true;});
       root.querySelector('[data-run="pause"]').addEventListener("click",()=>{playing=false;});
       root.querySelector('[data-run="reset"]').addEventListener("click",()=>{
@@ -762,8 +802,11 @@
           p.quakes.forEach((r,i)=>{const phase=(elapsed*1.1+i*.22)%1;r.scale.setScalar(1+phase*2.1);r.material.opacity=.7*(1-phase);});
         }
         if(playing)animated.forEach(fn=>fn(elapsed));
-        const phase=elapsed%20,stages={tectonic:["Ứng suất tích tụ","Mảng dịch chuyển","Biến dạng địa tầng","Hệ quả địa chất xuất hiện"],water:["Bốc hơi","Ngưng tụ","Giáng thủy","Dòng chảy và thấm"],river:["Xâm thực","Vận chuyển vật liệu","Dòng chảy giảm tốc","Bồi tụ phù sa"],coast:["Sóng tác động","Phá hủy và mài mòn","Vận chuyển dọc bờ","Tích tụ vật liệu"],climate:["Khối khí ẩm tiến đến","Không khí bị nâng lên","Ngưng tụ và mưa","Không khí hạ xuống khô hơn"]};
-        progressBar.style.width=(phase/20*100).toFixed(1)+"%";stageText.textContent=playing?stages[kind][Math.min(3,Math.floor(phase/5))]:(elapsed?stages[kind][Math.min(3,Math.floor(phase/5))]:"Chờ bắt đầu");
+        const phase=elapsed%20,stages={tectonic:["Ứng suất tích tụ","Mảng dịch chuyển","Biến dạng địa tầng","Hệ quả địa chất xuất hiện"],water:["Bốc hơi từ mặt nước","Hơi nước ngưng tụ","Mây phát triển và di chuyển","Mưa rơi, nước trở về biển"],river:["Xâm thực","Vận chuyển vật liệu","Dòng chảy giảm tốc","Bồi tụ phù sa"],coast:["Sóng tác động","Phá hủy và mài mòn","Vận chuyển dọc bờ","Tích tụ vật liệu"],climate:["Khối khí ẩm tiến đến","Không khí bị nâng lên","Ngưng tụ và mưa","Không khí hạ xuống khô hơn"]};
+        progressBar.style.width=(phase/20*100).toFixed(1)+"%";
+        const waterStageNames={evaporation_sea:"Nước biển chuyển thành hơi nước",evaporation_inland:"Nước lục địa bốc hơi",condensation:"Hơi nước lạnh đi và ngưng tụ",cloud_formation:"Các giọt nước tập hợp thành mây",precipitation_rain:"Giọt nước rơi xuống thành mưa",surface_runoff:"Nước chảy trên bề mặt về sông, biển",groundwater_flow:"Nước thấm xuống và di chuyển trong tầng chứa nước"};
+        if(kind==="water")stageText.textContent=scenario==="cycle"?stages.water[Math.min(3,Math.floor(phase/5))]:(waterStageNames[scenario]||"Đang quan sát quá trình");
+        else stageText.textContent=playing?stages[kind][Math.min(3,Math.floor(phase/5))]:(elapsed?stages[kind][Math.min(3,Math.floor(phase/5))]:"Chờ bắt đầu");
         if(orbit)orbit.update();
         renderer.render(scene,camera);
       }
