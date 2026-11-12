@@ -516,7 +516,57 @@
         const runoff=addLine(scene,[[-2.9,.18,3.35],[-1.6,.1,3.55],[.0,-.04,3.6],[1.65,-.12,3.25],[3.1,-.16,2.5]],0x9bd9e8,.8,.026);
         runoff.visible=false;
 
+        // Solar energy and surface heating: visible 3D beams terminate at the ocean surface.
+        const heatRays=[];
+        for(let i=0;i<5;i++){
+          const ray=new THREE.Mesh(
+            new THREE.CylinderGeometry(.025,.075,2.25,8,1,true),
+            new THREE.MeshBasicMaterial({color:0xffd47a,transparent:true,opacity:.34,side:THREE.DoubleSide,depthWrite:false})
+          );
+          ray.position.set(4.35+i*.43,1.22,-1.55+i*.78);
+          ray.rotation.z=-.12;
+          scene.add(ray);heatRays.push(ray);
+        }
+        const heatedSurface=new THREE.Mesh(
+          new THREE.CircleGeometry(.92,40),
+          new THREE.MeshBasicMaterial({color:0xffc66d,transparent:true,opacity:.17,depthWrite:false,side:THREE.DoubleSide})
+        );
+        heatedSurface.rotation.x=-Math.PI/2;heatedSurface.position.set(5.15,-.155,.1);scene.add(heatedSurface);
+
+        // Moist air cools as it rises; droplets become visible around the cloud base.
+        const coolingColumn=new THREE.Mesh(
+          new THREE.CylinderGeometry(.52,.9,2.45,24,1,true),
+          new THREE.MeshBasicMaterial({color:0x8bd8ed,transparent:true,opacity:.105,side:THREE.DoubleSide,depthWrite:false})
+        );
+        coolingColumn.position.set(1.05,3.15,-2.05);scene.add(coolingColumn);
+        const condensationPts=addParticles(96,0xe8fbff,{x:3.2,y:1.5,z:2.2},.052);
+        seedParticles(condensationPts,{x:[-.35,2.25],y:[3.0,4.35],z:[-2.65,-1.0]});
+        condensationPts.points.visible=false;
+
+        // Surface runoff follows the visible slope and joins the river channel.
+        const runoffCurve=new THREE.CatmullRomCurve3([
+          new THREE.Vector3(-2.9,.28,3.35),new THREE.Vector3(-2.0,.19,3.55),
+          new THREE.Vector3(-1.1,.11,3.62),new THREE.Vector3(-.1,.015,3.55),
+          new THREE.Vector3(1.0,-.08,3.28),new THREE.Vector3(2.0,-.14,2.92),
+          new THREE.Vector3(3.0,-.15,2.48),new THREE.Vector3(4.15,-.16,1.8)
+        ]);
+        const runoffPts=addParticles(74,0xcaf5ff,{x:5,y:1,z:2},.045);
+        runoffPts.points.visible=false;
+
+        // Groundwater percolates through the strata, then moves laterally toward the coast.
+        const groundwaterCurve=new THREE.CatmullRomCurve3([
+          new THREE.Vector3(-2.65,-.12,5.08),new THREE.Vector3(-2.2,-.58,5.08),
+          new THREE.Vector3(-1.35,-1.03,5.08),new THREE.Vector3(-.35,-1.42,5.08),
+          new THREE.Vector3(.85,-1.58,5.08),new THREE.Vector3(2.0,-1.48,5.08),
+          new THREE.Vector3(3.15,-1.12,5.08)
+        ]);
+        const groundwaterPath=addLine(scene,groundwaterCurve.getPoints(70).map(p=>[p.x,p.y,p.z]),0x6bc5df,.85,.035);
+        groundwaterPath.visible=false;
+        const groundwaterFlowPts=addParticles(58,0xb6efff,{x:5,y:1,z:1},.045);
+        groundwaterFlowPts.points.visible=false;
+
         objects.cycle={ocean,clouds,evaporation,rainfall,transpiration,infiltrationPts,infiltrationLines,flowPoints,riverCurve,runoff,fallsGroup,sunGlow,
+          heatRays,heatedSurface,coolingColumn,condensationPts,runoffCurve,runoffPts,groundwaterCurve,groundwaterPath,groundwaterFlowPts,
           soil:{soilTop,soilBody,weatheredRock,groundwater,bedrock,rootLines}};
         camera.position.set(11.8,9.2,14.5);
         addLabel(view,"BỐC HƠI",76,48);addLabel(view,"NGƯNG TỤ",42,13);addLabel(view,"MƯA",33,40);
@@ -641,6 +691,7 @@
 
       function select(action) {
         scenario=action;
+        if(kind==="water"){elapsed=0;playing=true;}
         buttons.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.scenario===action));
         const descriptions={
           diverge:"Ranh giới phân kỳ: hai mảng tách xa nhau. Vật chất nóng từ bên dưới có thể đi lên, nguội đi và tạo phần vỏ mới.",
@@ -651,11 +702,11 @@
           cycle:"Năng lượng Mặt Trời làm nước bốc hơi; hơi nước ngưng tụ thành mây, rơi xuống dưới dạng mưa và trở lại biển qua dòng chảy hoặc thấm xuống đất.",
           evaporation_sea:"Bức xạ Mặt Trời làm nước ở bề mặt đại dương nóng lên và chuyển thành hơi nước. Hơi nước bốc lên khí quyển, là nguồn cung cấp ẩm chủ yếu cho vòng tuần hoàn lớn.",
           evaporation_inland:"Nước ở sông, hồ và bề mặt đất ẩm nhận nhiệt, chuyển thành hơi nước rồi khuếch tán lên khí quyển. Lượng hơi nước này bổ sung cho khối khí phía trên lục địa.",
-          condensation:"Không khí chứa hơi nước bốc lên cao và lạnh đi. Khi đạt trạng thái bão hòa, hơi nước ngưng tụ thành những giọt nước rất nhỏ hoặc tinh thể băng.",
-          cloud_formation:"Các giọt nước nhỏ và tinh thể băng tập hợp trong khí quyển tạo thành mây. Những hạt nước va chạm, kết hợp và lớn dần trước khi có thể rơi xuống.",
-          precipitation_rain:"Khi các giọt nước trong mây đủ lớn và nặng, chúng rơi xuống bề mặt dưới dạng mưa. Nước mưa có thể chảy trên mặt đất, thấm xuống đất hoặc tạm thời tích trữ trong ao hồ.",
-          surface_runoff:"Nước mưa không thấm hết sẽ chảy theo sườn dốc, tập trung thành dòng nhỏ, suối và sông. Dòng chảy đưa nước từ lục địa trở lại biển.",
-          groundwater_flow:"Một phần nước mưa thấm qua đất, đi xuống các lớp vật liệu thấm nước và bổ sung cho tầng nước ngầm. Nước ngầm di chuyển chậm theo độ dốc thủy lực, có thể thoát ra sông, suối hoặc biển.",
+          condensation:"Hơi nước được không khí ẩm mang lên cao. Áp suất giảm khiến khối khí giãn nở và lạnh đi. Khi nhiệt độ hạ đến mức bão hòa, hơi nước bắt đầu ngưng tụ trên các hạt nhân ngưng kết thành những giọt nước li ti hoặc tinh thể băng. Vùng không khí phía trên núi được làm nổi bật để quan sát quá trình lạnh đi.",
+          cloud_formation:"Các giọt nước li ti và tinh thể băng tập trung thành đám mây. Chúng va chạm, kết hợp và phát triển; đám mây dày hơn khi lượng giọt nước và tinh thể băng tăng. Mô hình biểu diễn sự hình thành và phát triển của mây, không coi mây là khối hơi nước nhìn thấy được.",
+          precipitation_rain:"Trong mây, các giọt nước va chạm và hợp nhất; ở vùng mây lạnh, tinh thể băng cũng có thể phát triển. Khi hạt nước đủ lớn để thắng lực cản của không khí, chúng rơi xuống thành mưa. Các vệt mưa sẽ đi từ đáy mây đến mặt đất.",
+          surface_runoff:"Nước mưa chạm mặt đất. Phần không kịp thấm hoặc vượt quá khả năng thấm của đất chảy theo sườn dốc, tập trung vào rãnh nhỏ rồi nhập vào suối và sông. Các hạt nước di chuyển dọc tuyến dốc để cho thấy hướng dòng chảy về biển.",
+          groundwater_flow:"Nước mưa đi vào các khe rỗng giữa hạt đất và đá phong hóa. Một phần tiếp tục thấm sâu đến tầng chứa nước; tại đây, nước di chuyển chậm theo độ dốc thủy lực và có thể bổ sung cho sông hoặc thoát ra biển.",
           upper:"Thượng lưu thường có độ dốc lớn, dòng chảy nhanh và xâm thực sâu mạnh; lòng sông thường hẹp, có nhiều ghềnh thác.",
           middle:"Trung lưu có độ dốc giảm. Dòng sông uốn khúc rõ hơn; bờ lõm thường bị xói mòn, bờ lồi có xu hướng bồi tụ.",
           lower:"Hạ lưu có độ dốc nhỏ, dòng chảy chậm hơn; phù sa dễ lắng đọng, có thể hình thành bãi bồi và châu thổ.",
@@ -693,6 +744,13 @@
           o.infiltrationPts.points.visible=all||action==="groundwater_flow";
           o.infiltrationLines.forEach(x=>x.visible=all||action==="groundwater_flow");
           o.runoff.visible=all||action==="surface_runoff";
+          o.heatRays.forEach(x=>x.visible=all||action==="evaporation_sea"||action==="evaporation_inland");
+          o.heatedSurface.visible=all||action==="evaporation_sea"||action==="evaporation_inland";
+          o.coolingColumn.visible=all||action==="condensation"||action==="cloud_formation";
+          o.condensationPts.points.visible=all||action==="condensation"||action==="cloud_formation";
+          o.runoffPts.points.visible=all||action==="surface_runoff";
+          o.groundwaterPath.visible=all||action==="groundwater_flow";
+          o.groundwaterFlowPts.points.visible=all||action==="groundwater_flow";
           o.clouds.forEach(x=>x.visible=all||action==="condensation"||action==="cloud_formation"||action==="precipitation_rain");
           if(action==="evaporation_sea")seedParticles(o.evaporation,{x:[3.4,8.1],y:[.08,2.4],z:[-3.8,3.8]});
           if(action==="evaporation_inland")seedParticles(o.evaporation,{x:[-1.8,2.2],y:[.08,2.1],z:[-3.6,3.6]});
@@ -776,20 +834,56 @@
         if(playing)elapsed+=dt*speed;
         waterSurfaces.forEach(w=>w.update(elapsed,playing ? .075 : .025));
         if(playing&&kind==="water"&&objects.cycle){
-          const o=objects.cycle,step=elapsed%20;
+          const o=objects.cycle,cycleTime=elapsed%42,stage=Math.floor(cycleTime/6),stageProgress=(cycleTime%6)/6;
           if(scenario==="cycle"){
-            o.evaporation.points.visible=step<10;
-            o.rainfall.points.visible=step>=10&&step<15;
-            o.infiltrationPts.points.visible=step>=15;
-            o.infiltrationLines.forEach(x=>x.visible=step>=15);
-            o.runoff.visible=step>=15;
-            o.clouds.forEach(x=>x.visible=true);
+            o.heatRays.forEach(x=>x.visible=stage===0);
+            o.heatedSurface.visible=stage===0;
+            o.evaporation.points.visible=stage===0||stage===1;
+            o.coolingColumn.visible=stage===1||stage===2;
+            o.condensationPts.points.visible=stage===1||stage===2;
+            o.clouds.forEach(x=>x.visible=stage>=2);
+            o.rainfall.points.visible=stage===3;
+            o.runoff.visible=stage===4;
+            o.runoffPts.points.visible=stage===4;
+            o.infiltrationPts.points.visible=stage===5;
+            o.infiltrationLines.forEach(x=>x.visible=stage===5);
+            o.groundwaterPath.visible=stage===6;
+            o.groundwaterFlowPts.points.visible=stage===6;
           }
           o.transpiration.points.visible=false;
           updateParticles(o.evaporation,dt*speed*force,"rise");
           updateParticles(o.rainfall,dt*speed*force,"fall");
           updateParticles(o.infiltrationPts,dt*speed*force,"fall");
-          o.clouds.forEach(c=>{if(c.visible){c.position.x+=dt*.12*speed*force;if(c.position.x>4)c.position.x=-4.5;}});
+          updateParticles(o.condensationPts,dt*speed*force,"drift");
+          o.clouds.forEach((c,i)=>{
+            if(c.visible){
+              c.position.x+=dt*.12*speed*force;
+              if(c.position.x>4)c.position.x=-4.5;
+              const growth=scenario==="cycle"&&stage===2?.72+stageProgress*.48:1;
+              c.scale.setScalar(growth*(1+Math.sin(elapsed*.7+i)*.018));
+            }
+          });
+          o.heatRays.forEach((ray,i)=>{ray.material.opacity=.22+.16*(.5+.5*Math.sin(elapsed*2.2+i));});
+          const runoffAttr=o.runoffPts.points.geometry.attributes.position;
+          for(let i=0;i<runoffAttr.count;i++){
+            const p=o.runoffCurve.getPointAt((i/runoffAttr.count+elapsed*.055)%1);
+            runoffAttr.setXYZ(i,p.x,p.y+.035,p.z);
+          }
+          runoffAttr.needsUpdate=true;
+          const groundAttr=o.groundwaterFlowPts.points.geometry.attributes.position;
+          for(let i=0;i<groundAttr.count;i++){
+            const p=o.groundwaterCurve.getPointAt((i/groundAttr.count+elapsed*.018)%1);
+            groundAttr.setXYZ(i,p.x,p.y,p.z);
+          }
+          groundAttr.needsUpdate=true;
+          const condAttr=o.condensationPts.points.geometry.attributes.position;
+          for(let i=0;i<condAttr.count;i++){
+            const x=-.35+(i%12)*.22;
+            const y=3.05+Math.floor(i/12)*.17+Math.sin(elapsed*.9+i*.31)*.045;
+            const z=-2.55+((i*7)%10)*.15;
+            condAttr.setXYZ(i,x,y,z);
+          }
+          condAttr.needsUpdate=true;
         }
         if(playing&&kind==="river"&&objects.river){const o=objects.river;updateParticles(o.gravel,dt*speed*force,"drift");updateParticles(o.riverFlow,dt*speed*force,"river");o.bars.forEach((b,i)=>{const base=o.barBase[i];b.position.x=base.x+Math.sin(elapsed*.45+i)*.05*force;b.position.y=base.y+Math.sin(elapsed*.7+i*.4)*.025;});}
         if(playing&&kind==="coast"&&objects.coast)updateParticles(objects.coast.sandParticles,dt*speed,"drift");
@@ -805,10 +899,10 @@
           p.quakes.forEach((r,i)=>{const phase=(elapsed*1.1+i*.22)%1;r.scale.setScalar(1+phase*2.1);r.material.opacity=.7*(1-phase);});
         }
         if(playing)animated.forEach(fn=>fn(elapsed));
-        const phase=elapsed%20,stages={tectonic:["Ứng suất tích tụ","Mảng dịch chuyển","Biến dạng địa tầng","Hệ quả địa chất xuất hiện"],water:["Bốc hơi từ mặt nước","Hơi nước ngưng tụ","Mây phát triển và di chuyển","Mưa rơi, nước trở về biển"],river:["Xâm thực","Vận chuyển vật liệu","Dòng chảy giảm tốc","Bồi tụ phù sa"],coast:["Sóng tác động","Phá hủy và mài mòn","Vận chuyển dọc bờ","Tích tụ vật liệu"],climate:["Khối khí ẩm tiến đến","Không khí bị nâng lên","Ngưng tụ và mưa","Không khí hạ xuống khô hơn"]};
-        progressBar.style.width=(phase/20*100).toFixed(1)+"%";
-        const waterStageNames={evaporation_sea:"Nước biển chuyển thành hơi nước",evaporation_inland:"Nước lục địa bốc hơi",condensation:"Hơi nước lạnh đi và ngưng tụ",cloud_formation:"Các giọt nước tập hợp thành mây",precipitation_rain:"Giọt nước rơi xuống thành mưa",surface_runoff:"Nước chảy trên bề mặt về sông, biển",groundwater_flow:"Nước thấm xuống và di chuyển trong tầng chứa nước"};
-        if(kind==="water")stageText.textContent=scenario==="cycle"?stages.water[Math.min(3,Math.floor(phase/5))]:(waterStageNames[scenario]||"Đang quan sát quá trình");
+        const phase=kind==="water"?elapsed%42:elapsed%20,duration=kind==="water"?42:20,stages={tectonic:["Ứng suất tích tụ","Mảng dịch chuyển","Biến dạng địa tầng","Hệ quả địa chất xuất hiện"],water:["Bức xạ làm nóng mặt nước","Hơi nước bốc lên và lạnh đi","Giọt nước tập hợp thành mây","Mưa hình thành và rơi xuống","Nước chảy trên bề mặt","Nước thấm qua các tầng đất","Nước ngầm di chuyển về sông, biển"],river:["Xâm thực","Vận chuyển vật liệu","Dòng chảy giảm tốc","Bồi tụ phù sa"],coast:["Sóng tác động","Phá hủy và mài mòn","Vận chuyển dọc bờ","Tích tụ vật liệu"],climate:["Khối khí ẩm tiến đến","Không khí bị nâng lên","Ngưng tụ và mưa","Không khí hạ xuống khô hơn"]};
+        progressBar.style.width=(phase/duration*100).toFixed(1)+"%";
+        const waterStageNames={evaporation_sea:"Bức xạ làm nóng bề mặt biển; phân tử nước thoát khỏi mặt nước",evaporation_inland:"Nước ở sông, hồ và đất ẩm nhận nhiệt rồi chuyển thành hơi",condensation:"Không khí ẩm lạnh đi đến trạng thái bão hòa; hơi nước ngưng tụ",cloud_formation:"Các giọt nước li ti tập hợp, va chạm và phát triển thành mây",precipitation_rain:"Giọt nước trong mây lớn dần và rơi xuống thành mưa",surface_runoff:"Nước mưa chảy theo sườn dốc, nhập vào suối và sông",groundwater_flow:"Nước thấm qua đất, bổ sung tầng chứa nước và di chuyển về nơi thấp"};
+        if(kind==="water")stageText.textContent=scenario==="cycle"?stages.water[Math.min(6,Math.floor(phase/6))]:(waterStageNames[scenario]||"Đang quan sát quá trình");
         else stageText.textContent=playing?stages[kind][Math.min(3,Math.floor(phase/5))]:(elapsed?stages[kind][Math.min(3,Math.floor(phase/5))]:"Chờ bắt đầu");
         if(orbit)orbit.update();
         renderer.render(scene,camera);
