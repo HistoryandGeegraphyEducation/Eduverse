@@ -519,6 +519,7 @@
           objects.river.gravel.points.visible=action==="load"||action==="cycle";
         }
         if(kind==="coast" && objects.coast){
+          objects.coast.cliff.position.x=-2.6;objects.coast.spit.scale.x=1.9;
           objects.coast.sandParticles.points.visible=action==="drift"||action==="deposition";
           objects.coast.spit.visible=action==="deposition"||action==="drift"||action==="erosion";
         }
