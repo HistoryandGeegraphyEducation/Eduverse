@@ -737,6 +737,7 @@
           b.addEventListener("click",()=>select(action));buttons.appendChild(b);
         });
       }
+      if(kind==="water")select("cycle");
       root.querySelector('[data-run="play"]').addEventListener("click",()=>{playing=true;});
       root.querySelector('[data-run="pause"]').addEventListener("click",()=>{playing=false;});
       root.querySelector('[data-run="reset"]').addEventListener("click",()=>{
