@@ -775,18 +775,20 @@
         if(playing)elapsed+=dt*speed;
         waterSurfaces.forEach(w=>w.update(elapsed,playing ? .075 : .025));
         if(playing&&kind==="water"&&objects.cycle){
-          const o=objects.cycle,step=elapsed%18;
-          o.evaporation.points.visible=scenario==="cycle"||scenario==="evaporation"||step<5;
-          o.rainfall.points.visible=scenario==="cycle"||scenario==="precipitation"||step>8&&step<14;
-          o.transpiration.points.visible=scenario==="cycle"||scenario==="transpiration";
-          o.infiltrationPts.points.visible=scenario==="cycle"||scenario==="infiltration";
-          o.infiltrationLines.forEach(x=>x.visible=scenario==="infiltration"||scenario==="cycle"&&step>12);
-          o.runoff.visible=scenario==="precipitation"||scenario==="cycle"&&step>12;
+          const o=objects.cycle,step=elapsed%20;
+          if(scenario==="cycle"){
+            o.evaporation.points.visible=step<10;
+            o.rainfall.points.visible=step>=10&&step<15;
+            o.infiltrationPts.points.visible=step>=15;
+            o.infiltrationLines.forEach(x=>x.visible=step>=15);
+            o.runoff.visible=step>=15;
+            o.clouds.forEach(x=>x.visible=true);
+          }
+          o.transpiration.points.visible=false;
           updateParticles(o.evaporation,dt*speed*force,"rise");
           updateParticles(o.rainfall,dt*speed*force,"fall");
-          updateParticles(o.transpiration,dt*speed*force,"rise");
           updateParticles(o.infiltrationPts,dt*speed*force,"fall");
-          o.clouds.forEach(c=>{c.position.x+=dt*.12*speed*force;if(c.position.x>4)c.position.x=-4.5;});
+          o.clouds.forEach(c=>{if(c.visible){c.position.x+=dt*.12*speed*force;if(c.position.x>4)c.position.x=-4.5;}});
         }
         if(playing&&kind==="river"&&objects.river){const o=objects.river;updateParticles(o.gravel,dt*speed*force,"drift");updateParticles(o.riverFlow,dt*speed*force,"river");o.bars.forEach((b,i)=>{const base=o.barBase[i];b.position.x=base.x+Math.sin(elapsed*.45+i)*.05*force;b.position.y=base.y+Math.sin(elapsed*.7+i*.4)*.025;});}
         if(playing&&kind==="coast"&&objects.coast)updateParticles(objects.coast.sandParticles,dt*speed,"drift");
