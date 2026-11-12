@@ -1,48 +1,22 @@
 /* EDUVERSE | Địa lí 6
  * Bộ mô phỏng 3D: mảng kiến tạo, chu trình nước, quá trình sông,
  * địa hình ven biển và ảnh hưởng địa hình đến khí hậu.
- * Dùng Three.js r147 + OrbitControls đã nạp từ index.html.
+ * Dựng hình WebGL 3D bằng Three.js r147; không có Canvas 2D/vector fallback.
  */
 (function () {
   "use strict";
 
-  function compatibilityView(root, kind, error) {
-    const old=root.querySelector('.evgeo-view');
-    if(!old) return;
-    const box=document.createElement('div');
-    box.className='evgeo-view'; box.style.cssText='height:clamp(300px,56vh,510px);min-height:280px;position:relative;overflow:hidden;border-radius:13px;background:#a9cbdc';
-    const canvas=document.createElement('canvas'); canvas.style.cssText='width:100%;height:100%;display:block'; box.appendChild(canvas);
-    const tag=document.createElement('div');tag.className='evgeo-viewtag';tag.textContent='CHẾ ĐỘ TƯƠNG THÍCH · CANVAS 2D';box.appendChild(tag);
-    old.replaceWith(box);
-    const ctx=canvas.getContext('2d');
-    if(!ctx){box.textContent='Trình duyệt không hỗ trợ Canvas 2D.';return;}
-    function draw(){
-      const w=Math.max(280,box.clientWidth),h=Math.max(260,box.clientHeight),d=Math.min(window.devicePixelRatio||1,2);
-      canvas.width=w*d;canvas.height=h*d;ctx.setTransform(d,0,0,d,0,0);
-      const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#9bc5d8');g.addColorStop(1,'#e2e8d9');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
-      const y=h*.68;ctx.fillStyle='#66865a';ctx.fillRect(0,y,w,h-y);ctx.font='bold 13px system-ui';ctx.fillStyle='#173e50';
-      if(kind==='tectonic'){ctx.fillStyle='#9b7958';ctx.fillRect(0,y-40,w*.48,110);ctx.fillStyle='#b18b65';ctx.fillRect(w*.52,y-40,w*.48,110);ctx.fillStyle='#c15c39';ctx.fillRect(0,y+70,w,55);ctx.fillStyle='#fff';ctx.fillText('VỎ TRÁI ĐẤT · RANH GIỚI MẢNG',12,24);}
-      else if(kind==='water'){ctx.fillStyle='#168db8';ctx.fillRect(0,y,w,h-y);ctx.beginPath();ctx.moveTo(w*.25,y);ctx.lineTo(w*.42,h*.35);ctx.lineTo(w*.58,y);ctx.fillStyle='#718b5b';ctx.fill();ctx.fillStyle='#173e50';ctx.fillText('BỐC HƠI → NGƯNG TỤ → MƯA → DÒNG CHẢY',12,26);}
-      else if(kind==='river'){ctx.beginPath();ctx.moveTo(0,y-95);ctx.lineTo(w*.25,y-5);ctx.lineTo(w*.5,y+15);ctx.lineTo(w,y+55);ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.fillStyle='#78915e';ctx.fill();ctx.beginPath();ctx.moveTo(w*.18,y-45);ctx.bezierCurveTo(w*.25,y+40,w*.62,y-15,w*.8,h*.84);ctx.strokeStyle='#238fbd';ctx.lineWidth=24;ctx.stroke();ctx.fillStyle='#fff';ctx.fillText('THƯỢNG LƯU · TRUNG LƯU · HẠ LƯU',12,24);}
-      else if(kind==='coast'){ctx.fillStyle='#168db8';ctx.fillRect(0,y,w,h-y);ctx.fillStyle='#c8ae7b';ctx.fillRect(0,y-55,w*.52,55);ctx.fillStyle='#173e50';ctx.fillText('VÁCH BIỂN · BÃI CÁT · DÒNG VEN BỜ',12,24);}
-      else {ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w*.2,h*.45);ctx.lineTo(w*.38,h*.16);ctx.lineTo(w*.57,h*.48);ctx.lineTo(w,h*.7);ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.fillStyle='#748d5d';ctx.fill();ctx.fillStyle='#173e50';ctx.fillText('SƯỜN ĐÓN GIÓ · SƯỜN KHUẤT GIÓ',12,24);}
-    }
-    draw(); if(window.ResizeObserver){const ro=new ResizeObserver(draw);ro.observe(box);}
-    const note=root.querySelector('.evgeo-explain');if(note)note.textContent='WebGL không khởi tạo được. Đang hiển thị sơ đồ Canvas 2D tương thích. Lỗi gốc: '+String(error||'không xác định');
-    console.warn('[EDUVERSE] WebGL fallback:',error);
-  }
   const THREE = window.THREE;
   if (!THREE) {
-    const fail = (root,kind) => {
-      root.innerHTML='<section class="evgeo"><div class="evgeo-head"><h2>Không tải được thư viện 3D</h2></div><div class="evgeo-view"></div><div class="evgeo-explain"></div></section>';
-      compatibilityView(root,kind,'Three.js CDN không tải được');
-      return {destroy(){}};
+    const fail = root => {
+      root.innerHTML = '<section class="evgeo evgeo-error"><h2>Không thể khởi tạo mô phỏng 3D</h2><p>Thư viện Three.js chưa được tải. Kiểm tra kết nối mạng rồi tải lại trang.</p></section>';
+      return { destroy() {} };
     };
-    window.simTectonics=root=>fail(root,'tectonic');
-    window.simWaterCycle=root=>fail(root,'water');
-    window.simRiverProcess=root=>fail(root,'river');
-    window.simCoastalLandforms=root=>fail(root,'coast');
-    window.simClimateRelief=root=>fail(root,'climate');
+    window.simTectonics=root=>fail(root);
+    window.simWaterCycle=root=>fail(root);
+    window.simRiverProcess=root=>fail(root);
+    window.simCoastalLandforms=root=>fail(root);
+    window.simClimateRelief=root=>fail(root);
     return;
   }
 
@@ -57,45 +31,31 @@
     new THREE.MeshStandardMaterial({ color, roughness, ...extra });
 
   function makeTexture(base, seed, scale = 1) {
-    const canvas = document.createElement("canvas");
-    canvas.width = canvas.height = 512;
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = base;
-    ctx.fillRect(0, 0, 512, 512);
+    const size = 512, data = new Uint8Array(size * size * 4);
+    const hex = base.replace("#", "");
+    const br = parseInt(hex.slice(0, 2), 16), bg = parseInt(hex.slice(2, 4), 16), bb = parseInt(hex.slice(4, 6), 16);
     let n = seed >>> 0;
-    const rand = () => {
-      n = (n * 1664525 + 1013904223) >>> 0;
-      return n / 4294967296;
-    };
-    for (let i = 0; i < 18000; i++) {
-      const v = rand(), a = .025 + rand() * .13;
-      ctx.fillStyle = v > .52 ? "rgba(255,245,220," + a + ")" : "rgba(28,24,18," + a + ")";
-      const s = .5 + rand() * 4 * scale;
-      ctx.fillRect(rand() * 512, rand() * 512, s, s);
+    const rand = () => { n = (n * 1664525 + 1013904223) >>> 0; return n / 4294967296; };
+    const coarse = new Float32Array(64 * 64);
+    for (let i = 0; i < coarse.length; i++) coarse[i] = rand() - .5;
+    for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
+      const i = (y * size + x) * 4, cx = Math.floor(x / 8), cy = Math.floor(y / 8);
+      const broad = coarse[cy * 64 + cx] * 13, fine = (rand() - .5) * 22 * scale;
+      const grain = Math.sin((x * .17 + y * .09) * scale) * 2.2, v = broad + fine + grain;
+      data[i] = Math.max(0, Math.min(255, br + v));
+      data[i + 1] = Math.max(0, Math.min(255, bg + v));
+      data[i + 2] = Math.max(0, Math.min(255, bb + v)); data[i + 3] = 255;
     }
-    for (let i = 0; i < 90; i++) {
-      ctx.strokeStyle = "rgba(40,35,28," + (.025 + rand() * .07) + ")";
-      ctx.lineWidth = .5 + rand() * 2;
-      ctx.beginPath();
-      const x = rand() * 512, y = rand() * 512;
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + (rand() - .5) * 90, y + (rand() - .5) * 90);
-      ctx.stroke();
-    }
-    const map = new THREE.CanvasTexture(canvas);
-    map.wrapS = map.wrapT = THREE.RepeatWrapping;
-    map.repeat.set(2.5, 2.5);
-    map.colorSpace = THREE.SRGBColorSpace || map.colorSpace;
+    const map = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
+    map.wrapS = map.wrapT = THREE.RepeatWrapping; map.repeat.set(2.5, 2.5);
+    map.magFilter = THREE.LinearFilter; map.minFilter = THREE.LinearMipmapLinearFilter;
+    map.generateMipmaps = true; map.colorSpace = THREE.SRGBColorSpace || map.colorSpace; map.needsUpdate = true;
     return map;
   }
-
   const TEX = {
-    grass: makeTexture("#668452", 17),
-    soil: makeTexture("#987653", 23),
-    rock: makeTexture("#81786b", 31),
-    sand: makeTexture("#c8ad7c", 41),
-    seabed: makeTexture("#786b56", 53),
-    sediment: makeTexture("#b69a6a", 67)
+    grass: makeTexture("#668452", 17), soil: makeTexture("#987653", 23),
+    rock: makeTexture("#81786b", 31), sand: makeTexture("#c8ad7c", 41),
+    seabed: makeTexture("#786b56", 53), sediment: makeTexture("#b69a6a", 67)
   };
 
   function terrainMaterial(map, color = 0xffffff) {
@@ -265,21 +225,27 @@
           <span class="evgeo-live">TƯƠNG TÁC</span>
         </div>
         <p class="evgeo-lead">${cfg.lead}</p>
-        <div class="evgeo-view">
-          <canvas aria-label="Mô hình địa lí ba chiều"></canvas>
-          <div class="evgeo-viewtag">GÓC NHÌN 3D · KÉO ĐỂ XOAY · CUỘN ĐỂ ZOOM</div>
-          <div class="evgeo-readout">TOÀN CẢNH</div>
-        </div>
-        <div class="evgeo-buttons"></div>
-        <div class="evgeo-process"><b>DIỄN BIẾN</b><div class="evgeo-process-track"><i data-progress></i></div><span data-stage>Chờ bắt đầu</span></div>
-        <div class="evgeo-explain" aria-live="polite">${cfg.lead}</div>
-        <div class="evgeo-footer">
-          <button data-run="play">▶ Chạy diễn biến</button>
-          <button data-run="pause">Ⅱ Tạm dừng</button>
-          <button data-run="reset">↺ Đặt lại</button>
-          <label>Tốc độ <input data-speed type="range" min=".25" max="2.5" step=".25" value="1"></label>
-          <label>Cường độ <input data-force type="range" min=".25" max="2" step=".25" value="1"></label>
-          <span>Điều chỉnh để so sánh mức độ tác động.</span>
+        <div class="evgeo-layout">
+          <div class="evgeo-view">
+            <canvas aria-label="Khung dựng hình mô phỏng địa lí 3D bằng WebGL"></canvas>
+            <div class="evgeo-viewtag">MÔ HÌNH 3D · KÉO ĐỂ XOAY · CUỘN ĐỂ ZOOM</div>
+            <div class="evgeo-readout">TOÀN CẢNH</div>
+          </div>
+          <aside class="evgeo-controls" aria-label="Bảng điều khiển mô phỏng">
+            <div class="evgeo-control-section"><b class="evgeo-section-title">CHỌN QUÁ TRÌNH</b><div class="evgeo-buttons"></div></div>
+            <div class="evgeo-process"><b>DIỄN BIẾN</b><div class="evgeo-process-track"><i data-progress></i></div><span data-stage>Chờ bắt đầu</span></div>
+            <div class="evgeo-explain" aria-live="polite">${cfg.lead}</div>
+            <div class="evgeo-footer">
+              <div class="evgeo-actions">
+                <button data-run="play">▶ Chạy diễn biến</button>
+                <button data-run="pause">Ⅱ Tạm dừng</button>
+                <button data-run="reset">↺ Đặt lại</button>
+              </div>
+              <label>Tốc độ <input data-speed type="range" min=".25" max="2.5" step=".25" value="1"></label>
+              <label>Cường độ <input data-force type="range" min=".25" max="2" step=".25" value="1"></label>
+              <span>Điều chỉnh để so sánh mức độ tác động.</span>
+            </div>
+          </aside>
         </div>
       </section>`;
 
@@ -291,18 +257,29 @@
       .evgeo h2{font-size:clamp(14px,2vw,19px);line-height:1.35;margin:5px 0 0;font-weight:800}
       .evgeo-live{font-size:9px;letter-spacing:1px;border:1px solid #4c849d;color:#b8e6f5;padding:5px 8px;border-radius:20px;white-space:nowrap}
       .evgeo-lead{font-size:12px;line-height:1.55;color:#c7dce8;margin:9px 0 12px}
-      .evgeo-view{height:clamp(300px,56vh,510px);min-height:280px;position:relative;overflow:hidden;border-radius:13px;background:linear-gradient(#9fc5d8,#d5e0d9 66%,#657d61);box-shadow:inset 0 0 35px #173a4d55}
+      .evgeo-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:14px;align-items:stretch}
+      .evgeo-view{height:clamp(430px,66vh,650px);min-height:390px;position:relative;overflow:hidden;border-radius:13px;background:linear-gradient(#9fc5d8,#d5e0d9 66%,#657d61);box-shadow:inset 0 0 35px #173a4d55}
       .evgeo-view canvas{width:100%;height:100%;display:block;touch-action:none}
-      .evgeo-label{position:absolute;z-index:2;transform:translate(-8%,-50%);padding:5px 8px;border-radius:6px;background:#08283bcf;border:1px solid #ffffff42;color:#f5fbff;font-size:9px;font-weight:700;letter-spacing:.4px;pointer-events:none;white-space:nowrap;text-shadow:0 1px 2px #000}.evgeo-viewtag,.evgeo-readout{position:absolute;top:10px;background:#071b2cce;color:#e2f3fb;border:1px solid #ffffff24;border-radius:7px;padding:7px 9px;font-size:9px;letter-spacing:.5px;pointer-events:none}
+      .evgeo-label{position:absolute;z-index:2;transform:translate(-8%,-50%);padding:5px 8px;border-radius:6px;background:#08283bcf;border:1px solid #ffffff42;color:#f5fbff;font-size:9px;font-weight:700;letter-spacing:.4px;pointer-events:none;white-space:nowrap;text-shadow:0 1px 2px #000}
+      .evgeo-viewtag,.evgeo-readout{position:absolute;top:10px;background:#071b2cce;color:#e2f3fb;border:1px solid #ffffff24;border-radius:7px;padding:7px 9px;font-size:9px;letter-spacing:.5px;pointer-events:none}
       .evgeo-viewtag{left:10px}.evgeo-readout{right:10px}
-      .evgeo-buttons{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
-      .evgeo button{border:1px solid #4e7e95;background:#17445d;color:#f2f8fb;border-radius:9px;padding:8px 11px;font-size:11px;cursor:pointer}
+      .evgeo-controls{min-width:0;display:flex;flex-direction:column;gap:10px;padding:12px;border:1px solid #ffffff1c;border-radius:13px;background:#061725a8}
+      .evgeo-control-section{min-width:0}.evgeo-section-title{font-size:10px;letter-spacing:1px;color:#91c9df}
+      .evgeo-buttons{display:grid;grid-template-columns:1fr;gap:7px;margin-top:9px}
+      .evgeo button{border:1px solid #4e7e95;background:#17445d;color:#f2f8fb;border-radius:9px;padding:9px 11px;font-size:11px;cursor:pointer;text-align:left}
       .evgeo button.active,.evgeo button:focus-visible{background:#147c9d;border-color:#9be1f2;outline:none}
-      .evgeo-explain{margin-top:9px;padding:11px 12px;border-radius:10px;background:#ffffff10;border-left:3px solid #58b5d0;color:#d9eaf2;font-size:12px;line-height:1.6;min-height:54px}
-      .evgeo-footer{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:10px}
-      .evgeo-footer label{display:flex;align-items:center;gap:6px;color:#c8dce7;font-size:11px}
-      .evgeo-footer input{width:88px;accent-color:#63c3dc}
-      .evgeo-footer span{font-size:10px;color:#91afbf}.evgeo-process{display:grid;grid-template-columns:auto minmax(65px,1fr) auto;align-items:center;gap:9px;margin-top:10px;color:#b8d5e3;font-size:10px}.evgeo-process-track{height:6px;background:#ffffff20;border-radius:9px;overflow:hidden}.evgeo-process-track i{display:block;width:0;height:100%;background:linear-gradient(90deg,#4ca8c5,#b4e7ed);transition:width .15s}
+      .evgeo-explain{padding:11px 12px;border-radius:10px;background:#ffffff10;border-left:3px solid #58b5d0;color:#d9eaf2;font-size:12px;line-height:1.6;min-height:72px}
+      .evgeo-footer{display:flex;flex-direction:column;align-items:stretch;gap:9px;margin-top:auto}
+      .evgeo-actions{display:grid;grid-template-columns:1fr;gap:6px}
+      .evgeo-footer label{display:grid;grid-template-columns:58px minmax(0,1fr);align-items:center;gap:6px;color:#c8dce7;font-size:11px}
+      .evgeo-footer input{width:100%;accent-color:#63c3dc}.evgeo-footer span{font-size:10px;color:#91afbf;line-height:1.45}
+      .evgeo-process{display:grid;grid-template-columns:1fr;align-items:center;gap:7px;padding:9px 0;border-top:1px solid #ffffff1c;border-bottom:1px solid #ffffff1c;color:#b8d5e3;font-size:10px}
+      .evgeo-process-track{height:6px;background:#ffffff20;border-radius:9px;overflow:hidden}
+      .evgeo-process-track i{display:block;width:0;height:100%;background:linear-gradient(90deg,#4ca8c5,#b4e7ed);transition:width .15s}
+      .evgeo-error{padding:22px;color:#f2f8fb;background:#182d3d;border:1px solid #a65c4d;border-radius:14px}
+      .evgeo-error p{font-size:13px;line-height:1.6;color:#d7e6ed}
+      .evgeo-webgl-error{height:100%;min-height:300px;display:grid;place-content:center;padding:28px;color:#fff;background:linear-gradient(145deg,#263c4b,#101f2b);font:600 14px/1.7 system-ui;text-align:center}
+      @media(max-width:820px){.evgeo-layout{grid-template-columns:minmax(0,1fr)}.evgeo-view{height:clamp(340px,55vh,480px);min-height:300px}.evgeo-buttons{grid-template-columns:repeat(auto-fit,minmax(135px,1fr))}.evgeo-actions{grid-template-columns:repeat(3,minmax(0,1fr))}.evgeo-footer label{grid-template-columns:65px minmax(0,1fr)}}
       @media(max-width:480px){.evgeo-view{height:360px}.evgeo-footer span{width:100%}.evgeo button{padding:8px 9px}}
     `;
     root.appendChild(style);
@@ -669,7 +646,10 @@
       if(observer) observer.disconnect();
       if(orbit) orbit.dispose();
       if(renderer) renderer.dispose();
-      compatibilityView(root,kind,error && error.message ? error.message : String(error));
+      const failure = document.createElement("div");
+      failure.className = "evgeo-webgl-error";
+      failure.textContent = "Không thể dựng mô phỏng WebGL 3D trên thiết bị này. Hãy kiểm tra trình duyệt, tăng tốc phần cứng và kết nối thư viện Three.js. Chi tiết: " + (error && error.message ? error.message : String(error));
+      view.replaceChildren(failure);
       return { destroy(){} };
     }
 
