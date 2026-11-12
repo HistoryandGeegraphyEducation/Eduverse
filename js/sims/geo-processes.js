@@ -364,91 +364,156 @@
       }
 
       function buildWaterCycle() {
-        scene.background = new THREE.Color(0x9bbdca);
-        scene.fog = new THREE.Fog(0x9bbdca, 19, 34);
+        scene.background = new THREE.Color(0x9ebfce);
+        scene.fog = new THREE.Fog(0x9ebfce, 23, 42);
+
+        // River centreline also defines the incised valley in the terrain.
+        const riverX=(z)=>-3.15+(z+4.8)*.72+Math.sin((z+4.8)*.72)*.48;
         const heightAt=(x,z)=>{
-          const ridge=2.35*Math.exp(-Math.pow((x+4.2)/1.55,2))*(.82+.18*Math.cos(z*.62));
-          const foothill=.72*Math.exp(-Math.pow((x+1.5)/2.1,2));
-          const valley=-.22*Math.exp(-Math.pow((x-.7)/1.45,2));
-          return -.22+ridge+foothill+valley+.07*Math.sin(z*1.15+x*.42);
+          const mainRidge=2.25*Math.exp(-Math.pow((x+4.55)/2.15,2))*(.78+.22*Math.cos(z*.38));
+          const rearRidge=1.05*Math.exp(-Math.pow((x+1.9)/2.6,2));
+          const foothill=.48*Math.exp(-Math.pow((x-.2)/2.4,2));
+          const channel=Math.exp(-Math.pow((x-riverX(z))/.58,2))*.34;
+          const valley=-.16*Math.exp(-Math.pow((x-2.0)/2.4,2));
+          return -.18+mainRidge+rearRidge+foothill+valley-channel
+            +.055*Math.sin(z*.8+x*.48)+.035*Math.cos(z*1.35-x*.22);
         };
-        const terrain=addTerrain(14,10,112,84,heightAt,TEX.grass,(x,z,y)=>{
-          if(y>1.75)return new THREE.Color(0x77796e);
-          if(y>1.05)return new THREE.Color(0x68785b);
-          if(x>2.6)return new THREE.Color(0xb8a47b);
-          return new THREE.Color(y<.05?0x8b9568:0x71845d);
+        const terrain=addTerrain(16,12,144,108,heightAt,TEX.grass,(x,z,y)=>{
+          if(y>1.9)return new THREE.Color(0x77766d);
+          if(y>1.15)return new THREE.Color(0x65775a);
+          if(x>3.5)return new THREE.Color(0x9b9877);
+          if(y<.02)return new THREE.Color(0x78865b);
+          return new THREE.Color(0x668252);
         });
-        terrain.position.y=0;
-        const ocean=addWater(6.2,10,4.15,-.22,.15,{segments:72,color:0x176d91,opacity:.96});
-        const lake=addWater(2.1,1.55,-2.2,.34,-2.1,{segments:36,color:0x287f9c,opacity:.93});
-        const beach=new THREE.Mesh(new THREE.PlaneGeometry(2.5,10,1,1),new THREE.MeshStandardMaterial({map:TEX.sand,roughness:.96}));
-        beach.rotation.x=-Math.PI/2;beach.position.set(2.65,-.08,.05);scene.add(beach);
+        terrain.position.set(0,0,0);
+
+        // Ocean basin and a narrow natural shore transition.
+        const ocean=addWater(8.2,12,5.15,-.19,.05,{segments:88,color:0x176b8d,opacity:.97});
+        const shoreShape=new THREE.Shape();
+        shoreShape.moveTo(0,-5.8);shoreShape.lineTo(1.15,-5.8);
+        shoreShape.quadraticCurveTo(.65,-2.6,1.45,0);
+        shoreShape.quadraticCurveTo(2.1,2.8,1.25,5.8);
+        shoreShape.lineTo(0,5.8);shoreShape.closePath();
+        const shoreGeo=new THREE.ShapeGeometry(shoreShape,32);shoreGeo.rotateX(-Math.PI/2);
+        const shore=new THREE.Mesh(shoreGeo,new THREE.MeshStandardMaterial({map:TEX.sand,roughness:.98,side:THREE.DoubleSide}));
+        shore.position.set(3.35,-.12,.05);scene.add(shore);
+
+        // A real ribbon-shaped river channel follows the carved valley.
         const riverPoints=[];
-        for(let i=0;i<=90;i++){
-          const t=i/90,z=-4.65+t*8.9,x=-3.55+t*6.9+Math.sin(t*Math.PI*2.2)*.48;
-          riverPoints.push(new THREE.Vector3(x,heightAt(x,z)+.07,z));
+        for(let i=0;i<=120;i++){
+          const t=i/120,z=-5.1+t*10.2,x=riverX(z);
+          riverPoints.push(new THREE.Vector3(x,heightAt(x,z)+.065,z));
         }
         const riverCurve=new THREE.CatmullRomCurve3(riverPoints);
-        const riverBed=new THREE.Mesh(new THREE.TubeGeometry(riverCurve,220,.27,12,false),new THREE.MeshStandardMaterial({color:0x76634d,roughness:1}));
-        riverBed.position.y=-.055;scene.add(riverBed);
-        const river=new THREE.Mesh(new THREE.TubeGeometry(riverCurve,220,.19,14,false),new THREE.MeshPhysicalMaterial({color:0x1d7899,roughness:.2,metalness:.02,clearcoat:.9,clearcoatRoughness:.12}));
-        river.position.y=.035;scene.add(river);
-        const waterfallCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(-3.5,1.35,-2.8),new THREE.Vector3(-3.25,.85,-2.65),new THREE.Vector3(-3.05,.35,-2.45)]);
-        const waterfall=new THREE.Mesh(new THREE.TubeGeometry(waterfallCurve,36,.12,10,false),new THREE.MeshPhysicalMaterial({color:0x8ed5e5,transparent:true,opacity:.82,roughness:.16}));
-        scene.add(waterfall);
-        [[-5.5,-2.4,.95],[-5.1,-1.25,.82],[-4.8,.1,1.05],[-5.7,1.3,.9],[-4.2,2.0,.78],[-3.7,-3.3,.72],[-3.25,-1.9,.82],[-4.5,3.0,.76],[-2.8,.5,.7]].forEach(([x,z,k])=>addTree(scene,x,heightAt(x,z),z,k));
-        const rockMat=new THREE.MeshStandardMaterial({map:TEX.rock,roughness:1});
-        for(let i=0;i<18;i++){
-          const x=-5.9+(i%6)*.47+Math.sin(i*2.3)*.12,z=-3.7+Math.floor(i/6)*.72;
-          const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.16+(i%3)*.035,1),rockMat);
-          rock.position.set(x,heightAt(x,z)+.08,z);rock.rotation.set(i*.3,i*.7,i*.2);rock.scale.y=.65;scene.add(rock);
+        const makeRiverRibbon=(offset,width,color,opacity)=>{
+          const verts=[],indices=[],steps=180;
+          for(let i=0;i<=steps;i++){
+            const t=i/steps,p=riverCurve.getPointAt(t),t0=Math.max(0,t-.002),t1=Math.min(1,t+.002);
+            const a=riverCurve.getPointAt(t0),b=riverCurve.getPointAt(t1);
+            const dx=b.x-a.x,dz=b.z-a.z,len=Math.hypot(dx,dz)||1;
+            const nx=-dz/len,nz=dx/len,w=width*(.72+.28*Math.sin(Math.PI*t));
+            const y=p.y+offset;
+            verts.push(p.x+nx*w,y,p.z+nz*w,p.x-nx*w,y,p.z-nz*w);
+            if(i<steps){const k=i*2;indices.push(k,k+1,k+2,k+1,k+3,k+2);}
+          }
+          const geo=new THREE.BufferGeometry();
+          geo.setAttribute("position",new THREE.Float32BufferAttribute(verts,3));
+          geo.setIndex(indices);geo.computeVertexNormals();
+          const mat=new THREE.MeshPhysicalMaterial({color,roughness:.22,metalness:.02,clearcoat:.85,transparent:opacity<1,opacity,side:THREE.DoubleSide});
+          const mesh=new THREE.Mesh(geo,mat);mesh.receiveShadow=true;scene.add(mesh);return mesh;
+        };
+        const riverBed=makeRiverRibbon(-.035,.42,0x80694f,1);
+        const river=makeRiverRibbon(.025,.31,0x267d9c,1);
+
+        // A short cascade connects the upper stream to the incised channel.
+        const fallsGroup=new THREE.Group();
+        const fallMat=new THREE.MeshPhysicalMaterial({color:0x9edce9,roughness:.16,transparent:true,opacity:.88,side:THREE.DoubleSide});
+        const fallGeo=new THREE.PlaneGeometry(.72,1.05,8,20);
+        const fall= new THREE.Mesh(fallGeo,fallMat);
+        fall.rotation.x=-.22;fall.position.set(-3.25,.42,-2.55);fallsGroup.add(fall);
+        const plunge=new THREE.Mesh(new THREE.CircleGeometry(.48,32),new THREE.MeshPhysicalMaterial({color:0x8ed2e2,transparent:true,opacity:.55,roughness:.2}));
+        plunge.rotation.x=-Math.PI/2;plunge.position.set(-2.55,.05,-2.25);fallsGroup.add(plunge);
+        scene.add(fallsGroup);
+
+        // Forest patches follow the mountain contours; rocks are clustered at the stream.
+        [[-6,-3,.9],[-5.65,-1.9,.85],[-5.7,-.5,1],[-5.15,1,.92],[-4.7,2.6,.78],[-4.1,-3.6,.76],[-3.9,-1.65,.8],[-4.35,3.5,.72],[-2.7,1.7,.7],[-2.4,-3.2,.66]].forEach(([x,z,k])=>addTree(scene,x,heightAt(x,z),z,k));
+        const rockMat=new THREE.MeshStandardMaterial({map:TEX.rock,roughness:.96});
+        for(let i=0;i<24;i++){
+          const z=-4.4+(i%8)*1.12,x=riverX(z)+(i%2?-.62:.62)+(Math.sin(i*2.1)*.12);
+          const rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.13+(i%4)*.035,1),rockMat);
+          rock.position.set(x,heightAt(x,z)+.09,z);rock.rotation.set(i*.23,i*.61,i*.17);rock.scale.set(1,.72,.85);scene.add(rock);
         }
-        const soilSide=meshBox(scene,6.4,.42,1.35,MAT(0x654d39),-.15,-.48,4.25);
-        const topsoil=meshBox(scene,6.4,.18,1.38,new THREE.MeshStandardMaterial({map:TEX.soil,roughness:1}),-.15,-.18,4.24);
-        const subsoil=meshBox(scene,6.4,.58,1.35,MAT(0x98704e),-.15,-.86,4.25);
-        const weathered=meshBox(scene,6.4,.43,1.35,MAT(0x81715e),-.15,-1.37,4.25);
-        const aquifer=meshBox(scene,6.4,.32,1.35,new THREE.MeshPhysicalMaterial({color:0x397f98,transparent:true,opacity:.72,roughness:.28}),-.15,-1.73,4.25);
-        const bedrock=meshBox(scene,6.4,.42,1.35,MAT(0x57534d),-.15,-2.1,4.25);
-        [soilSide,topsoil,subsoil,weathered,aquifer,bedrock].forEach(o=>{o.material.side=THREE.DoubleSide;});
-        for(let i=0;i<9;i++)addLine(scene,[[-3.3,-.43-i*.17,4.94],[3.0,-.43-i*.17,4.94]],i%2?0xc19a70:0x5f5549,.55,.012);
-        for(let i=0;i<7;i++){
-          const x=-2.8+i*.78;
-          addLine(scene,[[x,-.22,4.93],[x+.12,-.55,4.94],[x-.08,-.78,4.94]],0x4b3b2b,.8,.018);
+
+        // Geological cutaway: irregular strata instead of a detached wooden-looking box.
+        const profileX=[-3.35,-2.5,-1.65,-.8,.05,.9,1.75,2.6,3.35];
+        const topProfile=[-.12,-.04,-.1,-.02,-.13,-.06,-.15,-.08,-.18];
+        const makeStratum=(top,bottom,color,roughness=1,opacity=1)=>{
+          const shape=new THREE.Shape();
+          shape.moveTo(profileX[0],top[0]);
+          for(let i=1;i<profileX.length;i++)shape.lineTo(profileX[i],top[i]);
+          for(let i=profileX.length-1;i>=0;i--)shape.lineTo(profileX[i],bottom[i]);
+          shape.closePath();
+          const geo=new THREE.ExtrudeGeometry(shape,{depth:.48,bevelEnabled:false,steps:1});
+          const mat=new THREE.MeshStandardMaterial({color,roughness,transparent:opacity<1,opacity,side:THREE.DoubleSide});
+          const mesh=new THREE.Mesh(geo,mat);mesh.position.z=4.55;mesh.castShadow=true;mesh.receiveShadow=true;scene.add(mesh);return mesh;
+        };
+        const layer=(v)=>v.map((n,i)=>n);
+        const top=layer(topProfile);
+        const humus=top.map(v=>v-.2);
+        const subsoil=humus.map((v,i)=>v-.52-.06*Math.sin(i*.8));
+        const weathered=subsoil.map((v,i)=>v-.42-.05*Math.cos(i*.65));
+        const aquifer=weathered.map(v=>v-.34);
+        const base=aquifer.map(v=>v-.52);
+        const soilTop=makeStratum(top,humus,0x51402e,.98);
+        const soilBody=makeStratum(humus,subsoil,0x98704e,.98);
+        const weatheredRock=makeStratum(subsoil,weathered,0x827565,1);
+        const groundwater=makeStratum(weathered,aquifer,0x397f98,.34,.82);
+        const bedrock=makeStratum(aquifer,base,0x5d5a54,1);
+        const rootLines=[];
+        for(let i=0;i<9;i++){
+          const x=-3.05+i*.76,y=topProfile[Math.min(8,Math.round(i*.95))]-.08;
+          rootLines.push(addLine(scene,[[x,y,5.05],[x+.1,y-.22,5.05],[x-.08,y-.38,5.05]],0x493827,.82,.014));
         }
-        const clouds=[cloud(-1.8,4.15,-1.9,1.25),cloud(1.0,4.45,-1.2,1.05),cloud(3.1,4.0,-2.2,.8)];
-        const sunBall=new THREE.Mesh(new THREE.SphereGeometry(.38,24,16),new THREE.MeshBasicMaterial({color:0xffd47a}));
-        sunBall.position.set(-5.5,4.7,-3.6);scene.add(sunBall);
-        const sunGlow=new THREE.Mesh(new THREE.SphereGeometry(.66,24,16),new THREE.MeshBasicMaterial({color:0xffd47a,transparent:true,opacity:.12,depthWrite:false}));
+
+        const clouds=[cloud(-1.9,4.15,-2.5,1.2),cloud(.85,4.55,-1.5,1.05),cloud(3.0,4.15,-2.7,.82)];
+        const sunBall=new THREE.Mesh(new THREE.SphereGeometry(.34,24,16),new THREE.MeshBasicMaterial({color:0xffd47a}));
+        sunBall.position.set(-6.1,4.8,-3.9);scene.add(sunBall);
+        const sunGlow=new THREE.Mesh(new THREE.SphereGeometry(.62,24,16),new THREE.MeshBasicMaterial({color:0xffd47a,transparent:true,opacity:.1,depthWrite:false}));
         sunGlow.position.copy(sunBall.position);scene.add(sunGlow);
-        const evaporation=addParticles(115,0xc8efff,{x:5.6,y:3.8,z:5.8},.035);
-        const rainfall=addParticles(150,0xb9e8fa,{x:5.2,y:4.2,z:4.8},.035);
-        const transpiration=addParticles(65,0xe0f6dc,{x:3.4,y:3.1,z:3.6},.027);
-        const infiltrationPts=addParticles(55,0x8ed9ed,{x:5.8,y:1.25,z:1.2},.03);
-        seedParticles(evaporation,{x:[2.2,5.4],y:[.05,3.5],z:[-2.6,2.7]});
-        seedParticles(rainfall,{x:[-2.2,1.8],y:[1.1,4.0],z:[-2.5,2.5]});
-        seedParticles(transpiration,{x:[-5.7,-2.8],y:[.55,2.7],z:[-2.8,2.8]});
-        seedParticles(infiltrationPts,{x:[-2.9,2.4],y:[-.35,.9],z:[4.2,4.8]});
-        const flowGeo=new THREE.BufferGeometry(),flowCount=96,flowPositions=new Float32Array(flowCount*3);
-        for(let i=0;i<flowCount;i++){const p=riverCurve.getPointAt(i/flowCount);flowPositions.set([p.x,p.y+.12,p.z],i*3);}
+
+        const evaporation=addParticles(120,0xd8f3ff,{x:6.2,y:4.1,z:6.8},.035);
+        const rainfall=addParticles(165,0xc4eafa,{x:5.8,y:4.5,z:5.8},.035);
+        const transpiration=addParticles(75,0xe0f6dc,{x:3.8,y:3.2,z:4.2},.027);
+        const infiltrationPts=addParticles(65,0x8ed9ed,{x:6.2,y:1.5,z:1.4},.03);
+        seedParticles(evaporation,{x:[3.2,6.5],y:[.05,3.8],z:[-2.5,2.8]});
+        seedParticles(rainfall,{x:[-1.5,2.3],y:[1.0,4.1],z:[-2.8,2.7]});
+        seedParticles(transpiration,{x:[-6.0,-2.8],y:[.5,2.8],z:[-3.0,2.8]});
+        seedParticles(infiltrationPts,{x:[-2.9,2.4],y:[-.25,.8],z:[4.55,4.95]});
+
+        const flowGeo=new THREE.BufferGeometry(),flowCount=120,flowPositions=new Float32Array(flowCount*3);
+        for(let i=0;i<flowCount;i++){const p=riverCurve.getPointAt(i/flowCount);flowPositions.set([p.x,p.y+.09,p.z],i*3);}
         flowGeo.setAttribute("position",new THREE.BufferAttribute(flowPositions,3));
-        const flowPoints=new THREE.Points(flowGeo,new THREE.PointsMaterial({color:0xd8f5fa,size:.045,transparent:true,opacity:.9,depthWrite:false}));
+        const flowPoints=new THREE.Points(flowGeo,new THREE.PointsMaterial({color:0xe4f8ff,size:.045,transparent:true,opacity:.92,depthWrite:false}));
         scene.add(flowPoints);
+
         const infiltrationLines=[];
-        for(let i=0;i<13;i++){
-          const x=-2.8+i*.44,line=addLine(scene,[[x,.12,4.18],[x+.08,-.42,4.18],[x+.02,-.96,4.18],[x+.16,-1.48,4.18]],0x73cce6,.72,.022);
+        for(let i=0;i<15;i++){
+          const x=-2.8+i*.39,line=addLine(scene,[[x,.02,4.48],[x+.07,-.36,4.7],[x+.02,-.78,4.7],[x+.13,-1.18,4.7]],0x83d4e8,.78,.018);
           line.visible=false;infiltrationLines.push(line);
         }
-        const runoff=addLine(scene,[[-2.7,.25,3.1],[-1.6,.18,3.35],[.1,.02,3.5],[1.7,-.08,3.25],[3.0,-.12,2.5]],0x75c5df,.75,.035);
+        const runoff=addLine(scene,[[-2.9,.18,3.35],[-1.6,.1,3.55],[.0,-.04,3.6],[1.65,-.12,3.25],[3.1,-.16,2.5]],0x9bd9e8,.8,.026);
         runoff.visible=false;
-        objects.cycle={ocean,lake,clouds,evaporation,rainfall,transpiration,infiltrationPts,infiltrationLines,flowPoints,riverCurve,runoff,waterfall,sunGlow,soil:{soilSide,topsoil,subsoil,weathered,aquifer,bedrock}};
-        camera.position.set(10.5,8.2,12.5);
-        addLabel(view,"BỐC HƠI",72,45);addLabel(view,"NGƯNG TỤ",39,12);addLabel(view,"MƯA",31,38);
-        addLabel(view,"THOÁT HƠI THỰC VẬT",8,45);addLabel(view,"DÒNG CHẢY MẶT",53,65);
-        addLabel(view,"THẤM XUỐNG ĐẤT",31,88);addLabel(view,"TẦNG NƯỚC NGẦM",68,91);
+
+        objects.cycle={ocean,clouds,evaporation,rainfall,transpiration,infiltrationPts,infiltrationLines,flowPoints,riverCurve,runoff,fallsGroup,sunGlow,
+          soil:{soilTop,soilBody,weatheredRock,groundwater,bedrock,rootLines}};
+        camera.position.set(11.8,9.2,14.5);
+        addLabel(view,"BỐC HƠI",76,48);addLabel(view,"NGƯNG TỤ",42,13);addLabel(view,"MƯA",33,40);
+        addLabel(view,"THOÁT HƠI THỰC VẬT",7,48);addLabel(view,"DÒNG CHẢY MẶT",53,69);
+        addLabel(view,"THẤM XUỐNG ĐẤT",30,91);addLabel(view,"TẦNG NƯỚC NGẦM",68,91);
         animated.push(t=>{
           const a=flowGeo.attributes.position;
-          for(let i=0;i<flowCount;i++){const p=riverCurve.getPointAt((i/flowCount+t*.045)%1);a.setXYZ(i,p.x,p.y+.12,p.z);}
-          a.needsUpdate=true;sunGlow.material.opacity=.09+Math.sin(t*.7)*.025;
+          for(let i=0;i<flowCount;i++){const p=riverCurve.getPointAt((i/flowCount+t*.055)%1);a.setXYZ(i,p.x,p.y+.09,p.z);}
+          a.needsUpdate=true;sunGlow.material.opacity=.08+Math.sin(t*.65)*.025;
         });
       }
 
