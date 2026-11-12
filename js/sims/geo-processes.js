@@ -201,6 +201,22 @@
     };
   }
 
+  function seedParticles(system, range) {
+    if(!system||!system.points)return;
+    const a=system.points.geometry.attributes.position;
+    for(let i=0;i<a.count;i++)a.setXYZ(i,range.x[0]+Math.random()*(range.x[1]-range.x[0]),range.y[0]+Math.random()*(range.y[1]-range.y[0]),range.z[0]+Math.random()*(range.z[1]-range.z[0]));
+    a.needsUpdate=true;
+  }
+  function addTree(scene,x,y,z,scale=1) {
+    const g=new THREE.Group();
+    const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.055*scale,.09*scale,.55*scale,7),MAT(0x725039));trunk.position.y=.28*scale;g.add(trunk);
+    [[.42,.48],[.68,.35],[.9,.22]].forEach(([h,r],i)=>{const crown=new THREE.Mesh(new THREE.ConeGeometry(r*scale,.62*scale,8),MAT(i===1?0x527b48:0x638b50));crown.position.y=h*scale;g.add(crown);});
+    g.position.set(x,y,z);scene.add(g);return g;
+  }
+  function addRockPillar(scene,x,y,z,height=1.2,color=0x766d60) {
+    const rock=new THREE.Mesh(new THREE.CylinderGeometry(.28,.42,height,7,2),MAT(color));rock.position.set(x,y+height/2,z);scene.add(rock);return rock;
+  }
+
   function addLabel(view, text, x, y) {
     const el = document.createElement("span");
     el.className = "evgeo-label";
@@ -215,7 +231,7 @@
       tectonic: {
         title: "TƯƠNG TÁC GIỮA CÁC MẢNG KIẾN TẠO",
         lead: "Quan sát cách các mảng thạch quyển dịch chuyển và tác động tại ranh giới tiếp xúc.",
-        controls: [["Tách giãn","diverge"],["Hội tụ – hút chìm","converge"],["Trượt ngang","transform"]]
+        controls: [["Tách giãn","diverge"],["Hội tụ: ĐD–LĐ","converge"],["Va chạm: LĐ–LĐ","collision"],["Hội tụ: ĐD–ĐD","islandarc"],["Trượt ngang","transform"]]
       },
       water: {
         title: "CHU TRÌNH NƯỚC TRONG TỰ NHIÊN",
@@ -357,7 +373,14 @@
         const volcanoes=[];[-1.35,0,1.35].forEach(x=>{const cone=new THREE.Mesh(new THREE.ConeGeometry(.42,.95,24),MAT(0x66594d));cone.position.set(x,1.35,-1.65);scene.add(cone);volcanoes.push(cone);const lava=new THREE.Mesh(new THREE.SphereGeometry(.12,12,8),MAT(0xff7138,.4,{emissive:0xc43c16,emissiveIntensity:.8}));lava.position.set(x,1.84,-1.65);scene.add(lava);volcanoes.push(lava);});
         const trench=new THREE.Mesh(new THREE.BoxGeometry(1.25,.12,5.6),MAT(0x244e66));trench.position.set(.15,.2,0);scene.add(trench);
         const faultScar=new THREE.Mesh(new THREE.BoxGeometry(.13,.32,5.8),MAT(0x59463b));faultScar.position.set(0,.95,0);scene.add(faultScar);
-        objects.plates={left,right,topLeft,topRight,mantle,fault,hot,quakes,ridge,uplift,volcanoes,trench,faultScar,baseLeft:-2.65,baseRight:2.65};
+        const subducted=meshBox(scene,5.8,.28,1.0,MAT(0x5f5148),-.05,-.15,0);subducted.rotation.z=-.28;subducted.position.set(.55,-.25,0);
+        const crustNew=meshBox(scene,1.05,.12,5.65,MAT(0xd58a55),0,.98,0);
+        const mountainChain=new THREE.Group();
+        for(let i=0;i<7;i++){const peak=new THREE.Mesh(new THREE.ConeGeometry(.48+(i%3)*.08,1.1+(i%2)*.42,6),MAT(0x77776c));peak.position.set(-.25+i*.55,1.45,-2.35+(i%2)*.18);mountainChain.add(peak);}scene.add(mountainChain);
+        const islandArc=new THREE.Group();
+        for(let i=0;i<5;i++){const island=new THREE.Mesh(new THREE.ConeGeometry(.38,.95+(i%2)*.25,18),MAT(0x5e6f4d));island.position.set(-1.2+i*.62,1.05,-2.65);islandArc.add(island);}scene.add(islandArc);
+
+        objects.plates={left,right,topLeft,topRight,mantle,fault,hot,quakes,ridge,uplift,volcanoes,trench,faultScar,subducted,crustNew,mountainChain,islandArc,baseLeft:-2.65,baseRight:2.65};
         camera.position.set(8,6.5,10);
         addLabel(view,"VỎ TRÁI ĐẤT",8,15);addLabel(view,"LỚP PHỦ",8,82);
       }
@@ -381,13 +404,21 @@
         const stream = addLine(scene,runoffPts,0x218fbd,.95,.095);
         const soilCut = meshBox(scene,5,.85,.28,MAT(0x9c7956),-1.5,-.8,-4.4);
         const aquifer = meshBox(scene,5,.28,.3,MAT(0x347b9a,.45,{transparent:true,opacity:.75}),-1.5,-1.25,-4.38);
+        const soilTop=meshBox(scene,5,.12,.34,MAT(0x5c8a50),-1.5,-.28,-4.34);
+        const bedrock=meshBox(scene,5,.18,.38,MAT(0x70685d),-1.5,-1.48,-4.34);
+        const trees=[addTree(scene,-4.5,.45,-.9,.9),addTree(scene,-3.9,.5,.15,1.05),addTree(scene,-3.1,.35,.75,.78)];
+        const transpiration=addParticles(48,0xc5efff,{x:2,y:2.8,z:2},.03);
+        seedParticles(transpiration,{x:[-4.8,-2.8],y:[.7,2.8],z:[-1.1,1.1]});
+        seedParticles(evaporation,{x:[2.5,5.5],y:[.1,2.5],z:[-2.4,2.3]});
+        seedParticles(rainfall,{x:[-1.5,2.4],y:[1.2,3.8],z:[-1.8,1.8]});
+
         const infiltration = [];
         for(let i=0;i<14;i++){
           infiltration.push(addLine(scene,[[-3.6+i*.32,.45,-4.2],[-3.55+i*.32,-.65,-4.2]],0x66c8ec,.7,.018));
         }
-        objects.cycle={ocean,evaporation,rainfall,stream,aquifer,infiltration,clouds};
+        objects.cycle={ocean,evaporation,rainfall,stream,aquifer,infiltration,clouds,transpiration,trees,soilTop,bedrock};
         camera.position.set(9,7,11);
-        addLabel(view,"BỐC HƠI",7,52);addLabel(view,"NGƯNG TỤ",37,13);addLabel(view,"GIÁNG THỦY",67,37);
+        addLabel(view,"BỐC HƠI",7,52);addLabel(view,"NGƯNG TỤ",37,13);addLabel(view,"GIÁNG THỦY",67,37);        addLabel(view,"THOÁT HƠI NƯỚC",17,42);addLabel(view,"DÒNG CHẢY",55,76);addLabel(view,"NƯỚC NGẦM",34,91);
       }
 
       function buildRiver() {
@@ -410,9 +441,17 @@
           bar.scale.set(1.5,.13,.65);bar.position.set(x,h(x,z)+.07,z);scene.add(bar);bars.push(bar);
         }
         const gravel=addParticles(70,0xc1a16f,{x:4,y:1.2,z:8},.045);
-        objects.river={bars,gravel,waterCurve,curve,barBase:bars.map(b=>b.position.clone())};
+        seedParticles(gravel,{x:[-1.8,1.8],y:[.18,.85],z:[-4.5,4.5]});
+        const outerBank=meshBox(scene,1.05,.34,.85,MAT(0x9b7651),-2.25,.5,-.25);
+        const bankFace=meshBox(scene,.12,.62,.9,MAT(0x76563e),-2.72,.47,-.25);
+        const delta=new THREE.Group();
+        for(let i=0;i<5;i++){const lobe=new THREE.Mesh(new THREE.ConeGeometry(.62,.16,3),MAT(i%2?0xb99a68:0xc7aa78));lobe.rotation.x=Math.PI/2;lobe.rotation.z=(i-2)*.22;lobe.position.set(-.55+(i-2)*.38,.02,3.95+(i%2)*.38);delta.add(lobe);}scene.add(delta);
+        const sedimentLayers=[];
+        for(let i=0;i<3;i++)sedimentLayers.push(meshBox(scene,2.4,.045,1.1,MAT(i%2?0x9c805d:0xc4a574),.4,-.55-i*.09,4.05));
+
+        objects.river={bars,gravel,waterCurve,curve,barBase:bars.map(b=>b.position.clone()),outerBank,bankFace,delta,sedimentLayers};
         camera.position.set(8,7,11);
-        addLabel(view,"THƯỢNG LƯU",6,20);addLabel(view,"TRUNG LƯU",42,43);addLabel(view,"HẠ LƯU",76,73);
+        addLabel(view,"THƯỢNG LƯU",6,20);addLabel(view,"TRUNG LƯU",42,43);addLabel(view,"HẠ LƯU",76,73);        addLabel(view,"XÂM THỰC BỜ NGOÀI",8,57);addLabel(view,"BÃI BỒI",51,61);addLabel(view,"CHÂU THỔ",77,83);
       }
 
       function buildCoast() {
@@ -435,9 +474,17 @@
           waveFoam.push(line);
         }
         const sandParticles=addParticles(55,0xd5bd8d,{x:5,y:1.2,z:5},.04);
-        objects.coast={cliff,shore,sea,spit,waveFoam,sandParticles};
+        seedParticles(sandParticles,{x:[-.2,4.8],y:[.08,.42],z:[-.8,2.8]});
+        const caveMouth=new THREE.Mesh(new THREE.CircleGeometry(.34,24),MAT(0x202c32));caveMouth.position.set(-2.15,.76,-.365);scene.add(caveMouth);
+        const archLeft=addRockPillar(scene,-1.15,.02,-.85,1.2,0x756d61);
+        const archRight=addRockPillar(scene,-.15,.02,-.85,1.0,0x756d61);
+        const archTop=meshBox(scene,1.15,.25,.55,MAT(0x756d61),-.65,1.12,-.85);
+        const stack=addRockPillar(scene,-.95,.02,-2.35,1.65,0x6f695f);
+        const tideMark=addLine(scene,[[-4,.15,2.95],[4,.15,2.95]],0xf1fbff,.8,.018);
+
+        objects.coast={cliff,shore,sea,spit,waveFoam,sandParticles,caveMouth,archLeft,archRight,archTop,stack,tideMark};
         camera.position.set(9,6.5,10);
-        addLabel(view,"VÁCH BIỂN",7,26);addLabel(view,"BÃI CÁT",42,63);addLabel(view,"DÒNG VEN BỜ",70,18);
+        addLabel(view,"VÁCH BIỂN",7,26);addLabel(view,"BÃI CÁT",42,63);addLabel(view,"DÒNG VEN BỜ",70,18);        addLabel(view,"HANG BIỂN",12,39);addLabel(view,"VÒM BIỂN",34,25);addLabel(view,"CỘT ĐÁ BIỂN",22,15);addLabel(view,"DOI CÁT",73,56);
       }
 
       function buildClimate() {
@@ -455,9 +502,17 @@
           windLines.push(addLine(scene,[[-6,y,-2.6],[-4.2,y+.12,-2.6],[-2.4,y+.35,-2.6],[-.7,y+.65,-2.6]],0xf1fbff,.8,.022));
         }
         const dryDust=addParticles(55,0xc8b58b,{x:3,y:1.8,z:3.5},.025);
-        objects.climate={rain,windLines,dryDust,snow,clouds};
+        seedParticles(rain,{x:[-5.5,-1.2],y:[.9,3.5],z:[-1.7,1.8]});
+        seedParticles(dryDust,{x:[1.2,5.5],y:[.15,1.4],z:[-1.8,1.8]});
+        const windwardTrees=[addTree(scene,-5.0,.25,.6,.8),addTree(scene,-4.2,.3,-.2,1),addTree(scene,-3.5,.4,1.0,.9)];
+        const dryShrubs=[];
+        for(let i=0;i<8;i++){const shrub=new THREE.Mesh(new THREE.SphereGeometry(.13,8,6),MAT(0x9b895e));shrub.scale.set(1.5,.55,.8);shrub.position.set(1.5+(i%4)*.72,.24,((i/4)|0)*1.1-.4);scene.add(shrub);dryShrubs.push(shrub);}
+        const airPath=[];
+        for(let i=0;i<6;i++){const dot=new THREE.Mesh(new THREE.SphereGeometry(.07,10,8),MAT(0xf3fbff,.5,{emissive:0x9fc8dc,emissiveIntensity:.25}));dot.position.set(-5.5+i*.55,2.35+i*.13,-2.4);scene.add(dot);airPath.push(dot);}
+
+        objects.climate={rain,windLines,dryDust,snow,clouds,windwardTrees,dryShrubs,airPath};
         camera.position.set(8,7,11);
-        addLabel(view,"SƯỜN ĐÓN GIÓ",7,24);addLabel(view,"SƯỜN KHUẤT GIÓ",68,28);
+        addLabel(view,"SƯỜN ĐÓN GIÓ",7,24);addLabel(view,"SƯỜN KHUẤT GIÓ",68,28);        addLabel(view,"KHÔNG KHÍ ẨM ĐI LÊN",24,14);addLabel(view,"MƯA ĐỊA HÌNH",15,45);addLabel(view,"KHÔNG KHÍ HẠ XUỐNG",66,42);
       }
 
       if(kind==="tectonic")buildTectonic();
@@ -479,7 +534,9 @@
         buttons.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.scenario===action));
         const descriptions={
           diverge:"Ranh giới phân kỳ: hai mảng tách xa nhau. Vật chất nóng từ bên dưới có thể đi lên, nguội đi và tạo phần vỏ mới.",
-          converge:"Ranh giới hội tụ: hai mảng tiến lại gần. Trong mô hình này, mảng đại dương chúi xuống dưới mảng lục địa, tạo đới hút chìm.",
+          converge:"Hội tụ đại dương – lục địa: mảng đại dương chìm xuống dưới mảng lục địa, hình thành rãnh đại dương và cung núi lửa.",
+          collision:"Va chạm lục địa – lục địa: hai khối vỏ bị nén ép, uốn nếp và nâng cao thành dãy núi.",
+          islandarc:"Hội tụ đại dương – đại dương: một mảng chìm xuống dưới mảng kia, tạo rãnh sâu và cung đảo núi lửa.",
           transform:"Ranh giới chuyển dạng: hai mảng trượt ngang ngược chiều nhau dọc theo đứt gãy; động đất có thể phát sinh khi ứng suất được giải phóng.",
           cycle:"Năng lượng Mặt Trời làm nước bốc hơi; hơi nước ngưng tụ thành mây, rơi xuống dưới dạng mưa và trở lại biển qua dòng chảy hoặc thấm xuống đất.",
           evaporation:"Bốc hơi chuyển nước lỏng thành hơi nước. Khi không khí ẩm lên cao và lạnh đi, hơi nước ngưng tụ thành những giọt nước nhỏ tạo mây.",
@@ -503,28 +560,28 @@
           const p=objects.plates;
           p.left.position.set(p.baseLeft,.55,0);p.right.position.set(p.baseRight,.55,0);p.topLeft.position.set(p.baseLeft,1.05,0);p.topRight.position.set(p.baseRight,1.05,0);
           p.left.rotation.z=0;p.right.rotation.z=0;
-          p.ridge.visible=action==="diverge";p.uplift.visible=action==="converge";p.volcanoes.forEach(o=>o.visible=action==="converge");p.trench.visible=action==="converge";p.faultScar.visible=action==="transform";p.hot.visible=action==="diverge";p.quakes.forEach(o=>o.visible=action==="transform"||action==="converge");
+          p.ridge.visible=action==="diverge";p.uplift.visible=action==="collision";p.mountainChain.visible=action==="collision";p.subducted.visible=action==="converge"||action==="islandarc";p.islandArc.visible=action==="islandarc";p.crustNew.visible=action==="diverge";p.volcanoes.forEach(o=>o.visible=action==="converge");p.trench.visible=action==="converge"||action==="islandarc";p.faultScar.visible=action==="transform";p.hot.visible=action==="diverge"||action==="converge"||action==="islandarc";p.quakes.forEach(o=>o.visible=action==="transform"||action==="converge"||action==="collision"||action==="islandarc");
           if(action==="diverge"){p.left.position.x=-3.05;p.right.position.x=3.05;}
-          if(action==="converge"){p.left.position.x=-2.25;p.right.position.x=2.25;p.right.rotation.z=.06;}
+          if(action==="converge"||action==="collision"||action==="islandarc"){p.left.position.x=-2.25;p.right.position.x=2.25;p.right.rotation.z=action==="collision"?.08:.06;}
           if(action==="transform"){p.left.position.z=-.35;p.right.position.z=.35;p.topLeft.position.z=-.35;p.topRight.position.z=.35;}
         }
         if(kind==="water" && objects.cycle){
           const o=objects.cycle;
           o.evaporation.points.visible=action==="cycle"||action==="evaporation";
           o.rainfall.points.visible=action==="cycle"||action==="precipitation";
-          o.infiltration.forEach(x=>x.visible=action==="cycle"||action==="infiltration");
+          o.infiltration.forEach(x=>x.visible=action==="cycle"||action==="infiltration");if(o.transpiration)o.transpiration.points.visible=action==="cycle"||action==="evaporation";
         }
         if(kind==="river" && objects.river){
           objects.river.bars.forEach((b,i)=>b.visible=action==="lower"||action==="middle"||action==="load" ? i>2 : action==="upper" ? i<3 : true);
-          objects.river.gravel.points.visible=action==="load"||action==="cycle";
+          objects.river.gravel.points.visible=action==="load"||action==="cycle";objects.river.delta.visible=action==="lower"||action==="load";objects.river.bankFace.visible=action==="upper"||action==="middle";
         }
         if(kind==="coast" && objects.coast){
           objects.coast.cliff.position.x=-2.6;objects.coast.spit.scale.x=1.9;
-          objects.coast.sandParticles.points.visible=action==="drift"||action==="deposition";
+          objects.coast.sandParticles.points.visible=action==="drift"||action==="deposition";objects.coast.caveMouth.visible=action==="erosion";objects.coast.archLeft.visible=action==="erosion";objects.coast.archRight.visible=action==="erosion";objects.coast.archTop.visible=action==="erosion";objects.coast.stack.visible=action==="erosion";
           objects.coast.spit.visible=action==="deposition"||action==="drift"||action==="erosion";
         }
         if(kind==="climate" && objects.climate){
-          objects.climate.rain.points.visible=action==="windward"||action==="reverse";
+          objects.climate.rain.points.visible=action==="windward"||action==="reverse";objects.climate.windwardTrees.forEach(x=>x.visible=action!=="leeward");objects.climate.dryShrubs.forEach(x=>x.visible=action!=="windward");
           objects.climate.dryDust.points.visible=action==="leeward"||action==="reverse";
           objects.climate.windLines.forEach(line=>line.rotation.z=action==="reverse"?Math.PI:0);
         }
@@ -539,7 +596,7 @@
       root.querySelector('[data-run="reset"]').addEventListener("click",()=>{
         playing=false;elapsed=0;speed=1;force=1;root.querySelector("[data-speed]").value="1";forceInput.value="1";camera.position.set(kind==="water"?9:8,kind==="water"?7:7,kind==="water"?11:10);
         if(objects.plates){const p=objects.plates;p.left.position.set(p.baseLeft,.55,0);p.right.position.set(p.baseRight,.55,0);p.topLeft.position.set(p.baseLeft,1.05,0);p.topRight.position.set(p.baseRight,1.05,0);p.hot.position.y=-.05;p.ridge.scale.y=.7;p.uplift.scale.y=1;p.volcanoes.forEach((o,i)=>{if(i%2===1)o.position.y=1.84;});}
-        if(objects.coast){objects.coast.cliff.position.x=-2.6;objects.coast.spit.scale.x=1.9;}
+        if(objects.coast){objects.coast.cliff.position.x=-2.6;objects.coast.spit.scale.x=1.9;objects.coast.sea.mesh.position.y=-.08;}if(objects.river){objects.river.bankFace.position.x=-2.72;objects.river.delta.scale.set(1,1,1);}
         if(orbit){orbit.target.set(0,.25,0);orbit.update();}select(cfg.controls[0][1]);
       });
       root.querySelector("[data-speed]").addEventListener("input",e=>speed=Number(e.target.value));
@@ -571,19 +628,19 @@
           const o=objects.cycle,step=elapsed%18;
           o.evaporation.points.visible=scenario==="cycle"||scenario==="evaporation"||step<5;o.rainfall.points.visible=scenario==="cycle"||scenario==="precipitation"||step>8&&step<14;
           o.infiltration.forEach(x=>x.visible=scenario==="infiltration"||scenario==="cycle"&&step>12);
-          updateParticles(o.evaporation,dt*speed*force,"rise");updateParticles(o.rainfall,dt*speed*force,"fall");
+          updateParticles(o.evaporation,dt*speed*force,"rise");updateParticles(o.rainfall,dt*speed*force,"fall");if(o.transpiration&&o.transpiration.points.visible)updateParticles(o.transpiration,dt*speed*force,"rise");
           o.clouds.forEach(c=>{c.position.x+=dt*.12*speed*force;if(c.position.x>4)c.position.x=-4.5;});
         }
         if(playing&&kind==="river"&&objects.river){const o=objects.river;updateParticles(o.gravel,dt*speed*force,"drift");o.bars.forEach((b,i)=>{const base=o.barBase[i];b.position.x=base.x+Math.sin(elapsed*.45+i)*.05*force;b.position.y=base.y+Math.sin(elapsed*.7+i*.4)*.025;});}
         if(playing&&kind==="coast"&&objects.coast)updateParticles(objects.coast.sandParticles,dt*speed,"drift");
-        if(playing&&kind==="climate"&&objects.climate){const o=objects.climate;updateParticles(o.rain,dt*speed*force,"fall");updateParticles(o.dryDust,dt*speed*force,"drift");o.windLines.forEach((line,i)=>{line.position.x=Math.sin(elapsed*1.5+i*.3)*.12*force;line.position.y=Math.sin(elapsed*1.2+i*.5)*.08;});o.clouds.forEach(c=>{c.position.x+=dt*.22*speed*force*(scenario==="reverse"?-1:1);if(c.position.x>2.8)c.position.x=-5.5;if(c.position.x<-5.5)c.position.x=2.8;});}
-        if(kind==="coast"&&objects.coast&&playing){const o=objects.coast,wave=Math.sin(elapsed*2.1*speed)*.16*force;o.waveFoam.forEach((line,i)=>{line.position.z=wave+i*.035;line.position.x=Math.sin(elapsed*1.2+i*.4)*.12;});if(scenario==="erosion")o.cliff.position.x=-2.6-Math.min(.28,elapsed*.012*force);else o.cliff.position.x=-2.6;if(scenario==="deposition")o.spit.scale.x=1.9+Math.min(.55,elapsed*.06*force);else o.spit.scale.x=1.9;updateParticles(o.sandParticles,dt*speed*force,"drift");}
+        if(playing&&kind==="climate"&&objects.climate){const o=objects.climate;updateParticles(o.rain,dt*speed*force,"fall");updateParticles(o.dryDust,dt*speed*force,"drift");o.windLines.forEach((line,i)=>{line.position.x=Math.sin(elapsed*1.5+i*.3)*.12*force;line.position.y=Math.sin(elapsed*1.2+i*.5)*.08;});o.clouds.forEach(c=>{c.position.x+=dt*.22*speed*force*(scenario==="reverse"?-1:1);if(c.position.x>2.8)c.position.x=-5.5;if(c.position.x<-5.5)c.position.x=2.8;});o.airPath.forEach((dot,i)=>{dot.position.x=-5.5+((elapsed*.38+i*.62)%8.2);dot.position.y=2.25+Math.sin((dot.position.x+5.5)*.55)*.85;});}
+        if(kind==="coast"&&objects.coast&&playing){const o=objects.coast,wave=Math.sin(elapsed*2.1*speed)*.16*force;o.sea.mesh.position.y=-.08+Math.sin(elapsed*.42*speed)*.13*force;o.waveFoam.forEach((line,i)=>{line.position.z=wave+i*.035;line.position.x=Math.sin(elapsed*1.2+i*.4)*.12;});if(scenario==="erosion")o.cliff.position.x=-2.6-Math.min(.28,elapsed*.012*force);else o.cliff.position.x=-2.6;if(scenario==="deposition")o.spit.scale.x=1.9+Math.min(.55,elapsed*.06*force);else o.spit.scale.x=1.9;updateParticles(o.sandParticles,dt*speed*force,"drift");}
         if(kind==="tectonic"&&objects.plates&&playing){
           const p=objects.plates,travel=Math.min(1.15,elapsed*.12*speed*force);
           p.left.position.x=p.baseLeft+(scenario==="diverge"?-travel:scenario==="converge"?travel*.62:0);p.right.position.x=p.baseRight+(scenario==="diverge"?travel:scenario==="converge"?-travel*.62:0);
           if(scenario==="transform"){p.left.position.z=-.28-Math.min(.65,elapsed*.09*speed*force);p.right.position.z=.28+Math.min(.65,elapsed*.09*speed*force);}
           p.topLeft.position.x=p.left.position.x;p.topRight.position.x=p.right.position.x;p.topLeft.position.z=p.left.position.z;p.topRight.position.z=p.right.position.z;
-          p.ridge.scale.y=.7+Math.min(.8,travel*.6);p.uplift.scale.y=1+Math.min(.8,travel*.7);p.hot.position.y=-.05+Math.min(.55,elapsed*.08*speed*force);
+          p.ridge.scale.y=.7+Math.min(.8,travel*.6);p.uplift.scale.y=1+Math.min(.8,travel*.7);p.hot.position.y=-.05+Math.min(.55,elapsed*.08*speed*force);p.crustNew.position.y=.98+Math.min(.28,travel*.2);p.subducted.rotation.z=-.28-Math.min(.12,travel*.08);
           p.volcanoes.forEach((o,i)=>{if(i%2===1)o.position.y=1.84+Math.max(0,Math.sin(elapsed*2+i)*.12)*force;});
           p.quakes.forEach((r,i)=>{const phase=(elapsed*1.1+i*.22)%1;r.scale.setScalar(1+phase*2.1);r.material.opacity=.7*(1-phase);});
         }
