@@ -607,7 +607,10 @@
           const o=objects.cycle;
           o.evaporation.points.visible=action==="cycle"||action==="evaporation";
           o.rainfall.points.visible=action==="cycle"||action==="precipitation";
-          o.infiltration.forEach(x=>x.visible=action==="cycle"||action==="infiltration");if(o.transpiration)o.transpiration.points.visible=action==="cycle"||action==="evaporation"||action==="transpiration";
+          o.transpiration.points.visible=action==="cycle"||action==="transpiration";
+          o.infiltrationPts.points.visible=action==="cycle"||action==="infiltration";
+          o.infiltrationLines.forEach(x=>x.visible=action==="cycle"||action==="infiltration");
+          o.runoff.visible=action==="cycle"||action==="precipitation";
         }
         if(kind==="river" && objects.river){
           objects.river.bars.forEach((b,i)=>b.visible=action==="lower"||action==="middle"||action==="load" ? i>2 : action==="upper" ? i<3 : true);
