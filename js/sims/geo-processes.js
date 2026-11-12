@@ -6,6 +6,31 @@
 (function () {
   "use strict";
 
+  function compatibilityView(root, kind, error) {
+    const old=root.querySelector('.evgeo-view');
+    if(!old) return;
+    const box=document.createElement('div');
+    box.className='evgeo-view'; box.style.cssText='height:clamp(300px,56vh,510px);min-height:280px;position:relative;overflow:hidden;border-radius:13px;background:#a9cbdc';
+    const canvas=document.createElement('canvas'); canvas.style.cssText='width:100%;height:100%;display:block'; box.appendChild(canvas);
+    const tag=document.createElement('div');tag.className='evgeo-viewtag';tag.textContent='CHẾ ĐỘ TƯƠNG THÍCH · CANVAS 2D';box.appendChild(tag);
+    old.replaceWith(box);
+    const ctx=canvas.getContext('2d');
+    if(!ctx){box.textContent='Trình duyệt không hỗ trợ Canvas 2D.';return;}
+    function draw(){
+      const w=Math.max(280,box.clientWidth),h=Math.max(260,box.clientHeight),d=Math.min(window.devicePixelRatio||1,2);
+      canvas.width=w*d;canvas.height=h*d;ctx.setTransform(d,0,0,d,0,0);
+      const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#9bc5d8');g.addColorStop(1,'#e2e8d9');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+      const y=h*.68;ctx.fillStyle='#66865a';ctx.fillRect(0,y,w,h-y);ctx.font='bold 13px system-ui';ctx.fillStyle='#173e50';
+      if(kind==='tectonic'){ctx.fillStyle='#9b7958';ctx.fillRect(0,y-40,w*.48,110);ctx.fillStyle='#b18b65';ctx.fillRect(w*.52,y-40,w*.48,110);ctx.fillStyle='#c15c39';ctx.fillRect(0,y+70,w,55);ctx.fillStyle='#fff';ctx.fillText('VỎ TRÁI ĐẤT · RANH GIỚI MẢNG',12,24);}
+      else if(kind==='water'){ctx.fillStyle='#168db8';ctx.fillRect(0,y,w,h-y);ctx.beginPath();ctx.moveTo(w*.25,y);ctx.lineTo(w*.42,h*.35);ctx.lineTo(w*.58,y);ctx.fillStyle='#718b5b';ctx.fill();ctx.fillStyle='#173e50';ctx.fillText('BỐC HƠI → NGƯNG TỤ → MƯA → DÒNG CHẢY',12,26);}
+      else if(kind==='river'){ctx.beginPath();ctx.moveTo(0,y-95);ctx.lineTo(w*.25,y-5);ctx.lineTo(w*.5,y+15);ctx.lineTo(w,y+55);ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.fillStyle='#78915e';ctx.fill();ctx.beginPath();ctx.moveTo(w*.18,y-45);ctx.bezierCurveTo(w*.25,y+40,w*.62,y-15,w*.8,h*.84);ctx.strokeStyle='#238fbd';ctx.lineWidth=24;ctx.stroke();ctx.fillStyle='#fff';ctx.fillText('THƯỢNG LƯU · TRUNG LƯU · HẠ LƯU',12,24);}
+      else if(kind==='coast'){ctx.fillStyle='#168db8';ctx.fillRect(0,y,w,h-y);ctx.fillStyle='#c8ae7b';ctx.fillRect(0,y-55,w*.52,55);ctx.fillStyle='#173e50';ctx.fillText('VÁCH BIỂN · BÃI CÁT · DÒNG VEN BỜ',12,24);}
+      else {ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w*.2,h*.45);ctx.lineTo(w*.38,h*.16);ctx.lineTo(w*.57,h*.48);ctx.lineTo(w,h*.7);ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.fillStyle='#748d5d';ctx.fill();ctx.fillStyle='#173e50';ctx.fillText('SƯỜN ĐÓN GIÓ · SƯỜN KHUẤT GIÓ',12,24);}
+    }
+    draw(); if(window.ResizeObserver){const ro=new ResizeObserver(draw);ro.observe(box);}
+    const note=root.querySelector('.evgeo-explain');if(note)note.textContent='WebGL không khởi tạo được. Đang hiển thị sơ đồ Canvas 2D tương thích. Lỗi gốc: '+String(error||'không xác định');
+    console.warn('[EDUVERSE] WebGL fallback:',error);
+  }
   const THREE = window.THREE;
   if (!THREE) {
     ["simTectonics", "simWaterCycle", "simRiverProcess", "simCoastalLandforms", "simClimateRelief"]
@@ -558,9 +583,12 @@
       else window.addEventListener("resize",resize);
       raf=requestAnimationFrame(tick);
     } catch (error) {
-      root.querySelector(".evgeo-view").innerHTML =
-        '<div style="padding:22px;color:#fff;font-size:13px">Không thể khởi tạo mô hình 3D trên thiết bị này. Hãy tải lại trang hoặc thử trình duyệt hỗ trợ WebGL.</div>';
-      console.error("[EDUVERSE geo simulation]", error);
+      console.error('[EDUVERSE geo simulation] WebGL initialization failed:',error);
+      if(observer) observer.disconnect();
+      if(orbit) orbit.dispose();
+      if(renderer) renderer.dispose();
+      compatibilityView(root,kind,error && error.message ? error.message : String(error));
+      return { destroy(){} };
     }
 
     return {
