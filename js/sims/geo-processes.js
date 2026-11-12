@@ -134,7 +134,7 @@
   }
 
   function makeWaterSurface(scene, width, depth, x, y, z, opts = {}) {
-    const geo = new THREE.PlaneGeometry(width, depth, opts.segments || 80, opts.segments || 60);
+    const geo = new THREE.PlaneGeometry(width, depth, opts.segments || 32, opts.segments || 24);
     geo.rotateX(-Math.PI / 2);
     const material = new THREE.MeshPhysicalMaterial({
       color: opts.color || C.water, roughness: .22, metalness: .08,
@@ -156,7 +156,7 @@
             Math.cos(bz * 1.1 - t * .9) * amp * .48);
         }
         p.needsUpdate = true;
-        geo.computeVertexNormals();
+        // Normals are calculated once; recomputing them every frame is unnecessarily expensive.
       }
     };
   }
@@ -292,15 +292,14 @@
     const readout = root.querySelector(".evgeo-readout");
     const buttons = root.querySelector(".evgeo-buttons");
     const progressBar=root.querySelector("[data-progress]"),stageText=root.querySelector("[data-stage]"),forceInput=root.querySelector("[data-force]");
-    let renderer, scene, camera, orbit, observer, raf = 0, destroyed = false;
+    let renderer, scene, camera, orbit, observer, visibilityObserver, raf = 0, destroyed = false;
     let playing = true, elapsed = 0, speed = 1, force = 1, scenario = "", waterSurfaces = [], particleSystems = [], updaters = [];
     const objects = {};
 
     try {
-      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: "high-performance" });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.65));
-      renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: "high-performance" });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.15));
+      renderer.shadowMap.enabled = false;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.0;
       if ("outputColorSpace" in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -311,9 +310,7 @@
       camera.position.set(8, 7, 10);
       scene.add(new THREE.HemisphereLight(0xe5edf0, 0x514b40, 1.05));
       const sun = new THREE.DirectionalLight(0xfff0d8, 1.65);
-      sun.position.set(-6, 12, 7); sun.castShadow = true;
-      sun.shadow.mapSize.set(1024,1024); sun.shadow.camera.left = -12; sun.shadow.camera.right = 12;
-      sun.shadow.camera.top = 12; sun.shadow.camera.bottom = -12; scene.add(sun);
+      sun.position.set(-6, 12, 7); sun.castShadow = false; scene.add(sun);
       const floor = new THREE.Mesh(new THREE.PlaneGeometry(30,30), MAT(0x53615a));
       floor.rotation.x = -Math.PI/2; floor.position.y = -1.4; floor.receiveShadow = true; scene.add(floor);
 
@@ -368,7 +365,7 @@
 
       function buildWaterCycle() {
         scene.background = new THREE.Color(0xa8cddd);
-        addTerrain(14,10,100,80,(x,z)=> {
+        addTerrain(14,10,60,48,(x,z)=> {
           const hill = 1.6*Math.exp(-Math.pow((x+3.8)/2.0,2)) + .55*Math.exp(-Math.pow((x-1.5)/2.8,2));
           return -.25 + hill + .08*Math.sin(z*1.3);
         },TEX.grass,(x,z,y)=>new THREE.Color(y>.65?0x6b765d:0x667b55));
@@ -406,7 +403,7 @@
         scene.background = new THREE.Color(0xa9cad9);
         const h = (x,z)=>.12 + (4.5-z)*.17 + .2*Math.sin(x*1.15+z*.4) +
           .35*Math.exp(-Math.pow((x+3.5)/1.3,2)) + .12*Math.cos(z*1.4);
-        addTerrain(14,10,110,90,h,TEX.grass,(x,z,y)=>new THREE.Color(y>1.8?0x6c725e:y>.8?0x687b55:0x71815d));
+        addTerrain(14,10,64,52,h,TEX.grass,(x,z,y)=>new THREE.Color(y>1.8?0x6c725e:y>.8?0x687b55:0x71815d));
         // Lòng sông uốn khúc, hạ thấp dần về hạ lưu.
         const pts=[];
         for(let i=0;i<=100;i++){const z=-4.6+i*.092;const x=Math.sin(i*.075)*1.9;pts.push([x,h(x,z)+.08,z]);}
@@ -440,7 +437,7 @@
       function buildCoast() {
         scene.background = new THREE.Color(0x9fc8da);
         const landH=(x,z)=>z<-.55?1.0+.35*Math.sin(x*.9)+.12*Math.cos(z):z<.25?.12:-.32;
-        addTerrain(14,9,100,80,landH,TEX.grass,(x,z,y)=>new THREE.Color(z<-.55?0x68765b:0xb59b70));
+        addTerrain(14,9,60,48,landH,TEX.grass,(x,z,y)=>new THREE.Color(z<-.55?0x68765b:0xb59b70));
         // Mũi đá và vách biển có lớp đá phân tầng.
         const cliff = meshBox(scene,4.5,1.55,1.1,MAT(0x777064),-2.6,.75,-.95);
         for(let i=0;i<4;i++){
@@ -606,11 +603,14 @@
         a.needsUpdate=true;
       }
 
-      let last=performance.now();
+      let last=performance.now(), lastRender=0, inView=true;
       function tick(now) {
         if(destroyed)return;
         raf=requestAnimationFrame(tick);
-        const dt=Math.min(.04,(now-last)/1000||0);last=now;
+        if(document.hidden || !inView){last=now;return;}
+        if(now-lastRender<33)return;
+        lastRender=now;
+        const dt=Math.min(.05,(now-last)/1000||0);last=now;
         if(playing)elapsed+=dt*speed;
         waterSurfaces.forEach(w=>w.update(elapsed,playing ? .075 : .025));
         if(playing&&kind==="water"&&objects.cycle){
@@ -647,6 +647,7 @@
       resize();
       if(window.ResizeObserver){observer=new ResizeObserver(resize);observer.observe(view);}
       else window.addEventListener("resize",resize);
+      if(window.IntersectionObserver){visibilityObserver=new IntersectionObserver(entries=>{inView=!!entries[0]?.isIntersecting;last=performance.now();},{threshold:0.01});visibilityObserver.observe(root);}
       raf=requestAnimationFrame(tick);
     } catch (error) {
       console.error('[EDUVERSE geo simulation] WebGL initialization failed:',error);
@@ -665,6 +666,7 @@
         destroyed=true;
         if(raf)cancelAnimationFrame(raf);
         if(observer)observer.disconnect();
+        if(visibilityObserver)visibilityObserver.disconnect();
         if(orbit)orbit.dispose();
         if(scene)scene.traverse(o=>{
           if(o.geometry)o.geometry.dispose();
