@@ -756,7 +756,7 @@
           o.infiltrationPts.points.visible=all||action==="groundwater_flow";
           o.infiltrationLines.forEach(x=>x.visible=all||action==="groundwater_flow");
           o.runoff.visible=all||action==="surface_runoff";
-          o.heatRays.forEach(x=>x.visible=all||action==="evaporation_sea"||action==="evaporation_inland");
+          o.heatRays.forEach(x=>x.mesh.visible=all||action==="evaporation_sea"||action==="evaporation_inland");
           o.heatedSurface.visible=all||action==="evaporation_sea"||action==="evaporation_inland";
           o.coolingColumn.visible=all||action==="condensation"||action==="cloud_formation";
           o.condensationPts.points.visible=all||action==="condensation"||action==="cloud_formation";
@@ -849,7 +849,7 @@
         if(playing&&kind==="water"&&objects.cycle){
           const o=objects.cycle,cycleTime=elapsed%42,stage=Math.floor(cycleTime/6),stageProgress=(cycleTime%6)/6;
           if(scenario==="cycle"){
-            o.heatRays.forEach(x=>x.visible=stage===0);
+            o.heatRays.forEach(x=>x.mesh.visible=stage===0);
             o.heatedSurface.visible=stage===0;
             o.evaporation.points.visible=stage===0||stage===1;
             o.coolingColumn.visible=stage===1||stage===2;
