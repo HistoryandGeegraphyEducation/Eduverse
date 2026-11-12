@@ -33,11 +33,16 @@
   }
   const THREE = window.THREE;
   if (!THREE) {
-    ["simTectonics", "simWaterCycle", "simRiverProcess", "simCoastalLandforms", "simClimateRelief"]
-      .forEach(name => window[name] = root => {
-        root.innerHTML = '<div class="box">Không tải được thư viện 3D. Hãy kiểm tra kết nối Internet rồi tải lại trang.</div>';
-        return { destroy() {} };
-      });
+    const fail = (root,kind) => {
+      root.innerHTML='<section class="evgeo"><div class="evgeo-head"><h2>Không tải được thư viện 3D</h2></div><div class="evgeo-view"></div><div class="evgeo-explain"></div></section>';
+      compatibilityView(root,kind,'Three.js CDN không tải được');
+      return {destroy(){}};
+    };
+    window.simTectonics=root=>fail(root,'tectonic');
+    window.simWaterCycle=root=>fail(root,'water');
+    window.simRiverProcess=root=>fail(root,'river');
+    window.simCoastalLandforms=root=>fail(root,'coast');
+    window.simClimateRelief=root=>fail(root,'climate');
     return;
   }
 
