@@ -206,7 +206,7 @@
     el.className = "evgeo-label";
     el.textContent = text;
     el.style.left = x + "%"; el.style.top = y + "%";
-    root.appendChild(el);
+    view.appendChild(el);
     return el;
   }
 
@@ -351,7 +351,7 @@
         }
         objects.plates={left,right,topLeft,topRight,mantle,fault,hot,quakes,baseLeft:-2.65,baseRight:2.65};
         camera.position.set(8,6.5,10);
-        addLabel(root,"VỎ TRÁI ĐẤT",8,15);addLabel(root,"LỚP PHỦ",8,82);
+        addLabel(view,"VỎ TRÁI ĐẤT",8,15);addLabel(view,"LỚP PHỦ",8,82);
       }
 
       function buildWaterCycle() {
@@ -379,7 +379,7 @@
         }
         objects.cycle={ocean,evaporation,rainfall,stream,aquifer,infiltration};
         camera.position.set(9,7,11);
-        addLabel(root,"BỐC HƠI",7,52);addLabel(root,"NGƯNG TỤ",37,13);addLabel(root,"GIÁNG THỦY",67,37);
+        addLabel(view,"BỐC HƠI",7,52);addLabel(view,"NGƯNG TỤ",37,13);addLabel(view,"GIÁNG THỦY",67,37);
       }
 
       function buildRiver() {
@@ -404,7 +404,7 @@
         const gravel=addParticles(70,0xc1a16f,{x:4,y:1.2,z:8},.045);
         objects.river={bars,gravel,waterCurve,curve};
         camera.position.set(8,7,11);
-        addLabel(root,"THƯỢNG LƯU",6,20);addLabel(root,"TRUNG LƯU",42,43);addLabel(root,"HẠ LƯU",76,73);
+        addLabel(view,"THƯỢNG LƯU",6,20);addLabel(view,"TRUNG LƯU",42,43);addLabel(view,"HẠ LƯU",76,73);
       }
 
       function buildCoast() {
@@ -429,7 +429,7 @@
         const sandParticles=addParticles(55,0xd5bd8d,{x:5,y:1.2,z:5},.04);
         objects.coast={cliff,shore,sea,spit,waveFoam,sandParticles};
         camera.position.set(9,6.5,10);
-        addLabel(root,"VÁCH BIỂN",7,26);addLabel(root,"BÃI CÁT",42,63);addLabel(root,"DÒNG VEN BỜ",70,18);
+        addLabel(view,"VÁCH BIỂN",7,26);addLabel(view,"BÃI CÁT",42,63);addLabel(view,"DÒNG VEN BỜ",70,18);
       }
 
       function buildClimate() {
@@ -449,7 +449,7 @@
         const dryDust=addParticles(55,0xc8b58b,{x:3,y:1.8,z:3.5},.025);
         objects.climate={rain,windLines,dryDust,snow};
         camera.position.set(8,7,11);
-        addLabel(root,"SƯỜN ĐÓN GIÓ",7,24);addLabel(root,"SƯỜN KHUẤT GIÓ",68,28);
+        addLabel(view,"SƯỜN ĐÓN GIÓ",7,24);addLabel(view,"SƯỜN KHUẤT GIÓ",68,28);
       }
 
       if(kind==="tectonic")buildTectonic();
