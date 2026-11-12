@@ -217,6 +217,8 @@
     const cfg = configs[kind];
     if (!cfg) return { destroy() {} };
 
+    root.classList.add("geo-sim-root");
+
     root.innerHTML = `
       <section class="evgeo">
         <div class="evgeo-head">
@@ -251,14 +253,14 @@
 
     const style = document.createElement("style");
     style.textContent = `
-      .evgeo{color:#edf6fb;background:linear-gradient(145deg,#071b2c,#12364a);border:1px solid #24475c;border-radius:18px;padding:clamp(10px,2vw,17px);overflow:hidden}
+      .simroot.geo-sim-root{display:block!important;grid-column:1/-1!important;width:100%;max-width:none!important;min-width:0}.evgeo{width:100%;max-width:none;min-width:0;box-sizing:border-box;color:#edf6fb;background:linear-gradient(145deg,#071b2c,#12364a);border:1px solid #24475c;border-radius:18px;padding:clamp(10px,2vw,17px);overflow:hidden}
       .evgeo-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
       .evgeo-kicker{font-size:10px;letter-spacing:1.5px;color:#8fc5df;font-weight:700}
       .evgeo h2{font-size:clamp(14px,2vw,19px);line-height:1.35;margin:5px 0 0;font-weight:800}
       .evgeo-live{font-size:9px;letter-spacing:1px;border:1px solid #4c849d;color:#b8e6f5;padding:5px 8px;border-radius:20px;white-space:nowrap}
       .evgeo-lead{font-size:12px;line-height:1.55;color:#c7dce8;margin:9px 0 12px}
-      .evgeo-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:14px;align-items:stretch}
-      .evgeo-view{height:clamp(430px,66vh,650px);min-height:390px;position:relative;overflow:hidden;border-radius:13px;background:linear-gradient(#9fc5d8,#d5e0d9 66%,#657d61);box-shadow:inset 0 0 35px #173a4d55}
+      .evgeo-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:stretch}
+      .evgeo-view{height:clamp(500px,70vh,760px);min-height:460px;position:relative;overflow:hidden;border-radius:13px;background:linear-gradient(#9fc5d8,#d5e0d9 66%,#657d61);box-shadow:inset 0 0 35px #173a4d55}
       .evgeo-view canvas{width:100%;height:100%;display:block;touch-action:none}
       .evgeo-label{position:absolute;z-index:2;transform:translate(-8%,-50%);padding:5px 8px;border-radius:6px;background:#08283bcf;border:1px solid #ffffff42;color:#f5fbff;font-size:9px;font-weight:700;letter-spacing:.4px;pointer-events:none;white-space:nowrap;text-shadow:0 1px 2px #000}
       .evgeo-viewtag,.evgeo-readout{position:absolute;top:10px;background:#071b2cce;color:#e2f3fb;border:1px solid #ffffff24;border-radius:7px;padding:7px 9px;font-size:9px;letter-spacing:.5px;pointer-events:none}
@@ -291,7 +293,7 @@
     const buttons = root.querySelector(".evgeo-buttons");
     const progressBar=root.querySelector("[data-progress]"),stageText=root.querySelector("[data-stage]"),forceInput=root.querySelector("[data-force]");
     let renderer, scene, camera, orbit, observer, raf = 0, destroyed = false;
-    let playing = false, elapsed = 0, speed = 1, force = 1, scenario = "", waterSurfaces = [], particleSystems = [], updaters = [];
+    let playing = true, elapsed = 0, speed = 1, force = 1, scenario = "", waterSurfaces = [], particleSystems = [], updaters = [];
     const objects = {};
 
     try {
@@ -299,18 +301,20 @@
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.65));
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.0;
       if ("outputColorSpace" in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(C.sky);
-      scene.fog = new THREE.Fog(C.sky, 17, 36);
+      scene.background = new THREE.Color(0x9fb9c6);
+      scene.fog = new THREE.Fog(0x9fb9c6, 20, 42);
       camera = new THREE.PerspectiveCamera(42, 1, .1, 100);
       camera.position.set(8, 7, 10);
-      scene.add(new THREE.HemisphereLight(0xe9f6ff, 0x52604a, 1.65));
-      const sun = new THREE.DirectionalLight(0xfff1d7, 2.2);
+      scene.add(new THREE.HemisphereLight(0xe5edf0, 0x514b40, 1.05));
+      const sun = new THREE.DirectionalLight(0xfff0d8, 1.65);
       sun.position.set(-6, 12, 7); sun.castShadow = true;
       sun.shadow.mapSize.set(1024,1024); sun.shadow.camera.left = -12; sun.shadow.camera.right = 12;
       sun.shadow.camera.top = 12; sun.shadow.camera.bottom = -12; scene.add(sun);
-      const floor = new THREE.Mesh(new THREE.PlaneGeometry(30,30), MAT(0x435b4a));
+      const floor = new THREE.Mesh(new THREE.PlaneGeometry(30,30), MAT(0x53615a));
       floor.rotation.x = -Math.PI/2; floor.position.y = -1.4; floor.receiveShadow = true; scene.add(floor);
 
       const animated = [];
@@ -367,7 +371,7 @@
         addTerrain(14,10,100,80,(x,z)=> {
           const hill = 1.6*Math.exp(-Math.pow((x+3.8)/2.0,2)) + .55*Math.exp(-Math.pow((x-1.5)/2.8,2));
           return -.25 + hill + .08*Math.sin(z*1.3);
-        },TEX.grass,(x,z,y)=>new THREE.Color(y>.65?0x728a62:0x78915d));
+        },TEX.grass,(x,z,y)=>new THREE.Color(y>.65?0x6b765d:0x667b55));
         const ocean = addWater(7,8,3.9,-.05,1.1,{segments:60,color:0x168fbe,opacity:.94});
         const clouds=[cloud(-3.3,3.4,-1.2,1.05),cloud(-.8,3.8,-1.5,.85)];
         const sunBall = new THREE.Mesh(new THREE.SphereGeometry(.42,24,16),new THREE.MeshBasicMaterial({color:0xffd36b}));
@@ -402,14 +406,14 @@
         scene.background = new THREE.Color(0xa9cad9);
         const h = (x,z)=>.12 + (4.5-z)*.17 + .2*Math.sin(x*1.15+z*.4) +
           .35*Math.exp(-Math.pow((x+3.5)/1.3,2)) + .12*Math.cos(z*1.4);
-        addTerrain(14,10,110,90,h,TEX.grass,(x,z,y)=>new THREE.Color(y>1.8?0x71845a:y>.8?0x6e8b52:0x78945e));
+        addTerrain(14,10,110,90,h,TEX.grass,(x,z,y)=>new THREE.Color(y>1.8?0x6c725e:y>.8?0x687b55:0x71815d));
         // Lòng sông uốn khúc, hạ thấp dần về hạ lưu.
         const pts=[];
         for(let i=0;i<=100;i++){const z=-4.6+i*.092;const x=Math.sin(i*.075)*1.9;pts.push([x,h(x,z)+.08,z]);}
         const curve=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));
         const bed=new THREE.Mesh(new THREE.TubeGeometry(curve,260,.42,14,false),MAT(0x75634d));
         bed.position.y=-.08;scene.add(bed);
-        const waterCurve=new THREE.Mesh(new THREE.TubeGeometry(curve,260,.29,14,false),new THREE.MeshPhysicalMaterial({color:0x258fbd,roughness:.2,transparent:true,opacity:.92,clearcoat:.7}));
+        const waterCurve=new THREE.Mesh(new THREE.TubeGeometry(curve,260,.29,14,false),new THREE.MeshPhysicalMaterial({color:0x176d91,roughness:.24,transparent:true,opacity:.94,clearcoat:.85,clearcoatRoughness:.12}));
         waterCurve.position.y=.1;scene.add(waterCurve);
         const bars=[];
         for(let i=0;i<8;i++){
@@ -418,6 +422,8 @@
           bar.scale.set(1.5,.13,.65);bar.position.set(x,h(x,z)+.07,z);scene.add(bar);bars.push(bar);
         }
         const gravel=addParticles(70,0xc1a16f,{x:4,y:1.2,z:8},.045);
+        const riverFlow=addParticles(150,0xc4e6ee,{x:3.8,y:.2,z:8.8},.026);
+        seedParticles(riverFlow,{x:[-1.55,1.55],y:[.22,.48],z:[-4.4,4.4]});
         seedParticles(gravel,{x:[-1.8,1.8],y:[.18,.85],z:[-4.5,4.5]});
         const outerBank=meshBox(scene,1.05,.34,.85,MAT(0x9b7651),-2.25,.5,-.25);
         const bankFace=meshBox(scene,.12,.62,.9,MAT(0x76563e),-2.72,.47,-.25);
@@ -426,7 +432,7 @@
         const sedimentLayers=[];
         for(let i=0;i<3;i++)sedimentLayers.push(meshBox(scene,2.4,.045,1.1,MAT(i%2?0x9c805d:0xc4a574),.4,-.55-i*.09,4.05));
 
-        objects.river={bars,gravel,waterCurve,curve,barBase:bars.map(b=>b.position.clone()),outerBank,bankFace,delta,sedimentLayers};
+        objects.river={bars,gravel,riverFlow,waterCurve,curve,barBase:bars.map(b=>b.position.clone()),outerBank,bankFace,delta,sedimentLayers};
         camera.position.set(8,7,11);
         addLabel(view,"THƯỢNG LƯU",6,20);addLabel(view,"TRUNG LƯU",42,43);addLabel(view,"HẠ LƯU",76,73);        addLabel(view,"XÂM THỰC BỜ NGOÀI",8,57);addLabel(view,"BÃI BỒI",51,61);addLabel(view,"CHÂU THỔ",77,83);
       }
@@ -434,7 +440,7 @@
       function buildCoast() {
         scene.background = new THREE.Color(0x9fc8da);
         const landH=(x,z)=>z<-.55?1.0+.35*Math.sin(x*.9)+.12*Math.cos(z):z<.25?.12:-.32;
-        addTerrain(14,9,100,80,landH,TEX.grass,(x,z,y)=>new THREE.Color(z<-.55?0x71845b:0xc4a879));
+        addTerrain(14,9,100,80,landH,TEX.grass,(x,z,y)=>new THREE.Color(z<-.55?0x68765b:0xb59b70));
         // Mũi đá và vách biển có lớp đá phân tầng.
         const cliff = meshBox(scene,4.5,1.55,1.1,MAT(0x777064),-2.6,.75,-.95);
         for(let i=0;i<4;i++){
@@ -442,7 +448,7 @@
         }
         const shore = new THREE.Mesh(new THREE.SphereGeometry(1,36,20),new THREE.MeshStandardMaterial({map:TEX.sand,roughness:1}));
         shore.scale.set(3.1,.18,.72);shore.position.set(.3,.03,.1);scene.add(shore);
-        const sea=addWater(8,8,3.0,-.08,1.6,{segments:70,color:0x1388b7,opacity:.94});
+        const sea=addWater(8,8,3.0,-.08,1.6,{segments:70,color:0x126b91,opacity:.96});
         const spit = new THREE.Mesh(new THREE.SphereGeometry(1,32,18),new THREE.MeshStandardMaterial({map:TEX.sand,roughness:1}));
         spit.scale.set(1.9,.12,.34);spit.position.set(1.5,.11,-.45);spit.rotation.y=-.2;scene.add(spit);
         const waveFoam=[];
@@ -467,7 +473,7 @@
       function buildClimate() {
         scene.background = new THREE.Color(0xa8cbdc);
         const mountain=(x,z)=>.15+2.8*Math.exp(-Math.pow((x+.15)/1.75,2))+.18*Math.sin(z*1.1);
-        addTerrain(14,10,110,90,mountain,TEX.grass,(x,z,y)=>new THREE.Color(y>2.25?0xd9ded5:y>1.2?0x70875c:x<-.2?0x668451:0x9a895e));
+        addTerrain(14,10,110,90,mountain,TEX.grass,(x,z,y)=>new THREE.Color(y>2.25?0xd5d8d1:y>1.2?0x737b66:x<-.2?0x647854:0x8d805f));
         const snow = new THREE.Mesh(new THREE.SphereGeometry(.2,24,14),MAT(0xe8efeb,.9));
         snow.scale.set(2.0,.55,1.2);snow.position.set(-.15,2.8,-.05);scene.add(snow);
         const clouds=[];
@@ -555,7 +561,7 @@
         }
         if(kind==="river" && objects.river){
           objects.river.bars.forEach((b,i)=>b.visible=action==="lower"||action==="middle"||action==="load" ? i>2 : action==="upper" ? i<3 : true);
-          objects.river.gravel.points.visible=action==="load"||action==="transport"||action==="cycle";objects.river.delta.visible=action==="lower"||action==="load"||action==="deposition";objects.river.bankFace.visible=action==="upper"||action==="middle"||action==="erosion";
+          objects.river.gravel.points.visible=action==="load"||action==="transport"||action==="cycle";objects.river.riverFlow.points.visible=true;objects.river.delta.visible=action==="lower"||action==="load"||action==="deposition";objects.river.bankFace.visible=action==="upper"||action==="middle"||action==="erosion";
         }
         if(kind==="coast" && objects.coast){
           objects.coast.cliff.position.x=-2.6;objects.coast.spit.scale.x=1.9;
@@ -593,6 +599,7 @@
           if(mode==="rise"){y+=dt*(.3+system.velocities[i]*.45);x+=Math.sin(elapsed+i)*dt*.035;if(y>system.bounds.y)y=0;}
           else if(mode==="fall"){y-=dt*(1.0+system.velocities[i]*.55);if(y<-.7)y=system.bounds.y;}
           else if(mode==="drift"){x+=dt*(.35+system.velocities[i]*.35);z+=dt*.08;if(x>system.bounds.x/2)x=-system.bounds.x/2;}
+          else if(mode==="river"){z+=dt*(.8+system.velocities[i]*.8);x=Math.sin((z+4.5)*.7)*1.75+(x*.08);if(z>4.5)z=-4.5;y=.22+Math.sin(elapsed*2+i*.21)*.025;}
           else {z+=dt*(.2+system.velocities[i]*.2);if(z>system.bounds.z/2)z=-system.bounds.z/2;}
           a.setXYZ(i,x,y,z);
         }
@@ -613,7 +620,7 @@
           updateParticles(o.evaporation,dt*speed*force,"rise");updateParticles(o.rainfall,dt*speed*force,"fall");if(o.transpiration&&o.transpiration.points.visible)updateParticles(o.transpiration,dt*speed*force,"rise");
           o.clouds.forEach(c=>{c.position.x+=dt*.12*speed*force;if(c.position.x>4)c.position.x=-4.5;});
         }
-        if(playing&&kind==="river"&&objects.river){const o=objects.river;updateParticles(o.gravel,dt*speed*force,"drift");o.bars.forEach((b,i)=>{const base=o.barBase[i];b.position.x=base.x+Math.sin(elapsed*.45+i)*.05*force;b.position.y=base.y+Math.sin(elapsed*.7+i*.4)*.025;});}
+        if(playing&&kind==="river"&&objects.river){const o=objects.river;updateParticles(o.gravel,dt*speed*force,"drift");updateParticles(o.riverFlow,dt*speed*force,"river");o.bars.forEach((b,i)=>{const base=o.barBase[i];b.position.x=base.x+Math.sin(elapsed*.45+i)*.05*force;b.position.y=base.y+Math.sin(elapsed*.7+i*.4)*.025;});}
         if(playing&&kind==="coast"&&objects.coast)updateParticles(objects.coast.sandParticles,dt*speed,"drift");
         if(playing&&kind==="climate"&&objects.climate){const o=objects.climate;updateParticles(o.rain,dt*speed*force,"fall");updateParticles(o.dryDust,dt*speed*force,"drift");o.windLines.forEach((line,i)=>{line.position.x=Math.sin(elapsed*1.5+i*.3)*.12*force;line.position.y=Math.sin(elapsed*1.2+i*.5)*.08;});o.clouds.forEach(c=>{c.position.x+=dt*.22*speed*force*(scenario==="reverse"?-1:1);if(c.position.x>2.8)c.position.x=-5.5;if(c.position.x<-5.5)c.position.x=2.8;});o.airPath.forEach((dot,i)=>{dot.position.x=-5.5+((elapsed*.38+i*.62)%8.2);dot.position.y=2.25+Math.sin((dot.position.x+5.5)*.55)*.85;});}
         if(kind==="coast"&&objects.coast&&playing){const o=objects.coast,wave=Math.sin(elapsed*2.1*speed)*.16*force;o.sea.mesh.position.y=-.08+Math.sin(elapsed*.42*speed)*.13*force;o.waveFoam.forEach((line,i)=>{line.position.z=wave+i*.035;line.position.x=Math.sin(elapsed*1.2+i*.4)*.12;});if(scenario==="erosion")o.cliff.position.x=-2.6-Math.min(.28,elapsed*.012*force);else o.cliff.position.x=-2.6;if(scenario==="deposition")o.spit.scale.x=1.9+Math.min(.55,elapsed*.06*force);else o.spit.scale.x=1.9;updateParticles(o.sandParticles,dt*speed*force,"drift");}
