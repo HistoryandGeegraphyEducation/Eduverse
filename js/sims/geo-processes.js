@@ -493,10 +493,10 @@
         const sunGlow=new THREE.Mesh(new THREE.SphereGeometry(.62,24,16),new THREE.MeshBasicMaterial({color:0xffd47a,transparent:true,opacity:.1,depthWrite:false}));
         sunGlow.position.copy(sunBall.position);scene.add(sunGlow);
 
-        const evaporation=addParticles(120,0xd8f3ff,{x:6.2,y:4.1,z:6.8},.035);
-        const rainfall=addParticles(165,0xc4eafa,{x:5.8,y:4.5,z:5.8},.035);
+        const evaporation=addParticles(120,0xd8f3ff,{x:6.2,y:4.1,z:6.8},.085);
+        const rainfall=addParticles(165,0xc4eafa,{x:5.8,y:4.5,z:5.8},.075);
         const transpiration=addParticles(75,0xe0f6dc,{x:3.8,y:3.2,z:4.2},.027);
-        const infiltrationPts=addParticles(65,0x8ed9ed,{x:6.2,y:1.5,z:1.4},.03);
+        const infiltrationPts=addParticles(65,0x8ed9ed,{x:6.2,y:1.5,z:1.4},.065);
         seedParticles(evaporation,{x:[3.2,6.5],y:[.05,3.8],z:[-2.5,2.8]});
         seedParticles(rainfall,{x:[-1.5,2.3],y:[1.0,4.1],z:[-2.8,2.7]});
         seedParticles(transpiration,{x:[-6.0,-2.8],y:[.5,2.8],z:[-3.0,2.8]});
@@ -544,7 +544,7 @@
           new THREE.MeshBasicMaterial({color:0x8bd8ed,transparent:true,opacity:.105,side:THREE.DoubleSide,depthWrite:false})
         );
         coolingColumn.position.set(1.05,3.15,-2.05);scene.add(coolingColumn);
-        const condensationPts=addParticles(96,0xe8fbff,{x:3.2,y:1.5,z:2.2},.052);
+        const condensationPts=addParticles(96,0xe8fbff,{x:3.2,y:1.5,z:2.2},.085);
         seedParticles(condensationPts,{x:[-.35,2.25],y:[3.0,4.35],z:[-2.65,-1.0]});
         condensationPts.points.visible=false;
 
@@ -553,7 +553,7 @@
           [-2.9,3.35],[-2.0,3.58],[-1.1,3.62],[-.1,3.55],
           [1.0,3.28],[2.0,2.92],[3.0,2.48],[4.15,1.8]
         ].map(([x,z])=>new THREE.Vector3(x,heightAt(x,z)+.13,z)));
-        const runoffPts=addParticles(74,0xcaf5ff,{x:5,y:1,z:2},.045);
+        const runoffPts=addParticles(74,0xcaf5ff,{x:5,y:1,z:2},.075);
         runoffPts.points.visible=false;
 
         // Groundwater percolates through the strata, then moves laterally toward the coast.
@@ -565,7 +565,7 @@
         ]);
         const groundwaterPath=addLine(scene,groundwaterCurve.getPoints(70).map(p=>[p.x,p.y,p.z]),0x6bc5df,.85,.035);
         groundwaterPath.visible=false;
-        const groundwaterFlowPts=addParticles(58,0xb6efff,{x:5,y:1,z:1},.045);
+        const groundwaterFlowPts=addParticles(58,0xb6efff,{x:5,y:1,z:1},.075);
         groundwaterFlowPts.points.visible=false;
 
         objects.cycle={ocean,clouds,evaporation,rainfall,transpiration,infiltrationPts,infiltrationLines,flowPoints,riverCurve,runoff,fallsGroup,sunGlow,
