@@ -21,7 +21,8 @@ window.simGeo01Coordinates=function(root){
    const l=land(48,15,27,42,15,42)||land(8,20,30,23,20,23)||land(-18,135,13,28,135,28)||land(-25,25,35,18,25,18)||land(48,-105,24,42,-105,42)||land(-15,-60,34,20,-60,20)||land(72,-40,13,18,-40,18);
    const c=Math.abs(la)>78?new T.Color(0xe8edf0):l?new T.Color(0x688e58).offsetHSL(0,.02,Math.sin(lo*1.7+la)*.02):new T.Color(0x17658a).offsetHSL(0,.02,Math.sin(lo+la)*.015);cols.push(c.r,c.g,c.b);
   }
-  g.setAttribute("color",new T.Float32BufferAttribute(cols,3));earth=new T.Mesh(g,new T.MeshStandardMaterial({vertexColors:true,roughness:.9}));scene.add(earth);\n  const textureLoader=new T.TextureLoader();textureLoader.setCrossOrigin("anonymous");textureLoader.load("https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg",texture=>{if(dead){texture.dispose();return;}texture.encoding=T.sRGBEncoding;earth.material.dispose();earth.material=new T.MeshStandardMaterial({map:texture,roughness:.92});},undefined,()=>{});
+  g.setAttribute("color",new T.Float32BufferAttribute(cols,3));earth=new T.Mesh(g,new T.MeshStandardMaterial({vertexColors:true,roughness:.9}));scene.add(earth);
+  const textureLoader=new T.TextureLoader();textureLoader.setCrossOrigin("anonymous");textureLoader.load("https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg",texture=>{if(dead){texture.dispose();return;}texture.encoding=T.sRGBEncoding;earth.material.dispose();earth.material=new T.MeshStandardMaterial({map:texture,roughness:.92});},undefined,()=>{});
   scene.add(new T.Mesh(new T.SphereGeometry(1.824,80,48),new T.MeshBasicMaterial({color:0x72c9ef,transparent:true,opacity:.1,side:T.BackSide})));
  }
  function makeLines(){
