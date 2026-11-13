@@ -83,7 +83,7 @@ function mount(root,id){
   return g;
  }
  function house(x,y,z,s,parent){
-  const g=group(parent);box(.9*s,.75*s,.8*s,0xd9d3bd,x,y+.38*s,z,g);const roof=mesh(new T.ConeGeometry(.78*s,.48*s,4),material(0x8a5544),g);roof.position.set(x,y+.98*s,z);roof.rotation.y=Math.PI/4;return g;
+  const g=group(parent);g.userData.groundY=y;box(.9*s,.75*s,.8*s,0xd9d3bd,x,y+.38*s,z,g);const roof=mesh(new T.ConeGeometry(.78*s,.48*s,4),material(0x8a5544),g);roof.position.set(x,y+.98*s,z);roof.rotation.y=Math.PI/4;return g;
  }
  function cloud(x,y,z,s,parent,color){
   const g=group(parent);for(let i=0;i<6;i++){const r=(.35+(i%3)*.11)*s;const c=sphere(r,color||0xe7eceb,x+(i-2.5)*.32*s,y+Math.sin(i*1.4)*.12*s,z+Math.cos(i)*.12*s,g);c.material.roughness=1;}g.position.set(x,y,z);return g;
@@ -176,7 +176,7 @@ function mount(root,id){
   if(id==="lu-quet"){objects.flood.position.y=.12+n*1.5;objects.flood.scale.set(1+n*.9,1,1+n*.3);objects.river.material.color.setHex(n>.55?0x806b50:0x3986a4);objects.rain.forEach((r,i)=>r.visible=mode>0&&i<Math.floor(n*90));}
   if(id==="sat-lo-dat"){objects.mass.position.set(-.5-n*3,mode===3?-.4-n*.8:0,0);objects.mass.rotation.z=-.12-n*.22;objects.cracks.forEach((c,i)=>c.visible=mode>0&&i<Math.floor(n*6));}
   if(id==="xam-nhap-man"){const intrusion=1.2+(1-n)*10+(mode===2?2:0);objects.wedge.scale.x=intrusion/16;objects.wedge.position.x=8-intrusion*.42;objects.halocline.scale.x=.7+intrusion/12;objects.flow.forEach((a,i)=>{a.visible=mode!==1||i%2===0;a.material.color.setHex(n>.6?0xc5e6e5:0xe1f1ed);});}
-  if(id==="nuoc-bien-dang"){const rise=v*.85;objects.sea.position.y=rise;objects.shore.position.x=-1+v*3.8;objects.houses.forEach((h,i)=>{h.children.forEach(c=>{if(c.geometry&&c.geometry.type==="BoxGeometry")c.material.color.setHex(h.position.y<rise?0x9eaaad:0xd9d3bd);});});}
+  if(id==="nuoc-bien-dang"){const rise=v*.85;objects.sea.position.y=rise;objects.shore.position.x=-1+v*3.8;objects.houses.forEach((h,i)=>{h.children.forEach(c=>{if(c.geometry&&c.geometry.type==="BoxGeometry")c.material.color.setHex(h.userData.groundY<rise?0x9eaaad:0xd9d3bd);});});}
  }
  function updateLabels(){
   if(!camera||!renderer)return;const rect=canvas.getBoundingClientRect();
