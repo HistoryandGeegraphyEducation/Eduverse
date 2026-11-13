@@ -1,7 +1,7 @@
 const SIMS = {
   lsdl: [
     {id:"kinh-vi-tuyen", grade:6, icon:"🌐", title:"Quả Địa Cầu kinh tuyến – vĩ tuyến 3D", type:"TRƯNG BÀY"},
-    {id:"toa-do-dia-li", grade:6, icon:"📍", title:"Xác định tọa độ địa lí", type:"MÔ PHỎNG", mount:(root)=>simGeoCatalog(root,"toa-do-dia-li")},
+    {id:"toa-do-dia-li", grade:6, icon:"📍", title:"Xác định tọa độ địa lí", type:"MÔ PHỎNG", mount:(root)=>simGeo01Coordinates(root)},
     {id:"qua-dia-cau-ban-do", grade:6, icon:"🗺️", title:"Chuyển đổi quả Địa Cầu thành bản đồ", type:"MÔ PHỎNG", mount:(root)=>simGeoCatalog(root,"qua-dia-cau-ban-do")},
     {id:"la-ban-phuong-huong", grade:6, icon:"🧭", title:"La bàn và phương hướng", type:"MÔ PHỎNG", mount:(root)=>simGeoCatalog(root,"la-ban-phuong-huong")},
     {id:"ti-le-ban-do", grade:6, icon:"📏", title:"Thay đổi tỉ lệ bản đồ", type:"MÔ PHỎNG", mount:(root)=>simGeoCatalog(root,"ti-le-ban-do")},
