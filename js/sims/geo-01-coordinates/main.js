@@ -21,14 +21,14 @@ window.simGeo01Coordinates=function(root){
    const l=land(48,15,27,42,15,42)||land(8,20,30,23,20,23)||land(-18,135,13,28,135,28)||land(-25,25,35,18,25,18)||land(48,-105,24,42,-105,42)||land(-15,-60,34,20,-60,20)||land(72,-40,13,18,-40,18);
    const c=Math.abs(la)>78?new T.Color(0xe8edf0):l?new T.Color(0x688e58).offsetHSL(0,.02,Math.sin(lo*1.7+la)*.02):new T.Color(0x17658a).offsetHSL(0,.02,Math.sin(lo+la)*.015);cols.push(c.r,c.g,c.b);
   }
-  g.setAttribute("color",new T.Float32BufferAttribute(cols,3));earth=new T.Mesh(g,new T.MeshStandardMaterial({vertexColors:true,roughness:.9}));scene.add(earth);
+  g.setAttribute("color",new T.Float32BufferAttribute(cols,3));earth=new T.Mesh(g,new T.MeshStandardMaterial({vertexColors:true,roughness:.9}));scene.add(earth);\n  const textureLoader=new T.TextureLoader();textureLoader.setCrossOrigin("anonymous");textureLoader.load("https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg",texture=>{if(dead){texture.dispose();return;}texture.encoding=T.sRGBEncoding;earth.material.dispose();earth.material=new T.MeshStandardMaterial({map:texture,roughness:.92});},undefined,()=>{});
   scene.add(new T.Mesh(new T.SphereGeometry(1.824,80,48),new T.MeshBasicMaterial({color:0x72c9ef,transparent:true,opacity:.1,side:T.BackSide})));
  }
  function makeLines(){
   latGroup=new T.Group();lonGroup=new T.Group();scene.add(latGroup,lonGroup);
   for(let la=-75;la<=75;la+=15){const pts=[];for(let lo=0;lo<=360;lo+=4)pts.push(point(la,lo,1.812));const m=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),180,la===0?.012:.004,6,false),material(la===0?0xffd36b:0xc7dce5));latGroup.add(m);if(la===0)eq=m;}
   for(let lo=-180;lo<180;lo+=15){const pts=[];for(let la=-89;la<=89;la+=4)pts.push(point(la,lo,1.814));const m=new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),100,lo===0?.012:.004,6,false),material(lo===0?0xff9f63:0xc7dce5));lonGroup.add(m);if(lo===0)prime=m;}
-  axis=new T.Mesh(new T.CylinderGeometry(.012,.012,4.35,12),material(0xffe1a1));axis.rotation.z=-23.5*Math.PI/180;scene.add(axis);
+  axis=new T.Mesh(new T.CylinderGeometry(.012,.012,4.35,12),material(0xffe1a1));axis.rotation.z=0;scene.add(axis);
  }
  function updatePin(){
   const pos=point(state.lat,state.lon,1.84);pin.position.copy(pos);pin.quaternion.setFromUnitVectors(V(0,1,0),pos.clone().normalize());
@@ -45,7 +45,7 @@ window.simGeo01Coordinates=function(root){
  function resize(){if(dead||!renderer)return;const w=Math.max(1,stage.clientWidth),h=Math.max(1,stage.clientHeight);renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
  function init(){
   scene=new T.Scene();scene.background=new T.Color(0x0b1d2b);camera=new T.PerspectiveCamera(38,1,.1,100);camera.position.set(5.4,3.2,6.8);camera.lookAt(0,0,0);
-  renderer=new T.WebGLRenderer({antialias:true,powerPreference:"high-performance"});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.outputColorSpace=T.SRGBColorSpace;stage.insertBefore(renderer.domElement,stage.firstChild);
+  renderer=new T.WebGLRenderer({antialias:true,powerPreference:"high-performance"});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.outputEncoding=T.sRGBEncoding;stage.insertBefore(renderer.domElement,stage.firstChild);
   scene.add(new T.HemisphereLight(0xd8efff,0x263b32,2));const key=new T.DirectionalLight(0xfff1d6,2.4);key.position.set(4,5,6);scene.add(key);const fill=new T.DirectionalLight(0x5b9ac6,.9);fill.position.set(-5,1,-4);scene.add(fill);
   makeEarth();makeLines();pin=new T.Group();const stem=new T.Mesh(new T.CylinderGeometry(.018,.025,.34,12),material(0xffd34f));stem.position.y=.16;const head=new T.Mesh(new T.SphereGeometry(.075,20,16),material(0xff6b4f));head.position.y=.36;pin.add(stem,head);scene.add(pin);updatePin();
   if(T.OrbitControls){orbit=new T.OrbitControls(camera,renderer.domElement);orbit.enableDamping=true;orbit.dampingFactor=.06;orbit.minDistance=3.5;orbit.maxDistance=11;orbit.target.set(0,0,0);}
