@@ -143,13 +143,16 @@
 <script src="js/sims/quake.js"></script>
 <!-- Three.js r147: renderer 3D, OrbitControls và bộ nạp mô hình GLB -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js" crossorigin="anonymous"></script>
+<!-- CDN dự phòng: vẫn nạp được Three.js nếu jsDelivr bị chặn hoặc lỗi mạng -->
+<script src="https://unpkg.com/three@0.147.0/build/three.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/three@0.147.0/examples/js/controls/OrbitControls.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js" crossorigin="anonymous"></script>
 <script src="js/sims/volcano.js"></script>
 <script src="js/sims/earth.js"></script>
 <script src="js/sims/tsunami.js?v=20261112-wave-visibility"></script>
 <script src="js/sims/geo-processes.js?v=20261112-geo-sims-complete-1"></script>
-<script src="js/sims/geo-catalog.js?v=20261113-camera-aim-1"></script>
+<script src="js/sims/geo-catalog.js?v=20261113-three-cdn-fallback-1"></script>
 <script src="js/sims/interior-earth.js"></script>
 <script src="js/sims/solar-system-explorer.js"></script>
 <script src="js/registry.js?v=20261111-no-sim-new"></script>
