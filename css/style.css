@@ -942,3 +942,94 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
   }
   #app>.top>.brand,#app>.top>.auth{position:relative!important;z-index:1!important}
 }
+
+
+/* EDUVERSE – bảng màu thống nhất cho toàn bộ mô phỏng */
+:root{
+  --sim-bg:#263640;
+  --sim-panel:#edf0ee;
+  --sim-panel-2:#dce3e1;
+  --sim-text:#26343a;
+  --sim-muted:#596970;
+  --sim-accent:#527b80;
+  --sim-accent-dark:#365d63;
+  --sim-border:#c2ceca;
+}
+.simcv,.simcv.ev{background:var(--sim-bg)!important;border-color:#718087!important;box-shadow:0 5px 14px rgba(18,31,36,.16)!important}
+.simctl,.vol3 .simctl,.siminfo,.vol3 .vinfo{
+  background:linear-gradient(180deg,#f2f4f2,#e4e9e6)!important;
+  color:var(--sim-text)!important;border:1px solid var(--sim-border)!important;
+  box-shadow:0 4px 12px rgba(25,39,43,.12)!important
+}
+.simctl label,.siminfo,.siminfo b,.simctl label b{color:var(--sim-text)!important}
+.simctl label b{color:var(--sim-accent-dark)!important}
+.simctl input[type=range],.simctl input{accent-color:var(--sim-accent)!important}
+.simctl button,.simctl .chip,.simctl .no{
+  background:#dce4e1!important;color:#304148!important;border:1px solid #b9c8c3!important
+}
+.simctl button.cta,.simctl button.on,.simctl .chip.on{
+  background:var(--sim-accent-dark)!important;color:#fff!important;border-color:var(--sim-accent-dark)!important
+}
+.simctl button.hot{background:#a65f48!important;color:#fff!important;border-color:#a65f48!important}
+.siminfo{line-height:1.55!important}
+.evload{color:#e2e9e6!important}
+
+/* Các mô phỏng có bảng điều khiển riêng */
+.quake3d-root .q3-controls,.tsunami-root .ts-controls{
+  background:linear-gradient(180deg,#f2f4f2,#e3e9e6)!important;
+  color:#26343a!important;border:1px solid #c2ceca!important;
+  box-shadow:0 4px 12px rgba(25,39,43,.12)!important
+}
+.quake3d-root .q3-label,.tsunami-root .ts-label,
+.quake3d-root .q3-range div,.tsunami-root .ts-range div{color:#43545a!important}
+.quake3d-root .q3-range b,.tsunami-root .ts-range b,
+.quake3d-root .q3-metric strong,.tsunami-root .ts-metric strong,
+.quake3d-root .q3-info strong,.tsunami-root .ts-explain strong{color:#365d63!important}
+.quake3d-root .q3-metric,.tsunami-root .ts-metric{background:#dfe6e3!important}
+.quake3d-root .q3-info,.tsunami-root .ts-explain{background:#f2f4f2!important;color:#2d3b40!important}
+.quake3d-root button,.tsunami-root .ts-modes button,
+.tsunami-root .ts-actions button,.tsunami-root .ts-views button{
+  background:#dce4e1!important;color:#304148!important;border:1px solid #bdcac6!important
+}
+.quake3d-root button.q3-primary,.quake3d-root button.q3-active,
+.tsunami-root button.ts-active,.tsunami-root .ts-actions button.ts-primary{
+  background:#365d63!important;color:#fff!important;border-color:#365d63!important
+}
+.quake3d-root input[type=range],.tsunami-root input[type=range]{accent-color:#527b80!important}
+
+/* Trái Đất bên trong, Hệ Mặt Trời và các quá trình địa lí */
+.ie-wrap{background:linear-gradient(145deg,#263640,#344b55 58%,#26343a)!important;color:#edf1ef!important;border-color:#718087!important}
+.ie-stage{background:radial-gradient(ellipse at 50% 48%,#526d77 0,#344b55 58%,#26343a 100%)!important}
+.ie-controls{background:rgba(28,43,49,.92)!important}
+.ie-card{background:rgba(230,236,233,.96)!important;color:#26343a!important;border-color:#c2ceca!important}
+.ie-card h3{color:#365d63!important}
+.ie-row{color:#e0e8e4!important}
+.ie-wrap button{background:#dce4e1!important;color:#304148!important;border-color:#bdcac6!important}
+.ie-wrap button.active{background:#527b80!important;color:#fff!important;border-color:#365d63!important}
+.ie-row input{accent-color:#527b80!important}
+.pe-explorer{color:#26343a!important}
+.pe-header,.pe-sidebar,.pe-info,.pe-footer{background:#edf0ee!important;color:#26343a!important;border-color:#c2ceca!important}
+.pe-sidebar .pe-panel-title,.pe-header .pe-eyebrow{color:#596970!important}
+.pe-body-item{background:#dfe6e3!important;color:#304148!important;border-color:#c2ceca!important}
+.pe-body-item.active,.pe-controls button,.pe-reset{background:#365d63!important;color:#fff!important;border-color:#365d63!important}
+.pe-stage{background:#263640!important;border-color:#718087!important}
+.pe-info{box-shadow:0 4px 12px rgba(25,39,43,.12)!important}
+.pe-speed{color:#365d63!important}
+.evgeo{
+  background:linear-gradient(145deg,#34464d,#293b42)!important;
+  color:#edf1ef!important
+}
+.evgeo .evgeo-controls{
+  background:linear-gradient(180deg,#f2f4f2,#e3e9e6)!important;
+  color:#26343a!important;border-color:#c2ceca!important
+}
+.evgeo .evgeo-section-title,.evgeo .evgeo-kicker{color:#435d63!important}
+.evgeo .evgeo-lead,.evgeo .evgeo-footer label{color:#43545a!important}
+.evgeo button,.evgeo .evgeo-water-toggle,.evgeo .evgeo-water-children button{
+  background:#dce4e1!important;color:#304148!important;border-color:#bdcac6!important
+}
+.evgeo button.active,.evgeo button:focus-visible,.evgeo .evgeo-water-toggle[aria-expanded=true]{
+  background:#527b80!important;color:#fff!important;border-color:#365d63!important
+}
+.evgeo .evgeo-explain{background:#edf0ee!important;color:#26343a!important;border-left-color:#527b80!important}
+.evgeo .evgeo-footer input{accent-color:#527b80!important}
