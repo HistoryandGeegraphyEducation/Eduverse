@@ -60,8 +60,8 @@ function mount03(root){
  const ring=new T.Mesh(new T.TorusGeometry(2.68,.075,12,120),M(E,0xd19a3b,.3,{metalness:.5}));ring.rotation.x=Math.PI/2;ring.position.y=.53;E.scene.add(ring);
  for(let i=0;i<72;i++){const a=i*Math.PI/36,major=i%6===0;const tick=new T.Mesh(new T.BoxGeometry(major?.045:.022,major?.2:.105,.025),M(E,major?0x18364b:0x657d8d));tick.position.set(Math.sin(a)*2.55,.56,Math.cos(a)*2.55);tick.rotation.y=a;E.scene.add(tick);}
  const needle=new T.Group();needle.position.y=.65;E.scene.add(needle);
- const n=new T.Mesh(new T.ConeGeometry(.19,1.95,4),M(E,0xd72f35,.32,{emissive:0x5b0808,emissiveIntensity:.13}));n.position.set(0,.05,-.8);n.rotation.x=Math.PI/2;needle.add(n);
- const south=new T.Mesh(new T.ConeGeometry(.19,1.95,4),M(E,0x23558a,.32));south.position.set(0,.05,.8);south.rotation.x=-Math.PI/2;needle.add(south);
+ const n=new T.Mesh(new T.ConeGeometry(.19,1.95,4),M(E,0xd72f35,.32,{emissive:0x5b0808,emissiveIntensity:.13}));n.position.set(0,.05,-.8);n.rotation.x=-Math.PI/2;needle.add(n);
+ const south=new T.Mesh(new T.ConeGeometry(.19,1.95,4),M(E,0x23558a,.32));south.position.set(0,.05,.8);south.rotation.x=Math.PI/2;needle.add(south);
  const hub=new T.Mesh(new T.SphereGeometry(.22,24,18),M(E,0xf1c65e,.25,{metalness:.5}));hub.position.y=.15;needle.add(hub);
  label(E,"BẮC",0,1.2,-3.1,"#ff7373");label(E,"NAM",0,1.2,3.05,"#e3f1ff");label(E,"ĐÔNG",3.1,1.2,0,"#fff0be");label(E,"TÂY",-3.1,1.2,0,"#fff0be");
  const input=U.el.querySelector("[data-angle]"),out=U.el.querySelector("[data-out]"),lab=U.el.querySelector("[data-angle-label]"),dirs=["Bắc","Đông Bắc","Đông","Đông Nam","Nam","Tây Nam","Tây","Tây Bắc"];
