@@ -41,12 +41,23 @@ function mount02(root){
  const url="https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg";
  loader.load(url,t=>{if(dead){t.dispose();return;}t.encoding=T.sRGBEncoding;globe.material.map=t;globe.material.color.set(0xffffff);globe.material.needsUpdate=true;},undefined,()=>{});
  const halo=new T.Mesh(new T.SphereGeometry(2.27,64,48),new T.MeshBasicMaterial({color:0x58c5ef,transparent:true,opacity:.08,side:T.BackSide}));halo.position.copy(globe.position);E.scene.add(halo);
- const flat=new T.Mesh(new T.PlaneGeometry(5.25,3.05),M(E,0x176b91,.9));flat.rotation.x=-Math.PI/2;flat.position.set(3.1,.08,0);E.scene.add(flat);
+ function projectionGeometry(kind){
+  const g=new T.BufferGeometry(),nx=100,ny=50,verts=[],uvs=[],indices=[];
+  for(let j=0;j<=ny;j++){const v=j/ny,lat=(v-.5)*Math.PI;for(let i=0;i<=nx;i++){const u=i/nx,lon=(u-.5)*2*Math.PI;let x,z;
+   if(kind===0){x=4.8*lon/Math.PI;z=2.4*lat/(Math.PI/2);}
+   else if(kind===1){const rho=(Math.PI/2-lat)*1.8,theta=lon*Math.sin(Math.PI/4);x=rho*Math.sin(theta);z=-rho*Math.cos(theta);}
+   else{const rho=(Math.PI/2-lat)*2.8/Math.PI;x=rho*Math.sin(lon);z=-rho*Math.cos(lon);}
+   verts.push(x,0,z);uvs.push(u,v);
+  }}
+  for(let j=0;j<ny;j++)for(let i=0;i<nx;i++){const a=j*(nx+1)+i,b=a+1,c=a+nx+1,d=c+1;indices.push(a,c,b,b,c,d);}
+  g.setAttribute("position",new T.Float32BufferAttribute(verts,3));g.setAttribute("uv",new T.Float32BufferAttribute(uvs,2));g.setIndex(indices);g.computeVertexNormals();return g;
+ }
+ const flat=new T.Mesh(projectionGeometry(0),M(E,0x176b91,.9));flat.position.set(3.1,.08,0);E.scene.add(flat);
  const rim=new T.Mesh(new T.BoxGeometry(5.42,.13,3.22),M(E,0xd5a94c,.4,{metalness:.35}));rim.position.set(3.1,-.04,0);E.scene.add(rim);
  loader.load(url,t=>{if(dead){t.dispose();return;}t.encoding=T.sRGBEncoding;flat.material.map=t;flat.material.color.set(0xffffff);flat.material.needsUpdate=true;},undefined,()=>{});
  for(let lat=-75;lat<=75;lat+=15){const pts=[];for(let lon=-180;lon<=180;lon+=5){const a=lat*Math.PI/180,b=lon*Math.PI/180;pts.push([-3.15+2.22*Math.cos(a)*Math.cos(b),2+2.22*Math.sin(a),2.22*Math.cos(a)*Math.sin(b)]);}tube(E,pts,0x9bd7e8,.009);}
  const names=["Hình trụ","Hình nón","Phương vị"],desc=["Hình trụ: biến dạng tăng mạnh về hai vùng cực; thường dùng trong một số bản đồ thế giới.","Hình nón: phù hợp thể hiện khu vực ở vĩ độ trung bình; thường dùng cho bản đồ khu vực ôn đới.","Phương vị: thể hiện phương hướng từ tâm bản đồ; biến dạng tăng dần khi ra xa tâm."];
- const proj=U.el.querySelector("[data-proj]"),out=U.el.querySelector("[data-out]");proj.addEventListener("input",()=>{const i=+proj.value;U.el.querySelector("[data-name]").textContent=names[i];out.textContent=desc[i];flat.scale.set(1-i*.06,1,1-i*.06);});
+ const proj=U.el.querySelector("[data-proj]"),out=U.el.querySelector("[data-out]");proj.addEventListener("input",()=>{const i=+proj.value;U.el.querySelector("[data-name]").textContent=names[i];out.textContent=desc[i];flat.geometry.dispose();flat.geometry=projectionGeometry(i);});
  let spin=true;U.el.querySelector("[data-spin]").addEventListener("click",e=>{spin=!spin;e.currentTarget.textContent=spin?"⏸ Tạm dừng quay":"▶ Tiếp tục quay";});U.el.querySelector("[data-home]").addEventListener("click",()=>{E.camera.position.set(7,5,9);if(E.orbit)E.orbit.target.set(0,1,0);});
  E.updates.push(()=>{if(spin)globe.rotation.y+=.0018;});return{destroy(){dead=true;E.dispose();}};
 }
