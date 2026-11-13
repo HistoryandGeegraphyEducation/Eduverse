@@ -110,7 +110,12 @@ const SIMS = {
   type:"MÔ PHỎNG",
 
   status:"new-version", statusAt:"2026-11-12T00:00:00+07:00",
-  mount:simVolcano}
+  mount:simVolcano},
+    {id:"bao-nhiet-doi",grade:8,icon:"🌀",title:"Bão nhiệt đới – cấu tạo và quá trình hình thành",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>simNaturalHazard(root,"bao-nhiet-doi")},
+    {id:"lu-quet",grade:8,icon:"🌧️",title:"Lũ quét – quá trình hình thành và tác động",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>simNaturalHazard(root,"lu-quet")},
+    {id:"sat-lo-dat",grade:8,icon:"⛰️",title:"Sạt lở đất – cơ chế mất ổn định sườn dốc",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>simNaturalHazard(root,"sat-lo-dat")},
+    {id:"xam-nhap-man",grade:8,icon:"🌊",title:"Xâm nhập mặn – sự lan truyền nước mặn",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>simNaturalHazard(root,"xam-nhap-man")},
+    {id:"nuoc-bien-dang",grade:8,icon:"🏝️",title:"Nước biển dâng – biến đổi đường bờ và ngập ven biển",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>simNaturalHazard(root,"nuoc-bien-dang")}
   ]
 };
 
