@@ -76,7 +76,7 @@ function mount03(root){
  const hub=new T.Mesh(new T.SphereGeometry(.22,24,18),M(E,0xf1c65e,.25,{metalness:.5}));hub.position.y=.15;needle.add(hub);
  label(E,"BẮC",0,1.2,-3.1,"#ff7373");label(E,"NAM",0,1.2,3.05,"#e3f1ff");label(E,"ĐÔNG",3.1,1.2,0,"#fff0be");label(E,"TÂY",-3.1,1.2,0,"#fff0be");
  const input=U.el.querySelector("[data-angle]"),out=U.el.querySelector("[data-out]"),lab=U.el.querySelector("[data-angle-label]"),dirs=["Bắc","Đông Bắc","Đông","Đông Nam","Nam","Tây Nam","Tây","Tây Bắc"];
- function set(v){v=(v+360)%360;input.value=Math.round(v);needle.rotation.y=v*Math.PI/180;const d=dirs[Math.round(v/45)%8],a=String(Math.round(v)).padStart(3,"0");lab.textContent=a+"° · "+d;out.textContent=d+" · "+a+"°";}
+ function set(v){v=(v+360)%360;input.value=Math.round(v);needle.rotation.y=-v*Math.PI/180;const d=dirs[Math.round(v/45)%8],a=String(Math.round(v)).padStart(3,"0");lab.textContent=a+"° · "+d;out.textContent=d+" · "+a+"°";}
  input.addEventListener("input",()=>set(+input.value));U.el.querySelectorAll("[data-dir]").forEach(b=>b.addEventListener("click",()=>set(+b.dataset.dir)));set(0);return{destroy(){E.dispose();}};
 }
 function mount04(root){
@@ -108,7 +108,7 @@ function mount05(root){
  const plane=new T.Plane(new T.Vector3(0,1,0),0),ray=new T.Raycaster(),pointer=new T.Vector2(),points=[],group=new T.Group(),segments=[];E.scene.add(group);
  const scale=U.el.querySelector("[data-scale]"),mapOut=U.el.querySelector("[data-map]"),groundOut=U.el.querySelector("[data-ground]"),den=[10000,25000,50000,100000,250000];
  function update(){const d=den[+scale.value-1];U.el.querySelector("[data-scale-label]").textContent="1 : "+d.toLocaleString("vi-VN");if(points.length<2){groundOut.textContent="—";return;}const cm=Math.hypot(points[1].x-points[0].x,points[1].z-points[0].z);mapOut.textContent=cm.toFixed(2)+" cm";const m=cm*d/100;groundOut.textContent=m>=1000?(m/1000).toFixed(2)+" km":Math.round(m)+" m";}
- function clear(){points.length=0;group.clear();segments.forEach(o=>{E.scene.remove(o);o.geometry.dispose();o.material.dispose();});segments.length=0;mapOut.textContent="0 cm";groundOut.textContent="—";}
+ function clear(){points.length=0;group.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose();}});group.clear();segments.forEach(o=>{E.scene.remove(o);o.geometry.dispose();o.material.dispose();});segments.length=0;mapOut.textContent="0 cm";groundOut.textContent="—";}
  function add(x,z){if(points.length===2)clear();points.push({x,z});const p=pin(E,x,0,z,points.length===1?0xffc83d:0x30c7ed);group.add(p);if(points.length===2){const s=tube(E,[[points[0].x,.2,points[0].z],[x,.2,z]],0xffb72f,.055);segments.push(s);}update();}
  const canvas=E.renderer.domElement;
  function down(ev){const r=canvas.getBoundingClientRect();pointer.x=(ev.clientX-r.left)/r.width*2-1;pointer.y=-(ev.clientY-r.top)/r.height*2+1;ray.setFromCamera(pointer,E.camera);const hit=new T.Vector3();if(ray.ray.intersectPlane(plane,hit)&&Math.abs(hit.x)<=5&&Math.abs(hit.z)<=3.2)add(hit.x,hit.z);}
