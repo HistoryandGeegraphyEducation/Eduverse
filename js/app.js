@@ -139,6 +139,7 @@ function depthOf(){
 }
 
 function render(){
+  if(window.LsdlFooterLogo) LsdlFooterLogo.unmount();
   if(curSim){
     curSim.destroy();
     curSim=null;
