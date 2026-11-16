@@ -157,6 +157,11 @@ function render(){
   ({home:vHome,learn:vLearn,cat:vCat,
     practice:vPractice,me:vMe})[S.tab]();
 
+  // Logo nhận diện chỉ xuất hiện trong các màn hình thuộc môn Lịch Sử và Địa Lí.
+  if((S.subj==="lsdl"||S.csub==="lsdl")&&window.LsdlFooterLogo){
+    LsdlFooterLogo.mount(main);
+  }
+
   syncRoute();
 
   main.querySelectorAll(".subj,.gpill,.row,.box,.sec,.tool")
