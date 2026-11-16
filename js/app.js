@@ -580,15 +580,16 @@ function authError(error){
 function auth(mode){
   const reg=mode==="reg";
   const reset=mode==="reset";
-  const heading=reg?"TẠO TÀI KHOẢN":reset?"ĐẶT LẠI MẬT KHẨU":"ĐĂNG NHẬP";
-  $("#sheet").innerHTML=`<div class="auth-sheet-head"><h2>${heading}</h2><p>${reg?"Đăng ký tài khoản EDUVERSE dùng chung cho hệ sinh thái.":reset?"Nhập email để nhận liên kết đặt lại mật khẩu.":"Đăng nhập bằng tài khoản EDUVERSE của bạn."}</p></div>`+
+  const update=mode==="update";
+  const heading=reg?"TẠO TÀI KHOẢN":reset?"ĐẶT LẠI MẬT KHẨU":update?"ĐỔI MẬT KHẨU":"ĐĂNG NHẬP";
+  $("#sheet").innerHTML=`<div class="auth-sheet-head"><h2>${heading}</h2><p>${reg?"Đăng ký tài khoản EDUVERSE dùng chung cho hệ sinh thái.":reset?"Nhập email để nhận liên kết đặt lại mật khẩu.":update?"Nhập mật khẩu mới cho tài khoản của bạn.":"Đăng nhập bằng tài khoản EDUVERSE của bạn."}</p></div>`+
     (reg?`<input id="fn" type="text" placeholder="Họ và tên" autocomplete="name" maxlength="80">`:"")+
-    `<input id="fe" type="email" placeholder="Địa chỉ email" autocomplete="email" required>`+
-    (reset?"":`<input id="fp" type="password" placeholder="Mật khẩu" autocomplete="${reg?"new-password":"current-password"}" minlength="6" required>`)+
-    (reg?`<input id="fc" type="password" placeholder="Xác nhận mật khẩu" autocomplete="new-password" minlength="6" required>`:"")+
+    (update?"":`<input id="fe" type="email" placeholder="Địa chỉ email" autocomplete="email" required>`)+
+    (reset?"":`<input id="fp" type="password" placeholder="${update?"Mật khẩu mới":"Mật khẩu"}" autocomplete="${reg||update?"new-password":"current-password"}" minlength="6" required>`)+
+    (reg||update?`<input id="fc" type="password" placeholder="Xác nhận mật khẩu" autocomplete="new-password" minlength="6" required>`:"")+
     `<p class="auth-error" id="authError" role="alert"></p>`+
-    `<div class="auth-links">${!reg&&!reset?`<button type="button" id="forgot">Quên mật khẩu?</button>`:""}${reg?`<button type="button" id="toLogin">Đã có tài khoản? Đăng nhập</button>`:reset?`<button type="button" id="toLogin">Quay lại đăng nhập</button>`:`<button type="button" id="toReg">Chưa có tài khoản? Đăng ký</button>`}</div>`+
-    `<div class="btns"><button class="no" id="c" type="button">Huỷ</button><button class="ok" id="s" type="button">${reg?"Tạo tài khoản":reset?"Gửi liên kết":"Đăng nhập"}</button></div>`;
+    `<div class="auth-links">${!reg&&!reset?`<button type="button" id="forgot">Quên mật khẩu?</button>`:""}${reg?`<button type="button" id="toLogin">Đã có tài khoản? Đăng nhập</button>`:reset?`<button type="button" id="toLogin">Quay lại đăng nhập</button>`:!update?`<button type="button" id="toReg">Chưa có tài khoản? Đăng ký</button>`:""}</div>`+
+    `<div class="btns"><button class="no" id="c" type="button">Huỷ</button><button class="ok" id="s" type="button">${reg?"Tạo tài khoản":reset?"Gửi liên kết":update?"Cập nhật mật khẩu":"Đăng nhập"}</button></div>`;
   $("#modal").classList.add("show");
   $("#c").onclick=()=>$("#modal").classList.remove("show");
   const errorBox=$("#authError");
@@ -598,16 +599,20 @@ function auth(mode){
   if($("#toReg")) $("#toReg").onclick=()=>auth("reg");
   $("#s").onclick=async()=>{
     const button=$("#s");
-    const email=$("#fe").value.trim();
+    const email=$("#fe")?.value.trim()||"";
     const password=$("#fp")?.value||"";
     const fullName=$("#fn")?.value.trim()||"";
-    if(!email){showError("Hãy nhập địa chỉ email.");return;}
+    if(!reset&&!update&&!email){showError("Hãy nhập địa chỉ email.");return;}
     if(reg&&fullName.length<2){showError("Hãy nhập họ và tên.");return;}
     if(!reset&&password.length<6){showError("Mật khẩu cần có ít nhất 6 ký tự.");return;}
-    if(reg&&password!==$("#fc").value){showError("Mật khẩu xác nhận không khớp.");return;}
+    if((reg||update)&&password!==$("#fc").value){showError("Mật khẩu xác nhận không khớp.");return;}
     button.disabled=true;button.textContent="ĐANG XỬ LÝ…";showError("");
     try{
-      if(reg){
+      if(update){
+        await EduverseAuth.updatePassword(password);
+        $("#modal").classList.remove("show");
+        toast("Đã cập nhật mật khẩu.");
+      }else if(reg){
         const result=await EduverseAuth.signUp({fullName,email,password});
         if(result.session){
           $("#modal").classList.remove("show");
@@ -628,7 +633,7 @@ function auth(mode){
     }catch(e){
       showError(authError(e));
       button.disabled=false;
-      button.textContent=reg?"Tạo tài khoản":reset?"Gửi liên kết":"Đăng nhập";
+      button.textContent=reg?"Tạo tài khoản":reset?"Gửi liên kết":update?"Cập nhật mật khẩu":"Đăng nhập";
     }
   };
 }
@@ -642,6 +647,7 @@ EduverseAuth.onChange((session,profile,event)=>{
   userProfile=profile||null;
   updateAuthHeader();
   if(S.tab==="me") vMe();
+  if(event==="PASSWORD_RECOVERY") auth("update");
   if(event==="SIGNED_IN") toast("Đăng nhập thành công.");
   if(event==="SIGNED_OUT") toast("Đã đăng xuất.");
 });
