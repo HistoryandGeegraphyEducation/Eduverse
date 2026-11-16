@@ -5,7 +5,7 @@ function mountStandaloneHazard(root,id){
   frame.title="Mô phỏng "+id;
   frame.loading="eager";
   frame.referrerPolicy="strict-origin-when-cross-origin";
-  frame.style.cssText="display:block;width:100%;height:calc(100dvh - 190px);min-height:590px;border:0;border-radius:14px;background:#e9eff2";
+  frame.style.cssText="display:block;width:100%;height:calc(100vh - 190px);height:calc(100dvh - 190px);min-height:590px;border:0;border-radius:14px;background:#e9eff2";
   frame.setAttribute("allow","fullscreen");
   root.appendChild(frame);
   return {destroy(){frame.src="about:blank";frame.remove();}};
