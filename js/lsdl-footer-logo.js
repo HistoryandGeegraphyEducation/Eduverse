@@ -139,6 +139,6 @@ function mount(root){
  var host=document.createElement("div");host.className="lsdl-footer-art";footer.appendChild(host);
  var inst=make(host);instances.push(inst);current=inst;
 }
-function unmount(){if(current){current.destroy();current=null;}}
+function unmount(){if(current){current.destroy();instances=instances.filter(function(x){return x!==current;});current=null;}}
 window.LsdlFooterLogo={mount:mount,unmount:unmount};
 })();
