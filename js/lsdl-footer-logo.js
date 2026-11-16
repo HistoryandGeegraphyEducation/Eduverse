@@ -74,13 +74,10 @@ function drawVietnam(c,x,y,s,alpha,progress){
  if(c.setLineDash){c.setLineDash([]);}
  c.save();c.beginPath();c.rect(-35,49-98*p,70,98*p);c.clip();
  c.fill();c.stroke();c.restore();
- // Bờ biển phía đông tạo một nét cong phụ, không biến thành đường trang trí rời
- c.beginPath();c.moveTo(8,-27);c.bezierCurveTo(14,-22,10,-17,13,-12);
- c.bezierCurveTo(9,-7,13,-2,9,3);c.bezierCurveTo(6,9,11,14,15,19);c.stroke();
  // Hoàng Sa ở ngoài khơi miền Trung
- drawIslandGroup(c,25,-5,1);
+ drawIslandGroup(c,27,-5,1.35);
  // Trường Sa ở ngoài khơi phía đông nam
- drawIslandGroup(c,24,27,.82);
+ drawIslandGroup(c,26,27,1.2);
  c.restore();
 }
 function drawIslandGroup(c,x,y,s){
@@ -147,7 +144,7 @@ function make(host){
   elapsed=sec;c.clearRect(0,0,w,h);
   var size=29,sp=4;
   var widths={lead:measure("LỊCH ",size),tail:measure("Ử ",size),middle:measure(" ĐỊ",size),a:measure("A",size),last:measure("Í",size)};
-  var slots={map:42,islands:38,rice:25};
+  var slots={map:42,islands:48,rice:27};
   var total=widths.lead+slots.map+widths.tail+slots.islands+widths.middle+widths.a+slots.rice+widths.last+sp*7;
   var sc=Math.min(1,(w-16)/total),left=(w-total*sc)/2;
   c.save();c.translate(left,0);c.scale(sc,sc);
