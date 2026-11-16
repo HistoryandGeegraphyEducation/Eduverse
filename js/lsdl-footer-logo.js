@@ -4,7 +4,7 @@
 */
 (function(){
 "use strict";
-var done=false,instances=[];
+var done=false,instances=[],current=null;
 var RED="#c71920",GOLD="#d8b45a",NAVY="#172b50",TAU=Math.PI*2;
 var reduced=false;
 try{
@@ -86,7 +86,8 @@ function make(host){
   else{
    ctx.save();ctx.globalAlpha=titleAlpha;
    pathMap(ctx,x+9,y-7,0.47);ctx.fillStyle=RED;ctx.strokeStyle=GOLD;ctx.lineWidth=1.5;ctx.fill();ctx.stroke();
-   island(ctx,x+7,y+17,.7);island(ctx,x+11,y+21,.65);ctx.restore();
+   // Hoàng Sa ở phía đông miền Trung, Trường Sa ở phía đông nam.
+   island(ctx,x+17,y-5,.75);island(ctx,x+19,y+16,.7);ctx.restore();
   }
   x+=19;
   var w2=text(ctx,"Ử ",x,y,fs,titleAlpha);x+=w2+2;
@@ -121,8 +122,6 @@ function make(host){
    ctx.beginPath();ctx.arc(291,28,3,0,TAU);ctx.fill();ctx.stroke();
    ctx.beginPath();ctx.moveTo(316,82);ctx.quadraticCurveTo(331,75,342,83);ctx.stroke();
   }
-  // Hai quần đảo được nhấn bằng cụm chấm nhỏ dưới bản đồ Việt Nam.
-  if(time>3.4){ctx.globalAlpha=titleAlpha;ctx.fillStyle=RED;for(var j=0;j<5;j++){ctx.beginPath();ctx.arc(202+j*3,88+(j%2)*2,1,0,TAU);ctx.fill();}}
   ctx.restore();ctx.restore();
   if(active&&time<10){raf=requestAnimationFrame(function(){draw((performance.now()-started)/1000);});}
   else{active=false;done=true;}
@@ -138,7 +137,8 @@ function mount(root){
  footer.innerHTML='<div class="lsdl-footer-rule"></div><div class="lsdl-footer-caption">LỊCH SỬ VÀ ĐỊA LÍ</div>';
  root.appendChild(footer);
  var host=document.createElement("div");host.className="lsdl-footer-art";footer.appendChild(host);
- var inst=make(host);instances.push(inst);
+ var inst=make(host);instances.push(inst);current=inst;
 }
-window.LsdlFooterLogo={mount:mount};
+function unmount(){if(current){current.destroy();current=null;}}
+window.LsdlFooterLogo={mount:mount,unmount:unmount};
 })();
