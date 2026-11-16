@@ -139,7 +139,6 @@ function depthOf(){
 }
 
 function render(){
-  if(window.LsdlFooterLogo) LsdlFooterLogo.unmount();
   if(curSim){
     curSim.destroy();
     curSim=null;
@@ -157,11 +156,6 @@ function render(){
 
   ({home:vHome,learn:vLearn,cat:vCat,
     practice:vPractice,me:vMe})[S.tab]();
-
-  // Logo nhận diện chỉ xuất hiện trong các màn hình thuộc môn Lịch Sử và Địa Lí.
-  if(((S.tab==="home"&&S.subj==="lsdl")||(S.tab==="cat"&&S.csub==="lsdl"))&&window.LsdlFooterLogo){
-    LsdlFooterLogo.mount(main);
-  }
 
   syncRoute();
 
