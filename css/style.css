@@ -1033,3 +1033,40 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 }
 .evgeo .evgeo-explain{background:#edf0ee!important;color:#26343a!important;border-left-color:#527b80!important}
 .evgeo .evgeo-footer input{accent-color:#527b80!important}
+
+
+/* ===== Responsive: nhãn trạng thái và tiêu đề học liệu ===== */
+.simrow{align-items:center;min-width:0}
+.simrow .stx{min-width:0;flex:1}
+.simrow .stx b{
+  display:block;max-width:100%;font-size:clamp(15px,4.7vw,19px);
+  line-height:1.18;white-space:normal;overflow-wrap:anywhere;word-break:normal
+}
+.simrow .stx small{line-height:1.25}
+.simrow .status-ribbon{
+  position:static;z-index:auto;display:inline-flex;align-self:flex-start;
+  align-items:center;width:max-content;max-width:100%;margin-top:5px;
+  padding:4px 9px;border-radius:999px;transform:none;
+  font-size:9px;line-height:1.15;letter-spacing:.35px;
+  white-space:normal;box-shadow:none
+}
+.simrow .status-ribbon.coming{background:#64748b}
+.simrow .status-ribbon.new{padding:5px 9px;background:linear-gradient(135deg,#ff7043,#e53935)}
+.simrow .status-ribbon.version{background:#b8860b;color:#fff}
+.simrow .status-ribbon.test{background:#c65a22;color:#fff}
+.main.lessons>.hd{gap:8px}
+.main.lessons>.hd .t1{
+  flex:1 1 auto;min-width:0;white-space:normal;
+  overflow-wrap:anywhere;line-height:1.12;
+  font-size:clamp(17px,4.8vw,24px)
+}
+.main.lessons>.hd .back{flex:0 0 auto;white-space:nowrap}
+@media(max-width:380px){
+  .simrow{gap:9px;padding:11px 10px}
+  .simrow .si{width:46px;height:46px;border-radius:14px;font-size:25px}
+  .simrow .stx b{font-size:clamp(14px,4.35vw,16px);line-height:1.16}
+  .simrow .sc{font-size:22px}
+  .main.lessons>.hd{padding:12px 10px 8px;gap:6px}
+  .main.lessons>.hd .t1{font-size:clamp(15px,4.5vw,18px)}
+  .main.lessons>.hd .back{font-size:13px;padding:5px 9px}
+}
