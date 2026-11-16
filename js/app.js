@@ -353,12 +353,12 @@ function vSimList(){
       ?`<div class="simlist">`+
         list.map(s=>
           `<button class="simrow" data-id="${s.id}">`+
-          `${getSimStatusTag(s)}`+
           `<span class="si"><i>${s.icon}</i>`+
           `${s.img?`<img src="${s.img}" alt="" onerror="this.remove()">`:""}`+
           `</span><span class="stx">`+
           `<b>${esc(s.title)}</b>`+
           `<small>${esc(s.type||s.lesson||"")}</small>`+
+          `${getSimStatusTag(s)}`+
           `</span><span class="sc">›</span></button>`
         ).join("")+
         `</div>`
