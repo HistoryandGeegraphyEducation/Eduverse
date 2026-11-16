@@ -12,7 +12,9 @@ const store = {
     }catch(e){}
   }
 };
-let user=store.get("ev_user",null);
+let user=null;
+let userProfile=null;
+store.set("ev_user",null);
 
 const S={
   tab:"home",subj:null,grade:null,
@@ -514,73 +516,144 @@ function vPractice(){
     `</div>`;
 }
 function vMe(){
+  const roleNames={admin:"QUẢN TRỊ VIÊN",teacher:"GIÁO VIÊN",student:"HỌC SINH",pending:"CHƯA ĐƯỢC PHÂN QUYỀN"};
   if(user){
-    main.innerHTML=`<div class="crumb"><span>CÁ NHÂN</span></div>`+
-      `<div class="box">👤 ${esc(user)}`+
-      `<button class="cta" id="out">Đăng xuất</button></div>`;
-
-    $("#out").onclick=()=>{
-      user=null;
-      store.set("ev_user",null);
-      toast("Đã đăng xuất");
-      vMe();
+    const p=userProfile||{};
+    main.innerHTML=`<div class="crumb"><span>TÀI KHOẢN</span></div>`+
+      `<section class="box account-card">`+
+      `<div class="account-avatar">${esc((p.full_name||user).trim().charAt(0).toUpperCase()||"U")}</div>`+
+      `<h2>${esc(p.full_name||user)}</h2>`+
+      `<p>${esc(p.email||"")}</p>`+
+      `<div class="account-role">${esc(roleNames[p.role]||"CHƯA ĐƯỢC PHÂN QUYỀN")}</div>`+
+      (p.role==="pending"?`<p class="account-note">Tài khoản đã được tạo. Quyền truy cập các phân hệ sẽ được cấp sau khi quản trị viên xác nhận vai trò.</p>`:"")+
+      `<button class="cta" id="out">Đăng xuất</button></section>`+
+      (p.role==="admin"?`<section class="box account-admin"><h3>QUẢN LÝ THÀNH VIÊN</h3><p>Danh sách tài khoản giáo viên và học sinh trong hệ thống.</p><div id="memberList">Đang tải danh sách…</div></section>`:"");
+    $("#out").onclick=async()=>{
+      try{await EduverseAuth.signOut();}catch(e){toast(authError(e));}
     };
+    if(p.role==="admin") loadAdminMembers();
   }else{
     main.innerHTML=`<div class="crumb"><span>CÁ NHÂN</span></div>`+
       `<div class="box">Bạn chưa đăng nhập`+
-      `<p>Đăng nhập để dùng đầy đủ tính năng.</p>`+
+      `<p>Đăng nhập để sử dụng tài khoản EDUVERSE.</p>`+
       `<button class="cta" id="in">Đăng nhập</button></div>`;
-
     $("#in").onclick=()=>auth("login");
   }
 }
-// ===== ĐĂNG NHẬP / ĐĂNG KÝ =====
+async function loadAdminMembers(){
+  const target=$("#memberList");
+  if(!target) return;
+  try{
+    const rows=await EduverseAuth.listProfiles();
+    target.innerHTML=rows.length?rows.map(p=>
+      `<div class="member-row"><span><b>${esc(p.full_name||"Chưa cập nhật tên")}</b><small>${esc(p.email)}</small></span><em>${esc(p.role.toUpperCase())}</em></div>`
+    ).join(""):`<p>Chưa có thành viên.</p>`;
+  }catch(e){target.textContent=authError(e);}
+}
+// ===== TÀI KHOẢN DÙNG CHUNG EDUVERSE =====
+const loginButton=$("#bLogin");
+const registerButton=$("#bReg");
+const loginButtonMarkup=loginButton.innerHTML;
+function updateAuthHeader(){
+  if(user){
+    loginButton.innerHTML='<span aria-hidden="true">👤</span> TÀI KHOẢN';
+    loginButton.setAttribute("aria-label","Mở tài khoản");
+    registerButton.hidden=true;
+    loginButton.onclick=()=>{S.tab="me";render();};
+  }else{
+    loginButton.innerHTML=loginButtonMarkup;
+    loginButton.removeAttribute("aria-label");
+    registerButton.hidden=false;
+    loginButton.onclick=()=>auth("login");
+  }
+}
+function authError(error){
+  const m=String(error?.message||error||"");
+  if(/Invalid login credentials/i.test(m)) return "Email hoặc mật khẩu không chính xác.";
+  if(/Email not confirmed/i.test(m)) return "Email chưa được xác minh. Hãy kiểm tra hộp thư.";
+  if(/User already registered/i.test(m)) return "Email này đã được đăng ký.";
+  if(/Password should be at least/i.test(m)) return "Mật khẩu cần có ít nhất 6 ký tự.";
+  if(/rate limit/i.test(m)) return "Bạn thao tác quá nhanh. Hãy thử lại sau.";
+  if(/profiles|schema cache|relation/i.test(m)) return "Cơ sở dữ liệu tài khoản chưa được cài đặt. Cần chạy supabase/schema.sql trong Supabase SQL Editor.";
+  return m||"Đã xảy ra lỗi. Vui lòng thử lại.";
+}
 function auth(mode){
   const reg=mode==="reg";
-
-  $("#sheet").innerHTML=
-    `<h2>${reg?"ĐĂNG KÝ":"ĐĂNG NHẬP"}</h2>`+
-    (reg?`<input id="fn" placeholder="Họ và tên" autocomplete="name">`:"")+
-    `<input id="fe" placeholder="Email hoặc tên đăng nhập" autocomplete="username">`+
-    `<input id="fp" type="password" placeholder="Mật khẩu" `+
-    `autocomplete="${reg?"new-password":"current-password"}">`+
-    `<div class="btns">`+
-    `<button class="no" id="c">Huỷ</button>`+
-    `<button class="ok" id="s">${reg?"Tạo tài khoản":"Vào học"}</button>`+
-    `</div>`;
-
+  const reset=mode==="reset";
+  const heading=reg?"TẠO TÀI KHOẢN":reset?"ĐẶT LẠI MẬT KHẨU":"ĐĂNG NHẬP";
+  $("#sheet").innerHTML=`<div class="auth-sheet-head"><h2>${heading}</h2><p>${reg?"Đăng ký tài khoản EDUVERSE dùng chung cho hệ sinh thái.":reset?"Nhập email để nhận liên kết đặt lại mật khẩu.":"Đăng nhập bằng tài khoản EDUVERSE của bạn."}</p></div>`+
+    (reg?`<input id="fn" type="text" placeholder="Họ và tên" autocomplete="name" maxlength="80">`:"")+
+    `<input id="fe" type="email" placeholder="Địa chỉ email" autocomplete="email" required>`+
+    (reset?"":`<input id="fp" type="password" placeholder="Mật khẩu" autocomplete="${reg?"new-password":"current-password"}" minlength="6" required>`)+
+    (reg?`<input id="fc" type="password" placeholder="Xác nhận mật khẩu" autocomplete="new-password" minlength="6" required>`:"")+
+    `<p class="auth-error" id="authError" role="alert"></p>`+
+    `<div class="auth-links">${!reg&&!reset?`<button type="button" id="forgot">Quên mật khẩu?</button>`:""}${reg?`<button type="button" id="toLogin">Đã có tài khoản? Đăng nhập</button>`:reset?`<button type="button" id="toLogin">Quay lại đăng nhập</button>`:`<button type="button" id="toReg">Chưa có tài khoản? Đăng ký</button>`}</div>`+
+    `<div class="btns"><button class="no" id="c" type="button">Huỷ</button><button class="ok" id="s" type="button">${reg?"Tạo tài khoản":reset?"Gửi liên kết":"Đăng nhập"}</button></div>`;
   $("#modal").classList.add("show");
-    $("#c").onclick=()=>{
-    $("#modal").classList.remove("show");
-  };
-
-  $("#s").onclick=()=>{
-    const e=$("#fe").value.trim();
-    const p=$("#fp").value;
-    const n=reg?$("#fn").value.trim():"";
-
-    if(!e||p.length<6){
-      return toast("Nhập tên đăng nhập và mật khẩu từ 6 ký tự");
+  $("#c").onclick=()=>$("#modal").classList.remove("show");
+  const errorBox=$("#authError");
+  const showError=msg=>{errorBox.textContent=msg;};
+  if($("#forgot")) $("#forgot").onclick=()=>auth("reset");
+  if($("#toLogin")) $("#toLogin").onclick=()=>auth("login");
+  if($("#toReg")) $("#toReg").onclick=()=>auth("reg");
+  $("#s").onclick=async()=>{
+    const button=$("#s");
+    const email=$("#fe").value.trim();
+    const password=$("#fp")?.value||"";
+    const fullName=$("#fn")?.value.trim()||"";
+    if(!email){showError("Hãy nhập địa chỉ email.");return;}
+    if(reg&&fullName.length<2){showError("Hãy nhập họ và tên.");return;}
+    if(!reset&&password.length<6){showError("Mật khẩu cần có ít nhất 6 ký tự.");return;}
+    if(reg&&password!==$("#fc").value){showError("Mật khẩu xác nhận không khớp.");return;}
+    button.disabled=true;button.textContent="ĐANG XỬ LÝ…";showError("");
+    try{
+      if(reg){
+        const result=await EduverseAuth.signUp({fullName,email,password});
+        if(result.session){
+          $("#modal").classList.remove("show");
+          toast("Tạo tài khoản thành công.");
+        }else{
+          $("#modal").classList.remove("show");
+          toast("Đã gửi email xác minh. Hãy kiểm tra hộp thư.");
+        }
+      }else if(reset){
+        await EduverseAuth.resetPassword(email);
+        $("#modal").classList.remove("show");
+        toast("Đã gửi liên kết đặt lại mật khẩu.");
+      }else{
+        await EduverseAuth.signIn({email,password});
+        $("#modal").classList.remove("show");
+        toast("Đăng nhập thành công.");
+      }
+    }catch(e){
+      showError(authError(e));
+      button.disabled=false;
+      button.textContent=reg?"Tạo tài khoản":reset?"Gửi liên kết":"Đăng nhập";
     }
-
-    user=n||e;
-    store.set("ev_user",user);
-
-    $("#modal").classList.remove("show");
-    toast("Xin chào, "+user+"!");
-
-    if(S.tab==="me") vMe();
   };
 }
-
-$("#bLogin").onclick=()=>auth("login");
-$("#bReg").onclick=()=>auth("reg");
-
+loginButton.onclick=()=>auth(user?"login":"login");
+registerButton.onclick=()=>auth("reg");
 $("#modal").onclick=e=>{
-  if(e.target.id==="modal"){
-    $("#modal").classList.remove("show");
-  }
+  if(e.target.id==="modal") $("#modal").classList.remove("show");
 };
+EduverseAuth.onChange((session,profile,event)=>{
+  user=session?.user?(profile?.full_name||session.user.email):null;
+  userProfile=profile||null;
+  updateAuthHeader();
+  if(S.tab==="me") vMe();
+  if(event==="SIGNED_IN") toast("Đăng nhập thành công.");
+  if(event==="SIGNED_OUT") toast("Đã đăng xuất.");
+});
+EduverseAuth.init().then(({session,profile})=>{
+  user=session?.user?(profile?.full_name||session.user.email):null;
+  userProfile=profile||null;
+  updateAuthHeader();
+  if(S.tab==="me") vMe();
+}).catch(e=>{
+  console.error("EDUVERSE auth init:",e);
+  updateAuthHeader();
+});
 // ===== HIỆU ỨNG CHẠM =====
 document.addEventListener("pointerdown",e=>{
   const t=e.target.closest("button, summary");
