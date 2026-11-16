@@ -1072,11 +1072,4 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 }
 
 
-/* ===== Logo animado de chân trang – chỉ trong môn Lịch Sử và Địa Lí ===== */
-.lsdl-footer-logo{width:100%;margin:30px auto 8px;padding:0 4px 8px;flex:none;text-align:center;overflow:hidden}
-.lsdl-footer-rule{height:1px;width:100%;background:#172b50;opacity:.9}
-.lsdl-footer-caption{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
-.lsdl-footer-art{width:100%;max-width:520px;height:154px;margin:5px auto 0;overflow:hidden}
-.lsdl-footer-canvas{display:block;width:100%;height:154px}
-@media(max-width:360px){.lsdl-footer-logo{margin-top:22px}.lsdl-footer-art{height:154px}.lsdl-footer-canvas{height:154px}}
-@media(prefers-reduced-motion:reduce){.lsdl-footer-canvas{animation:none}}
+
