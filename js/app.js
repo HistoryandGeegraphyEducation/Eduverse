@@ -159,7 +159,7 @@ function render(){
     practice:vPractice,me:vMe})[S.tab]();
 
   // Logo nhận diện chỉ xuất hiện trong các màn hình thuộc môn Lịch Sử và Địa Lí.
-  if((S.subj==="lsdl"||S.csub==="lsdl")&&window.LsdlFooterLogo){
+  if(((S.tab==="home"&&S.subj==="lsdl")||(S.tab==="cat"&&S.csub==="lsdl"))&&window.LsdlFooterLogo){
     LsdlFooterLogo.mount(main);
   }
 
