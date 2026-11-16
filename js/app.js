@@ -345,17 +345,13 @@ function vSimList(){
     "KHÁM PHÁ ĐỊA PHƯƠNG":"PHÒNG KHÁM PHÁ ĐỊA PHƯƠNG"
   };
 
-  const grades=[...new Set(list.map(s=>s.grade))]
-    .sort((a,b)=>a-b);
-
   const title=roomNames[S.croom]||"DANH SÁCH HỌC LIỆU";
-    main.innerHTML=`<div class="hd">`+
+  main.innerHTML=`<div class="hd">`+
     `<h1 class="t1">${title}</h1>`+
     `<button class="back" id="rb">← Quay lại</button></div>`+
     (list.length
-      ?grades.map(g=>
-        `<div class="simhead">LỚP ${g}</div><div class="simlist">`+
-        list.filter(s=>s.grade===g).map(s=>
+      ?`<div class="simlist">`+
+        list.map(s=>
           `<button class="simrow" data-id="${s.id}">`+
           `${getSimStatusTag(s)}`+
           `<span class="si"><i>${s.icon}</i>`+
@@ -366,7 +362,6 @@ function vSimList(){
           `</span><span class="sc">›</span></button>`
         ).join("")+
         `</div>`
-      ).join("")
       :`<div class="box">Phòng này chưa có học liệu được đăng ký.</div>`
     );
       $("#rb").onclick=()=>{
