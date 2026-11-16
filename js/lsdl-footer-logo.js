@@ -41,17 +41,26 @@ function drawVietnam(c,x,y,s,alpha){
  // Đường bao giản lược theo dáng chữ S: Bắc Bộ rộng, Trung Bộ hẹp,
  // Nam Bộ mở rộng; không dùng một đường cong đối xứng giả lập.
  c.beginPath();
- c.moveTo(-1,-46);c.lineTo(10,-43);c.lineTo(13,-35);c.lineTo(22,-31);
- c.lineTo(18,-24);c.lineTo(25,-18);c.lineTo(18,-10);c.lineTo(21,-3);
- c.lineTo(13,4);c.lineTo(17,12);c.lineTo(10,20);c.lineTo(13,29);
- c.lineTo(5,37);c.lineTo(0,47);c.lineTo(-7,43);c.lineTo(-9,35);
- c.lineTo(-17,30);c.lineTo(-13,23);c.lineTo(-20,17);c.lineTo(-13,10);
- c.lineTo(-18,3);c.lineTo(-12,-4);c.lineTo(-18,-12);c.lineTo(-11,-19);
- c.lineTo(-16,-27);c.lineTo(-8,-33);c.lineTo(-10,-40);c.closePath();
- c.fill();c.stroke();
- // Dải bờ biển phía đông tạo nhịp gấp khúc ở miền Trung.
- c.beginPath();c.moveTo(13,-24);c.lineTo(18,-18);c.lineTo(14,-10);
- c.lineTo(18,-3);c.lineTo(11,5);c.lineTo(15,13);c.lineTo(8,22);c.stroke();
+ c.moveTo(-2,-48);
+ c.bezierCurveTo(5,-47,11,-43,15,-37);
+ c.bezierCurveTo(22,-34,27,-29,22,-24);
+ c.bezierCurveTo(18,-20,25,-16,20,-11);
+ c.bezierCurveTo(16,-7,22,-2,17,3);
+ c.bezierCurveTo(13,8,17,13,12,18);
+ c.bezierCurveTo(8,23,14,29,8,35);
+ c.bezierCurveTo(5,40,1,46,-4,49);
+ c.bezierCurveTo(-7,43,-8,39,-14,35);
+ c.bezierCurveTo(-20,30,-17,24,-22,19);
+ c.bezierCurveTo(-27,13,-20,8,-24,2);
+ c.bezierCurveTo(-27,-4,-19,-9,-22,-15);
+ c.bezierCurveTo(-25,-21,-17,-25,-17,-31);
+ c.bezierCurveTo(-16,-39,-10,-45,-2,-48);
+ c.closePath();c.fill();c.stroke();
+ // Nét bờ biển phía đông được nhấn nhẹ, giữ đường bao tổng thể liền mạch.
+ c.beginPath();c.moveTo(14,-25);
+ c.bezierCurveTo(19,-20,15,-15,18,-10);
+ c.bezierCurveTo(14,-5,18,0,13,5);
+ c.bezierCurveTo(10,11,14,16,9,22);c.stroke();
  // Hoàng Sa và Trường Sa: cụm đảo tách khỏi đường bờ.
  c.fillStyle=RED;
  [[28,-2,1.8],[31,1,1.4],[29,5,1.2],[23,23,1.6],[27,27,1.2],[21,31,1]].forEach(function(p){
