@@ -18,6 +18,53 @@ const S={
   tab:"home",subj:null,grade:null,
   part:"Lịch Sử",csub:null,croom:null,csim:null
 };
+const ROUTE_PREFIX="#ev?";
+function readRoute(){
+  if(!location.hash.startsWith(ROUTE_PREFIX)) return;
+  const p=new URLSearchParams(location.hash.slice(ROUTE_PREFIX.length));
+  const tabs=["home","learn","cat","practice","me"];
+  const tab=p.get("tab");
+  S.tab=tabs.includes(tab)?tab:"home";
+  S.subj=null;S.grade=null;S.csub=null;S.croom=null;S.csim=null;
+  if(S.tab==="home"){
+    const subj=p.get("subj");
+    if(SUBJECTS.some(x=>x.id===subj)) S.subj=subj;
+    const grade=Number(p.get("grade"));
+    if(S.subj==="lsdl"&&Number.isInteger(grade)&&CONTENT["lsdl-"+grade]) S.grade=grade;
+  }
+  if(S.tab==="cat"){
+    const csub=p.get("csub");
+    if(Object.prototype.hasOwnProperty.call(SIMS,csub)) S.csub=csub;
+    if(S.csub){
+      const croom=p.get("croom");
+      if((SIMS[S.csub]||[]).some(x=>x.type===croom)) S.croom=croom;
+      if(S.croom){
+        const csim=p.get("csim");
+        if((SIMS[S.csub]||[]).some(x=>x.id===csim&&x.type===S.croom)) S.csim=csim;
+      }
+    }
+  }
+}
+function routeForState(){
+  const p=new URLSearchParams();
+  p.set("tab",S.tab);
+  if(S.tab==="home"&&S.subj){
+    p.set("subj",S.subj);
+    if(S.grade) p.set("grade",String(S.grade));
+  }
+  if(S.tab==="cat"){
+    if(S.csub) p.set("csub",S.csub);
+    if(S.croom) p.set("croom",S.croom);
+    if(S.csim) p.set("csim",S.csim);
+  }
+  return ROUTE_PREFIX+p.toString();
+}
+function syncRoute(){
+  const next=routeForState();
+  if(location.hash!==next){
+    history.pushState({eduverse:true},"",next);
+  }
+}
 const $=s=>document.querySelector(s);
 const main=$("#main");
 
@@ -109,6 +156,8 @@ function render(){
 
   ({home:vHome,learn:vLearn,cat:vCat,
     practice:vPractice,me:vMe})[S.tab]();
+
+  syncRoute();
 
   main.querySelectorAll(".subj,.gpill,.row,.box,.sec,.tool")
     .forEach((e,i)=>e.style.setProperty("--i",i));
@@ -952,6 +1001,13 @@ document.querySelectorAll("nav button").forEach(b=>
     }
   }catch(e){}
 })();
+
+// Khôi phục đúng màn hình khi tải lại hoặc dùng nút Back/Forward của trình duyệt.
+window.addEventListener("popstate",()=>{
+  readRoute();
+  render();
+});
+readRoute();
 
 // Khởi chạy ứng dụng
 render();
