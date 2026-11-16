@@ -1,3 +1,16 @@
+
+function mountStandaloneHazard(root,id){
+  const frame=document.createElement("iframe");
+  frame.src="simulations/natural-hazards/"+id+"/index.html";
+  frame.title="Mô phỏng "+id;
+  frame.loading="eager";
+  frame.referrerPolicy="strict-origin-when-cross-origin";
+  frame.style.cssText="display:block;width:100%;height:calc(100dvh - 190px);min-height:590px;border:0;border-radius:14px;background:#e9eff2";
+  frame.setAttribute("allow","fullscreen");
+  root.appendChild(frame);
+  return {destroy(){frame.src="about:blank";frame.remove();}};
+}
+
 const SIMS = {
   lsdl: [
     {id:"kinh-vi-tuyen", grade:6, icon:"🌐", title:"Quả Địa Cầu kinh tuyến – vĩ tuyến 3D", type:"TRƯNG BÀY"},
@@ -111,11 +124,11 @@ const SIMS = {
 
   status:"new-version", statusAt:"2026-11-12T00:00:00+07:00",
   mount:simVolcano},
-    {id:"bao-nhiet-doi",grade:8,icon:"🌀",title:"Bão nhiệt đới – cấu tạo và quá trình hình thành",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>simNaturalHazard(root,"bao-nhiet-doi")},
-    {id:"lu-quet",grade:8,icon:"🌧️",title:"Lũ quét – quá trình hình thành và tác động",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>simNaturalHazard(root,"lu-quet")},
-    {id:"sat-lo-dat",grade:8,icon:"⛰️",title:"Sạt lở đất – cơ chế mất ổn định sườn dốc",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>simNaturalHazard(root,"sat-lo-dat")},
-    {id:"xam-nhap-man",grade:8,icon:"🌊",title:"Xâm nhập mặn – sự lan truyền nước mặn",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>simNaturalHazard(root,"xam-nhap-man")},
-    {id:"nuoc-bien-dang",grade:8,icon:"🏝️",title:"Nước biển dâng – biến đổi đường bờ và ngập ven biển",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>simNaturalHazard(root,"nuoc-bien-dang")}
+    {id:"bao-nhiet-doi",grade:8,icon:"🌀",title:"Bão nhiệt đới – cấu tạo và quá trình hình thành",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>mountStandaloneHazard(root,"bao-nhiet-doi")},
+    {id:"lu-quet",grade:8,icon:"🌧️",title:"Lũ quét – quá trình hình thành và tác động",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>mountStandaloneHazard(root,"lu-quet")},
+    {id:"sat-lo-dat",grade:8,icon:"⛰️",title:"Sạt lở đất – cơ chế mất ổn định sườn dốc",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>mountStandaloneHazard(root,"sat-lo-dat")},
+    {id:"xam-nhap-man",grade:8,icon:"🌊",title:"Xâm nhập mặn – sự lan truyền nước mặn",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>mountStandaloneHazard(root,"xam-nhap-man")},
+    {id:"nuoc-bien-dang",grade:8,icon:"🏝️",title:"Nước biển dâng – biến đổi đường bờ và ngập ven biển",type:"MÔ PHỎNG",status:"new",statusAt:"2026-11-13T00:00:00+07:00",mount:(root)=>mountStandaloneHazard(root,"nuoc-bien-dang")}
   ]
 };
 
