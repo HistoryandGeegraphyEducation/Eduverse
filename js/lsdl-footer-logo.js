@@ -54,21 +54,21 @@ function drawVietnam(c,x,y,s,alpha,progress){
  c.save();c.translate(x,y);c.scale(s,s);c.globalAlpha=alpha;style(c,1.8);
  var p=clamp(progress===undefined?1:progress);
  c.beginPath();
- c.moveTo(-4,-48);
- c.bezierCurveTo(-13,-48,-19,-43,-18,-37);
- c.bezierCurveTo(-26,-35,-29,-29,-23,-25);
- c.bezierCurveTo(-19,-22,-24,-17,-19,-13);
- c.bezierCurveTo(-16,-9,-22,-4,-17,1);
- c.bezierCurveTo(-14,5,-18,10,-13,15);
- c.bezierCurveTo(-10,19,-14,24,-8,29);
- c.bezierCurveTo(-4,34,-5,40,2,47);
- c.bezierCurveTo(8,44,13,39,18,35);
- c.bezierCurveTo(24,31,24,26,19,22);
- c.bezierCurveTo(15,18,19,13,14,9);
- c.bezierCurveTo(11,5,15,0,11,-5);
- c.bezierCurveTo(8,-10,13,-14,9,-19);
- c.bezierCurveTo(5,-24,12,-29,7,-34);
- c.bezierCurveTo(3,-39,5,-44,-4,-48);
+ c.moveTo(-8,-49);
+ c.bezierCurveTo(-18,-47,-23,-40,-17,-34);
+ c.bezierCurveTo(-24,-30,-25,-24,-17,-20);
+ c.bezierCurveTo(-13,-17,-20,-12,-15,-7);
+ c.bezierCurveTo(-11,-2,-17,3,-12,8);
+ c.bezierCurveTo(-10,13,-14,18,-8,23);
+ c.bezierCurveTo(-5,28,-8,33,-3,37);
+ c.bezierCurveTo(1,43,6,47,12,49);
+ c.bezierCurveTo(18,45,23,39,19,34);
+ c.bezierCurveTo(15,29,20,25,15,20);
+ c.bezierCurveTo(11,15,14,10,10,5);
+ c.bezierCurveTo(7,0,13,-5,9,-10);
+ c.bezierCurveTo(5,-15,12,-20,16,-24);
+ c.bezierCurveTo(22,-30,20,-36,14,-40);
+ c.bezierCurveTo(7,-45,1,-49,-8,-49);
  c.closePath();
  // Vẽ theo tiến độ để chữ S rơi xuống rồi chuyển hình
  if(c.setLineDash){c.setLineDash([]);}
