@@ -71,43 +71,55 @@ function make(host){
   t=time;ctx.clearRect(0,0,w,h);
   var scale=Math.min(1,(w-22)/410),cx=w/2,baseY=58;
   ctx.save();ctx.translate(cx,0);ctx.scale(scale,scale);ctx.translate(-205,0);
-  var reveal=ease((time-1.1)/1.5),first=ease((time-.6)/.65);
+  var reveal=ease((time-1.1)/.9);
   var titleAlpha=time<.6?0:1;
-  ctx.save();ctx.beginPath();ctx.rect(0,0,410,118);ctx.clip();
+  ctx.save();ctx.beginPath();
+  var revealHeight=time<1.1?24:mix(24,118,reveal);
+  ctx.rect(0,118-revealHeight,410,revealHeight);ctx.clip();
   var fs=27, gap=0, x=14, y=58;
   // Từng cụm chữ được tách để thay thế S, VÀ và L bằng biểu tượng.
-  var w1=text(ctx,"LỊCH ",x,y,fs,titleAlpha*first);x+=w1+2;
+  var w1=text(ctx,"LỊCH ",x,y,fs,titleAlpha);x+=w1+2;
   var mapT=ease((time-3.75)/.7);
   var dropY=time<3.75?(-50*(1-ease(time/3.75))):mix(-42,0,mapT);
-  if(time<3.75){text(ctx,"S",x,y+dropY,fs,titleAlpha*first);}
+  if(time<3.75){text(ctx,"S",x,y+dropY,fs,titleAlpha);}
   else{
-   ctx.save();ctx.globalAlpha=titleAlpha*first;
+   ctx.save();ctx.globalAlpha=titleAlpha;
    pathMap(ctx,x+9,y-7,0.47);ctx.fillStyle=RED;ctx.strokeStyle=GOLD;ctx.lineWidth=1.5;ctx.fill();ctx.stroke();
    island(ctx,x+7,y+17,.7);island(ctx,x+11,y+21,.65);ctx.restore();
   }
   x+=19;
-  var w2=text(ctx,"Ử ",x,y,fs,titleAlpha*first);x+=w2+2;
+  var w2=text(ctx,"Ử ",x,y,fs,titleAlpha);x+=w2+2;
   var vaFade=1-ease((time-2.85)/.55);
-  if(time<3.4){x+=text(ctx,"VÀ",x,y,fs,titleAlpha*first*vaFade)+3;}
+  if(time<3.4){x+=text(ctx,"VÀ",x,y,fs,titleAlpha*vaFade)+3;}
   else{
-   ctx.globalAlpha=titleAlpha*first;
+   ctx.globalAlpha=titleAlpha;
    island(ctx,x+4,y-3,1.35);island(ctx,x+14,y+3,1.1);island(ctx,x+23,y+8,.8);
    island(ctx,x+9,y+11,.7);x+=32;
   }
-  x+=text(ctx," ĐỊA ",x,y,fs,titleAlpha*first)+1;
+  x+=text(ctx," ĐỊ",x,y,fs,titleAlpha);
+  var rocketX=x+10;
+  if(time<6.1){text(ctx,"A",x,y,fs,titleAlpha);}
+  else if(time<8.2){
+   var rp=time<7.05?ease((time-6.1)/.95):ease((time-7.05)/1.15);
+   var rx=time<7.05?mix(rocketX,500,rp):mix(-48,rocketX,rp);
+   rocket(ctx,rx,y,.66,1);
+  }else{text(ctx,"A",x,y,fs,titleAlpha);}
+  x+=20;
   var riceT=ease((time-4.8)/1.2);
-  if(time<4.8){text(ctx,"L",x,y,fs,titleAlpha*first);}
+  if(time<4.8){text(ctx,"L",x,y,fs,titleAlpha);}
   else{drawRice(ctx,x+7,y+2,.72,riceT);}
-  x+=18;text(ctx,"Í",x,y,fs,titleAlpha*first);
-  // Giai đoạn A biến thành tên lửa: bay ra phải rồi quay về từ trái.
-  if(time>6.1&&time<8.2){
-   var p=time<7.05?ease((time-6.1)/.95):ease((time-7.05)/1.15);
-   var rx=time<7.05?mix(330,470,p):mix(-35,330,p);
-   rocket(ctx,rx,57,.8,1);
-  }
+  x+=18;text(ctx,"Í",x,y,fs,titleAlpha);
   // Chim Lạc mở đầu và quay lại ở cuối chuỗi.
   if(time<1.15){var p=ease(time/1.15);bird(ctx,mix(-75,465,p),26+Math.sin(p*Math.PI)*-10,.68,1-p*.9,0);}
-  if(time>7.8){var p=ease((time-7.8)/1.5);bird(ctx,mix(455,344,p),20,.36*(1-p*.15),p,0);}
+  if(time>7.8){
+   var p=ease((time-7.8)/1.5);
+   bird(ctx,mix(455,344,p),20,.36*(1-p*.15),p,0);
+   // Cánh, đầu và đuôi tách ra rồi hoà thành các nét trang trí của chữ.
+   ctx.globalAlpha=p*.9;ctx.strokeStyle=GOLD;ctx.fillStyle=RED;ctx.lineWidth=1.4;
+   ctx.beginPath();ctx.moveTo(118,27);ctx.quadraticCurveTo(132,16,148,27);ctx.lineTo(137,25);ctx.stroke();
+   ctx.beginPath();ctx.arc(291,28,3,0,TAU);ctx.fill();ctx.stroke();
+   ctx.beginPath();ctx.moveTo(316,82);ctx.quadraticCurveTo(331,75,342,83);ctx.stroke();
+  }
   // Hai quần đảo được nhấn bằng cụm chấm nhỏ dưới bản đồ Việt Nam.
   if(time>3.4){ctx.globalAlpha=titleAlpha;ctx.fillStyle=RED;for(var j=0;j<5;j++){ctx.beginPath();ctx.arc(202+j*3,88+(j%2)*2,1,0,TAU);ctx.fill();}}
   ctx.restore();ctx.restore();
@@ -117,8 +129,6 @@ function make(host){
  function destroy(){if(raf)cancelAnimationFrame(raf);if(ro)ro.disconnect();if(cv.parentNode)cv.parentNode.removeChild(cv);}
  var ro=null;if(window.ResizeObserver){ro=new ResizeObserver(resize);ro.observe(host);}
  resize();
- if(active){raf=requestAnimationFrame(function(){draw((performance.now()-started)/1000);});}
- else draw(10);
  return {destroy:destroy,draw:draw};
 }
 function mount(root){
