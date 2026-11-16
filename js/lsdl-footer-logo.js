@@ -1,144 +1,176 @@
-/* EDUVERSE – Logo chân trang môn LỊCH SỬ VÀ ĐỊA LÍ
-   Canvas vector tự vẽ, không phụ thuộc ảnh ngoài.
-   Chuỗi intro chạy một lần trong phiên; hỗ trợ prefers-reduced-motion.
-*/
+/* EDUVERSE | Animated footer mark: LỊCH SỬ VÀ ĐỊA LÍ */
 (function(){
 "use strict";
-var done=false,instances=[],current=null;
-var RED="#c71920",GOLD="#d8b45a",NAVY="#172b50",TAU=Math.PI*2;
+var finished=false,activeInstance=null,instances=[];
+var RED="#c71920",GOLD="#d5ad4e",TAU=Math.PI*2;
 var reduced=false;
-try{
- var mq=matchMedia("(prefers-reduced-motion: reduce)");
- reduced=!!mq.matches;
- mq.addEventListener?mq.addEventListener("change",function(e){reduced=!!e.matches;instances.forEach(function(x){x.draw(reduced?10: x.t);});}):mq.addListener(function(e){reduced=!!e.matches;});
-}catch(e){}
+try{reduced=!!matchMedia("(prefers-reduced-motion: reduce)").matches;}catch(e){}
 function clamp(v){return Math.max(0,Math.min(1,v));}
-function ease(v){v=clamp(v);return 1-Math.pow(1-v,3);}
-function mix(a,b,t){return a+(b-a)*t;}
-function pathMap(c,x,y,s){
- c.save();c.translate(x,y);c.scale(s,s);c.beginPath();
- c.moveTo(0,-39);c.bezierCurveTo(8,-35,5,-28,12,-24);
- c.bezierCurveTo(7,-18,15,-12,10,-5);c.bezierCurveTo(18,1,13,8,8,13);
- c.bezierCurveTo(12,21,3,27,5,34);c.bezierCurveTo(1,40,-5,47,-8,55);
- c.bezierCurveTo(-10,46,-7,39,-13,33);c.bezierCurveTo(-18,26,-13,20,-20,14);
- c.bezierCurveTo(-25,8,-18,1,-23,-6);c.bezierCurveTo(-17,-12,-22,-18,-15,-24);
- c.bezierCurveTo(-10,-29,-8,-36,0,-39);c.closePath();c.restore();
-}
-function bird(c,x,y,s,alpha,parts){
- c.save();c.translate(x,y);c.scale(s,s);c.globalAlpha=alpha;
- c.fillStyle=RED;c.strokeStyle=GOLD;c.lineWidth=1.1;c.lineJoin="round";
- // Thân và cổ
- c.beginPath();c.moveTo(-24,1);c.quadraticCurveTo(-5,-9,12,-2);c.quadraticCurveTo(24,2,31,-4);c.quadraticCurveTo(23,12,5,9);c.lineTo(-20,7);c.closePath();c.fill();c.stroke();
- // Đầu và mỏ
- c.beginPath();c.moveTo(8,-4);c.quadraticCurveTo(18,-20,29,-17);c.lineTo(39,-13);c.lineTo(28,-10);c.quadraticCurveTo(23,0,13,3);c.closePath();c.fill();c.stroke();
- // Cánh chim Lạc cách điệu
- c.beginPath();c.moveTo(-13,0);c.quadraticCurveTo(-29,-24,-52,-27);c.lineTo(-42,-17);c.lineTo(-59,-19);c.lineTo(-43,-9);c.lineTo(-62,-7);c.lineTo(-39,0);c.quadraticCurveTo(-25,8,-13,7);c.closePath();c.fill();c.stroke();
- // Lông đuôi
- c.beginPath();c.moveTo(-22,4);c.lineTo(-48,18);c.lineTo(-27,13);c.lineTo(-43,27);c.lineTo(-17,12);c.closePath();c.fill();c.stroke();
+function ease(v){v=clamp(v);return v*v*(3-2*v);}
+function lerp(a,b,t){return a+(b-a)*t;}
+function strokeFill(c){c.fillStyle=RED;c.strokeStyle=GOLD;c.lineWidth=1.45;c.lineJoin="round";c.lineCap="round";}
+function drawBird(c,x,y,s,alpha,wing){
+ c.save();c.translate(x,y);c.scale(s,s);c.globalAlpha=alpha;strokeFill(c);
+ // Thân dài, thuôn; đầu hướng sang phải, mỏ nhọn.
+ c.beginPath();c.moveTo(-25,2);c.bezierCurveTo(-10,-7,8,-5,23,-1);
+ c.bezierCurveTo(31,1,35,-2,42,-7);c.lineTo(34,2);
+ c.bezierCurveTo(27,10,7,10,-12,7);c.closePath();c.fill();c.stroke();
+ // Đầu, mào và mỏ chim Lạc.
+ c.beginPath();c.moveTo(21,-3);c.quadraticCurveTo(26,-17,38,-16);
+ c.lineTo(34,-11);c.lineTo(49,-9);c.lineTo(35,-6);
+ c.quadraticCurveTo(31,1,24,3);c.closePath();c.fill();c.stroke();
+ c.beginPath();c.moveTo(27,-14);c.lineTo(21,-24);c.lineTo(33,-18);c.lineTo(38,-25);c.lineTo(38,-15);c.stroke();
+ // Cánh lớn xoè ngược về phía sau, có các vạch lông song song.
+ var lift=wing||0;
+ c.beginPath();c.moveTo(-12,1);
+ c.bezierCurveTo(-26,-12-lift,-38,-31-lift,-67,-35-lift);
+ c.lineTo(-54,-23-lift);c.lineTo(-75,-25-lift);c.lineTo(-56,-14-lift);
+ c.lineTo(-77,-12-lift);c.lineTo(-54,-5-lift);
+ c.bezierCurveTo(-37,5,-25,8,-12,7);c.closePath();c.fill();c.stroke();
+ for(var i=0;i<5;i++){
+  var sx=-25-i*7,sy=-7-i*2.7;
+  c.beginPath();c.moveTo(sx,sy);c.lineTo(sx-8,sy-15-lift*.18);c.stroke();
+ }
+ // Đuôi dài, phân lông thành các dải.
+ c.beginPath();c.moveTo(-22,5);c.lineTo(-57,17);c.lineTo(-34,15);
+ c.lineTo(-53,29);c.lineTo(-25,18);c.lineTo(-45,35);c.lineTo(-15,12);c.closePath();c.fill();c.stroke();
  c.restore();
 }
-function drawRice(c,x,y,s,grow){
- c.save();c.translate(x,y);c.scale(s,s);c.strokeStyle=GOLD;c.lineWidth=1.8;c.lineCap="round";
- c.beginPath();c.moveTo(0,22);c.quadraticCurveTo(2,2,-2,-30*grow);c.stroke();
- for(var i=0;i<6;i++){var yy=-26+i*7,xx=-2+(i%2?2:-1);c.beginPath();c.ellipse(xx-7,yy,3.2,7,-.65,0,TAU);c.fillStyle=RED;c.fill();c.stroke();}
- c.beginPath();c.moveTo(0,20);c.quadraticCurveTo(-9,7,-16,1);c.moveTo(0,14);c.quadraticCurveTo(9,2,16,-4);c.stroke();
+function drawVietnam(c,x,y,s,alpha){
+ c.save();c.translate(x,y);c.scale(s,s);c.globalAlpha=alpha;strokeFill(c);
+ // Đường bao giản lược theo dáng chữ S: Bắc Bộ rộng, Trung Bộ hẹp,
+ // Nam Bộ mở rộng; không dùng một đường cong đối xứng giả lập.
+ c.beginPath();
+ c.moveTo(-1,-46);c.lineTo(10,-43);c.lineTo(13,-35);c.lineTo(22,-31);
+ c.lineTo(18,-24);c.lineTo(25,-18);c.lineTo(18,-10);c.lineTo(21,-3);
+ c.lineTo(13,4);c.lineTo(17,12);c.lineTo(10,20);c.lineTo(13,29);
+ c.lineTo(5,37);c.lineTo(0,47);c.lineTo(-7,43);c.lineTo(-9,35);
+ c.lineTo(-17,30);c.lineTo(-13,23);c.lineTo(-20,17);c.lineTo(-13,10);
+ c.lineTo(-18,3);c.lineTo(-12,-4);c.lineTo(-18,-12);c.lineTo(-11,-19);
+ c.lineTo(-16,-27);c.lineTo(-8,-33);c.lineTo(-10,-40);c.closePath();
+ c.fill();c.stroke();
+ // Dải bờ biển phía đông tạo nhịp gấp khúc ở miền Trung.
+ c.beginPath();c.moveTo(13,-24);c.lineTo(18,-18);c.lineTo(14,-10);
+ c.lineTo(18,-3);c.lineTo(11,5);c.lineTo(15,13);c.lineTo(8,22);c.stroke();
+ // Hoàng Sa và Trường Sa: cụm đảo tách khỏi đường bờ.
+ c.fillStyle=RED;
+ [[28,-2,1.8],[31,1,1.4],[29,5,1.2],[23,23,1.6],[27,27,1.2],[21,31,1]].forEach(function(p){
+  c.beginPath();c.ellipse(p[0],p[1],p[2],p[2]*.7,-.4,0,TAU);c.fill();c.stroke();
+ });
  c.restore();
 }
-function rocket(c,x,y,s,a){
- c.save();c.translate(x,y);c.rotate(-.12);c.scale(s,s);c.globalAlpha=a;
- c.fillStyle=RED;c.strokeStyle=GOLD;c.lineWidth=1.4;
- c.beginPath();c.moveTo(-24,-6);c.quadraticCurveTo(-4,-15,17,-7);c.lineTo(27,0);c.lineTo(17,7);c.quadraticCurveTo(-4,15,-24,6);c.closePath();c.fill();c.stroke();
- c.beginPath();c.moveTo(-12,-6);c.lineTo(-21,-16);c.lineTo(-19,-5);c.moveTo(-12,6);c.lineTo(-21,16);c.lineTo(-19,5);c.fill();c.stroke();
- c.beginPath();c.arc(10,0,3.3,0,TAU);c.fillStyle=GOLD;c.fill();
- c.fillStyle="#f29a32";c.beginPath();c.moveTo(-24,-4);c.lineTo(-39,0);c.lineTo(-24,4);c.closePath();c.fill();
+function drawIslands(c,x,y,s,alpha){
+ c.save();c.translate(x,y);c.scale(s,s);c.globalAlpha=alpha;strokeFill(c);
+ // Cụm Hoàng Sa và Trường Sa biểu diễn thành hai nhóm đảo, không phải chấm trang trí.
+ function at(dx,dy,rx,ry,rot){c.beginPath();c.ellipse(dx,dy,rx,ry,rot,0,TAU);c.fill();c.stroke();}
+ at(-12,-7,5,2.2,-.35);at(-2,-11,3,1.6,.2);at(7,-5,4,2,-.5);
+ at(12,8,4,1.8,.25);at(3,13,3.2,1.5,-.4);at(-7,9,2.8,1.4,.1);
  c.restore();
 }
-function island(c,x,y,s){
- c.save();c.translate(x,y);c.scale(s,s);c.fillStyle=RED;c.strokeStyle=GOLD;c.lineWidth=1;
- c.beginPath();c.ellipse(0,0,4,2.2,-.25,0,TAU);c.fill();c.stroke();c.restore();
+function drawRice(c,x,y,s,grow,alpha){
+ c.save();c.translate(x,y);c.scale(s,s);c.globalAlpha=alpha;strokeFill(c);
+ // Thân lúa mọc từ gốc lên, nghiêng nhẹ theo chiều gió.
+ c.beginPath();c.moveTo(0,25);c.bezierCurveTo(-2,8,5,-12,2,-34*grow);c.stroke();
+ for(var i=0;i<7;i++){
+  var yy=-8-i*5,side=i%2?-1:1,xx=2+side*(3+i*.7);
+  c.beginPath();c.ellipse(xx+side*5,yy,3.1,6.2,side*-.62,0,TAU);c.fill();c.stroke();
+ }
+ c.beginPath();c.moveTo(0,15);c.quadraticCurveTo(-10,5,-17,2);
+ c.moveTo(1,8);c.quadraticCurveTo(10,-2,17,-8);c.stroke();
+ c.restore();
+}
+function drawRocket(c,x,y,s,alpha){
+ c.save();c.translate(x,y);c.rotate(-.08);c.scale(s,s);c.globalAlpha=alpha;strokeFill(c);
+ c.beginPath();c.moveTo(-25,-6);c.quadraticCurveTo(-5,-12,16,-7);
+ c.lineTo(29,0);c.lineTo(16,7);c.quadraticCurveTo(-5,12,-25,6);c.closePath();c.fill();c.stroke();
+ c.beginPath();c.moveTo(-12,-6);c.lineTo(-22,-16);c.lineTo(-19,-4);
+ c.moveTo(-12,6);c.lineTo(-22,16);c.lineTo(-19,4);c.stroke();
+ c.beginPath();c.arc(9,0,3.2,0,TAU);c.fillStyle=GOLD;c.fill();c.stroke();
+ c.beginPath();c.moveTo(-25,-4);c.lineTo(-40,0);c.lineTo(-25,4);c.closePath();c.fillStyle="#f28b32";c.fill();
+ c.restore();
 }
 function make(host){
- var cv=document.createElement("canvas");cv.className="lsdl-footer-canvas";cv.setAttribute("role","img");cv.setAttribute("aria-label","Logo động Lịch Sử và Địa Lí");
- host.appendChild(cv);
- var ctx=cv.getContext("2d"),w=0,h=0,dpr=1,t=0,raf=0,started=performance.now(),active=!done&&!reduced;
- function resize(){dpr=Math.min(2,window.devicePixelRatio||1);w=Math.max(260,host.clientWidth||320);h=118;cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);cv.style.height=h+"px";ctx.setTransform(dpr,0,0,dpr,0,0);draw(active?Math.max(0,(performance.now()-started)/1000):10);}
- function text(c,str,x,y,size,alpha){
-  c.save();c.globalAlpha=alpha;c.font="900 "+size+"px Impact, 'Arial Narrow', sans-serif";c.textAlign="left";c.textBaseline="middle";c.lineJoin="round";
-  c.lineWidth=Math.max(1.5,size*.085);c.strokeStyle=GOLD;c.fillStyle=RED;
-  c.strokeText(str,x,y);c.fillText(str,x,y);var width=c.measureText(str).width;c.restore();return width;
+ var canvas=document.createElement("canvas");canvas.className="lsdl-footer-canvas";
+ canvas.setAttribute("role","img");canvas.setAttribute("aria-label","Logo động Lịch Sử và Địa Lí");
+ host.appendChild(canvas);
+ var c=canvas.getContext("2d"),w=320,h=132,dpr=1,raf=0,t=0,start=performance.now();
+ var playing=!finished&&!reduced,ro=null;
+ function fit(){
+  dpr=Math.min(2,window.devicePixelRatio||1);w=Math.max(260,host.clientWidth||320);
+  h=132;canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
+  canvas.style.height=h+"px";c.setTransform(dpr,0,0,dpr,0,0);
+  if(raf)cancelAnimationFrame(raf);paint(playing?(performance.now()-start)/1000:10);
  }
- function draw(time){
-  t=time;ctx.clearRect(0,0,w,h);
-  var scale=Math.min(1,(w-22)/410),cx=w/2,baseY=58;
-  ctx.save();ctx.translate(cx,0);ctx.scale(scale,scale);ctx.translate(-205,0);
-  var reveal=ease((time-1.15)/.9);
-  var titleAlpha=time<1.15?0:1;
-  if(time<1.15){var bp=ease(time/1.15);bird(ctx,mix(-75,465,bp),26+Math.sin(bp*Math.PI)*-10,.68,1-bp*.9,0);}
-  ctx.save();ctx.beginPath();
-  var revealHeight=time<1.15?24:mix(24,118,reveal);
-  ctx.rect(0,58-revealHeight/2,410,revealHeight);ctx.clip();
-  var fs=27, gap=0, x=14, y=58;
-  // Từng cụm chữ được tách để thay thế S, VÀ và L bằng biểu tượng.
-  var w1=text(ctx,"LỊCH ",x,y,fs,titleAlpha);x+=w1+2;
-  var mapT=ease((time-3.75)/.7);
-  var dropY=time<3.75?(-50*(1-ease(time/3.75))):mix(-42,0,mapT);
-  if(time<3.75){text(ctx,"S",x,y+dropY,fs,titleAlpha);}
-  else{
-   ctx.save();ctx.globalAlpha=titleAlpha;
-   pathMap(ctx,x+9,y-7,0.47);ctx.fillStyle=RED;ctx.strokeStyle=GOLD;ctx.lineWidth=1.5;ctx.fill();ctx.stroke();
-   // Hoàng Sa ở phía đông miền Trung, Trường Sa ở phía đông nam.
-   island(ctx,x+17,y-5,.75);island(ctx,x+19,y+16,.7);ctx.restore();
-  }
-  x+=19;
-  var w2=text(ctx,"Ử ",x,y,fs,titleAlpha);x+=w2+2;
-  var vaFade=1-ease((time-2.85)/.55);
-  if(time<3.4){x+=text(ctx,"VÀ",x,y,fs,titleAlpha*vaFade)+3;}
-  else{
-   ctx.globalAlpha=titleAlpha;
-   island(ctx,x+4,y-3,1.35);island(ctx,x+14,y+3,1.1);island(ctx,x+23,y+8,.8);
-   island(ctx,x+9,y+11,.7);x+=32;
-  }
-  x+=text(ctx," ĐỊ",x,y,fs,titleAlpha);
-  var rocketX=x+10;
-  if(time<6.1){text(ctx,"A",x,y,fs,titleAlpha);}
-  else if(time<8.2){
-   var rp=time<7.05?ease((time-6.1)/.95):ease((time-7.05)/1.15);
-   var rx=time<7.05?mix(rocketX,500,rp):mix(-48,rocketX,rp);
-   rocket(ctx,rx,y,.66,1);
-  }else{text(ctx,"A",x,y,fs,titleAlpha);}
-  x+=20;
-  var riceT=ease((time-4.8)/1.2);
-  if(time<4.8){text(ctx,"L",x,y,fs,titleAlpha);}
-  else{drawRice(ctx,x+7,y+2,.72,riceT);}
-  x+=18;text(ctx,"Í",x,y,fs,titleAlpha);
-  // Chim Lạc mở đầu và quay lại ở cuối chuỗi.
-  if(time<1.15){var p=ease(time/1.15);bird(ctx,mix(-75,465,p),26+Math.sin(p*Math.PI)*-10,.68,1-p*.9,0);}
-  if(time>7.8){
-   var p=ease((time-7.8)/1.5);
-   bird(ctx,mix(455,344,p),20,.36*(1-p*.15),p,0);
-   // Cánh, đầu và đuôi tách ra rồi hoà thành các nét trang trí của chữ.
-   ctx.globalAlpha=p*.9;ctx.strokeStyle=GOLD;ctx.fillStyle=RED;ctx.lineWidth=1.4;
-   ctx.beginPath();ctx.moveTo(118,27);ctx.quadraticCurveTo(132,16,148,27);ctx.lineTo(137,25);ctx.stroke();
-   ctx.beginPath();ctx.arc(291,28,3,0,TAU);ctx.fill();ctx.stroke();
-   ctx.beginPath();ctx.moveTo(316,82);ctx.quadraticCurveTo(331,75,342,83);ctx.stroke();
-  }
-  ctx.restore();ctx.restore();
-  if(active&&time<10){raf=requestAnimationFrame(function(){draw((performance.now()-started)/1000);});}
-  else{active=false;done=true;}
+ function measure(str,size){c.font="900 "+size+"px 'Arial Narrow',Impact,sans-serif";return c.measureText(str).width;}
+ function word(str,x,y,size,alpha){
+  c.save();c.globalAlpha=alpha;c.font="900 "+size+"px 'Arial Narrow',Impact,sans-serif";
+  c.textAlign="left";c.textBaseline="middle";c.lineJoin="round";c.lineWidth=1.6;
+  c.fillStyle=RED;c.strokeStyle=GOLD;c.strokeText(str,x,y);c.fillText(str,x,y);
+  var z=c.measureText(str).width;c.restore();return z;
  }
- function destroy(){if(raf)cancelAnimationFrame(raf);if(ro)ro.disconnect();if(cv.parentNode)cv.parentNode.removeChild(cv);}
- var ro=null;if(window.ResizeObserver){ro=new ResizeObserver(resize);ro.observe(host);}
- resize();
- return {destroy:destroy,draw:draw};
+ function paint(sec){
+  t=sec;c.clearRect(0,0,w,h);
+  var scale=Math.min(1,(w-24)/430),size=29;
+  var widths=["LỊCH ","Ử "," ĐỊ","A","Í"].map(function(v){return measure(v,size);});
+  var mapW=34,islandW=34,riceW=20,gap=3;
+  var total=widths[0]+mapW+widths[1]+islandW+widths[2]+widths[3]+riceW+widths[4]+gap*7;
+  var sc=Math.min(scale,(w-18)/total),x=(w-total*sc)/2;
+  c.save();c.translate(x,0);c.scale(sc,sc);
+  var y=66;
+  // Chim bay ngang ở lớp trên, trước khi chữ xuất hiện.
+  if(sec<1.2){var q=ease(sec/1.2);drawBird(c,lerp(-95,total+100,q),26+Math.sin(q*Math.PI)*-8,.72,1-q*.88,Math.sin(q*TAU)*4);}
+  var reveal=ease((sec-1.15)/1.05),alpha=sec<1.15?0:1;
+  // Lộ dần theo chiều cao: phần chữ mở lên từ 1/5 rồi hoàn chỉnh.
+  c.save();c.beginPath();var hh=sec<1.15?0:lerp(24,132,reveal);
+  c.rect(-8,y-hh/2,total+16,hh);c.clip();
+  var px=0;
+  px+=word("LỊCH ",px,y,size,alpha)+gap;
+  var mapAlpha=ease((sec-3.45)/.65);
+  if(sec<3.45){var fall=lerp(-54,0,ease((sec-2.95)/.5));word("S",px,y+fall,size,alpha);}
+  else drawVietnam(c,px+mapW*.5,y-1,.46,alpha);
+  px+=mapW+gap;
+  px+=word("Ử ",px,y,size,alpha)+gap;
+  if(sec<3.1){word("VÀ",px,y,size,alpha*(1-ease((sec-2.55)/.55)));}
+  else drawIslands(c,px+islandW*.5,y-1,.9,alpha);
+  px+=islandW+gap;
+  px+=word(" ĐỊ",px,y,size,alpha)+gap;
+  var rocketX=px+widths[3]*.5;
+  if(sec<6.05||sec>8.2)word("A",px,y,size,alpha);
+  else{
+   var rq=sec<7.05?ease((sec-6.05)/1):ease((sec-7.05)/1.15);
+   var rx=sec<7.05?lerp(rocketX,rocketX+180,rq):lerp(-45,rocketX,rq);
+   drawRocket(c,rx,y,.68,1);
+  }
+  px+=widths[3]+gap;
+  var riceProgress=ease((sec-4.65)/1.1);
+  if(sec<4.65)word("L",px,y,size,alpha*(1-ease((sec-4.15)/.5)));
+  drawRice(c,px+riceW*.5,y+2,.72,riceProgress,sec<4.65?0:alpha);
+  px+=riceW+gap;word("Í",px,y,size,alpha);
+  c.restore();
+  // Chim trở lại; cánh, đầu và đuôi lần lượt tách ra rồi nhập vào nét viền chữ.
+  if(sec>8.1){
+   var b=ease((sec-8.1)/1.55);
+   drawBird(c,lerp(total+85,total*.78,b),25,.44,1-b*.35,0);
+   c.save();c.globalAlpha=b*.9;c.strokeStyle=GOLD;c.fillStyle=RED;c.lineWidth=1.8;
+   c.beginPath();c.moveTo(56,38);c.quadraticCurveTo(69,24,82,37);c.stroke();
+   c.beginPath();c.arc(total*.72,38,3,0,TAU);c.fill();
+   c.beginPath();c.moveTo(total*.82,89);c.quadraticCurveTo(total*.86,78,total*.9,86);c.stroke();c.restore();
+  }
+  c.restore();
+  if(playing&&sec<10){raf=requestAnimationFrame(function(){paint((performance.now()-start)/1000);});}
+  else{playing=false;finished=true;}
+ }
+ function destroy(){if(raf)cancelAnimationFrame(raf);if(ro)ro.disconnect();if(canvas.parentNode)canvas.parentNode.removeChild(canvas);}
+ if(window.ResizeObserver){ro=new ResizeObserver(fit);ro.observe(host);}
+ fit();return{destroy:destroy,draw:paint,get t(){return t;}};
 }
 function mount(root){
  if(!root||root.querySelector(".lsdl-footer-logo"))return;
  var footer=document.createElement("div");footer.className="lsdl-footer-logo";
  footer.innerHTML='<div class="lsdl-footer-rule"></div><div class="lsdl-footer-caption">LỊCH SỬ VÀ ĐỊA LÍ</div>';
- root.appendChild(footer);
- var host=document.createElement("div");host.className="lsdl-footer-art";footer.appendChild(host);
- var inst=make(host);instances.push(inst);current=inst;
+ root.appendChild(footer);var host=document.createElement("div");host.className="lsdl-footer-art";footer.appendChild(host);
+ activeInstance=make(host);instances.push(activeInstance);
 }
-function unmount(){if(current){current.destroy();instances=instances.filter(function(x){return x!==current;});current=null;}}
+function unmount(){if(activeInstance){activeInstance.destroy();instances=instances.filter(function(v){return v!==activeInstance;});activeInstance=null;}}
 window.LsdlFooterLogo={mount:mount,unmount:unmount};
 })();
