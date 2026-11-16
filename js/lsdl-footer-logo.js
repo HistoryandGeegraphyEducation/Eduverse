@@ -71,11 +71,12 @@ function make(host){
   t=time;ctx.clearRect(0,0,w,h);
   var scale=Math.min(1,(w-22)/410),cx=w/2,baseY=58;
   ctx.save();ctx.translate(cx,0);ctx.scale(scale,scale);ctx.translate(-205,0);
-  var reveal=ease((time-1.1)/.9);
-  var titleAlpha=time<.6?0:1;
+  var reveal=ease((time-1.15)/.9);
+  var titleAlpha=time<1.15?0:1;
+  if(time<1.15){var bp=ease(time/1.15);bird(ctx,mix(-75,465,bp),26+Math.sin(bp*Math.PI)*-10,.68,1-bp*.9,0);}
   ctx.save();ctx.beginPath();
-  var revealHeight=time<1.1?24:mix(24,118,reveal);
-  ctx.rect(0,118-revealHeight,410,revealHeight);ctx.clip();
+  var revealHeight=time<1.15?24:mix(24,118,reveal);
+  ctx.rect(0,58-revealHeight/2,410,revealHeight);ctx.clip();
   var fs=27, gap=0, x=14, y=58;
   // Từng cụm chữ được tách để thay thế S, VÀ và L bằng biểu tượng.
   var w1=text(ctx,"LỊCH ",x,y,fs,titleAlpha);x+=w1+2;
