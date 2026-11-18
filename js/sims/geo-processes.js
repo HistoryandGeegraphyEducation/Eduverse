@@ -228,15 +228,10 @@
     root.innerHTML = `
       <section class="evgeo">
         <div class="evgeo-head">
-          <div><div class="evgeo-kicker">EDUVERSE · ĐỊA LÍ 6 · MÔ PHỎNG 3D</div>
-          <h2>${cfg.title}</h2></div>
-          <span class="evgeo-live">TƯƠNG TÁC</span>
-        </div>
-        <p class="evgeo-lead">${cfg.lead}</p>
+          <div><h2>${cfg.title}</h2></div>
         <div class="evgeo-layout">
           <div class="evgeo-view">
             <canvas aria-label="Khung dựng hình mô phỏng địa lí 3D bằng WebGL"></canvas>
-            <div class="evgeo-viewtag">MÔ HÌNH 3D · KÉO ĐỂ XOAY · CUỘN ĐỂ ZOOM</div>
             <div class="evgeo-readout">TOÀN CẢNH</div>
           </div>
           <aside class="evgeo-controls" aria-label="Bảng điều khiển mô phỏng">
@@ -261,15 +256,11 @@
     style.textContent = `
       .simroot.geo-sim-root{display:block!important;grid-column:1/-1!important;width:100%;max-width:none!important;min-width:0}.evgeo{width:100%;max-width:none;min-width:0;box-sizing:border-box;color:#edf6fb;background:linear-gradient(145deg,#071b2c,#12364a);border:1px solid #24475c;border-radius:18px;padding:clamp(10px,2vw,17px);overflow:hidden}
       .evgeo-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-      .evgeo-kicker{font-size:10px;letter-spacing:1.5px;color:#8fc5df;font-weight:700}
-      .evgeo h2{font-size:clamp(14px,2vw,19px);line-height:1.35;margin:5px 0 0;font-weight:800}
-      .evgeo-live{font-size:9px;letter-spacing:1px;border:1px solid #4c849d;color:#b8e6f5;padding:5px 8px;border-radius:20px;white-space:nowrap}
-      .evgeo-lead{font-size:12px;line-height:1.55;color:#c7dce8;margin:9px 0 12px}
+      .evgeo h2{font-size:clamp(14px,2vw,19px);line-height:1.35;margin:0;font-weight:800}
       .evgeo-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:stretch}
       .evgeo-view{height:clamp(500px,70vh,760px);min-height:460px;position:relative;overflow:hidden;border-radius:13px;background:linear-gradient(#9fc5d8,#d5e0d9 66%,#657d61);box-shadow:inset 0 0 35px #173a4d55}
       .evgeo-view canvas{width:100%;height:100%;display:block;touch-action:none}
       .evgeo-label,.evgeo-readout{display:none!important}
-      .evgeo-viewtag{position:absolute;top:9px;left:9px;background:#071b2cce;color:#e2f3fb;border:1px solid #ffffff24;border-radius:7px;padding:6px 8px;font-size:9px;letter-spacing:.35px;pointer-events:none}
       .evgeo-controls{min-width:0;display:flex;flex-direction:column;gap:8px;padding:10px;border:1px solid #ffffff1c;border-radius:13px;background:#061725a8}
       .evgeo-control-section{min-width:0}.evgeo-section-title{font-size:10px;letter-spacing:1px;color:#91c9df}
       .evgeo-buttons{display:grid;grid-template-columns:1fr;gap:5px;margin-top:7px}
