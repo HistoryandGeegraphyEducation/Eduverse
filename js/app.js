@@ -18,7 +18,8 @@ store.set("ev_user",null);
 
 const S={
   tab:"home",subj:null,grade:null,
-  part:"Lịch Sử",csub:null,croom:null,csim:null
+  part:"Lịch Sử",csub:null,croom:null,csim:null,
+  language:null,langMode:null,langItem:null
 };
 const ROUTE_PREFIX="#ev?";
 function readRoute(){
@@ -28,15 +29,18 @@ function readRoute(){
   const tab=p.get("tab");
   S.tab=tabs.includes(tab)?tab:"home";
   S.subj=null;S.grade=null;S.csub=null;S.croom=null;S.csim=null;
+  S.language=null;S.langMode=null;S.langItem=null;
   if(S.tab==="home"){
     const subj=p.get("subj");
     if(SUBJECTS.some(x=>x.id===subj)) S.subj=subj;
     const grade=Number(p.get("grade"));
     if(S.subj==="lsdl"&&Number.isInteger(grade)&&CONTENT["lsdl-"+grade]) S.grade=grade;
+    if(S.subj==="nn") readLanguageRoute(p);
   }
   if(S.tab==="cat"){
     const csub=p.get("csub");
-    if(Object.prototype.hasOwnProperty.call(SIMS,csub)) S.csub=csub;
+    if(csub==="nn"||Object.prototype.hasOwnProperty.call(SIMS,csub)) S.csub=csub;
+    if(S.csub==="nn") readLanguageRoute(p);
     if(S.csub){
       const croom=p.get("croom");
       if((SIMS[S.csub]||[]).some(x=>x.type===croom)) S.croom=croom;
@@ -47,17 +51,30 @@ function readRoute(){
     }
   }
 }
+function readLanguageRoute(p){
+  const id=p.get("lang");
+  if(LANGUAGE_PROGRAMS.some(x=>x.id===id)) S.language=id;
+  S.langMode=p.get("langMode")||null;
+  S.langItem=p.get("langItem")||null;
+}
+function writeLanguageRoute(p){
+  if(S.language) p.set("lang",S.language);
+  if(S.langMode) p.set("langMode",S.langMode);
+  if(S.langItem) p.set("langItem",S.langItem);
+}
 function routeForState(){
   const p=new URLSearchParams();
   p.set("tab",S.tab);
   if(S.tab==="home"&&S.subj){
     p.set("subj",S.subj);
     if(S.grade) p.set("grade",String(S.grade));
+    if(S.subj==="nn") writeLanguageRoute(p);
   }
   if(S.tab==="cat"){
     if(S.csub) p.set("csub",S.csub);
     if(S.croom) p.set("croom",S.croom);
     if(S.csim) p.set("csim",S.csim);
+    if(S.csub==="nn") writeLanguageRoute(p);
   }
   return ROUTE_PREFIX+p.toString();
 }
@@ -137,6 +154,7 @@ function depthOf(){
   if(S.tab!=="home") return 0;
   if(S.subj==="lsdl"&&S.grade) return 2;
   if(S.subj==="lsdl") return 1;
+  if(S.subj==="nn") return S.language?(S.langMode?3:2):1;
   return 0;
 }
 
@@ -188,6 +206,7 @@ function setHdh(){
 }
 
 function vHome(){
+  if(S.subj==="nn") return vLanguages();
   if(S.subj==="lsdl"&&S.grade) return vLessons();
   if(S.subj==="lsdl") return vGrades();
 
@@ -210,6 +229,12 @@ function vHome(){
   );
 }
 function openSubject(id){
+  if(id==="nn"){
+    S.tab="home";S.subj="nn";S.grade=null;
+    S.language=null;S.langMode=null;S.langItem=null;
+    render();
+    return;
+  }
   if(id!=="lsdl"){
     toast(sName(id)+" – sắp ra mắt");
     return;
@@ -407,6 +432,7 @@ function vSim(){
 function vCat(){
   main.className="main lessons";
 
+  if(S.csub==="nn") return vLanguages();
   if(S.csub){
     return S.csim?vSim():(
       S.croom?vSimList():vRooms()
@@ -507,6 +533,88 @@ function vRooms(){
       render();
     }
   );
+}
+
+
+// ===== PHÂN HỆ NGOẠI NGỮ =====
+function currentLanguage(){
+  return LANGUAGE_PROGRAMS.find(x=>x.id===S.language)||null;
+}
+function vLanguages(){
+  main.className="main lessons language-space";
+  const lang=currentLanguage();
+  const isHome=S.tab==="home";
+  const back=()=>{
+    if(S.langMode){S.langMode=null;S.langItem=null;render();return;}
+    if(S.language){S.language=null;render();return;}
+    if(isHome){S.subj=null;S.grade=null;}
+    else{S.csub=null;S.croom=null;S.csim=null;}
+    S.language=null;S.langMode=null;S.langItem=null;render();
+  };
+  if(!lang){
+    main.innerHTML=
+      "<div class=\"language-head\"><div><span class=\"language-eyebrow\">EDUVERSE · LANGUAGE LEARNING</span>"+
+      "<h1 class=\"language-title\">NGOẠI NGỮ</h1>"+
+      "<p class=\"language-lead\">Chọn ngôn ngữ để mở không gian học tập và lộ trình phù hợp.</p></div></div>"+
+      "<div class=\"language-grid\">"+
+      LANGUAGE_PROGRAMS.map(x=>
+        "<button class=\"language-card\" data-language=\""+x.id+"\">"+
+        "<span class=\"language-flag\">"+x.flag+"</span>"+
+        "<span class=\"language-card-copy\"><b>"+esc(x.name)+"</b><small>"+esc(x.nativeName)+"</small><em>"+esc(x.shortDescription)+"</em></span>"+
+        "<span class=\"language-arrow\">›</span></button>"
+      ).join("")+
+      "</div>";
+    main.querySelectorAll("[data-language]").forEach(b=>b.onclick=()=>{
+      S.language=b.dataset.language;S.langMode=null;S.langItem=null;render();
+    });
+    return;
+  }
+  if(S.langMode){
+    const item=S.langMode==="exam"
+      ?lang.certificates.find(x=>x.id===S.langItem)
+      :lang.tracks.find(x=>x.id===S.langItem);
+    if(!item){S.langMode=null;S.langItem=null;return vLanguages();}
+    const label=S.langMode==="exam"?"ÔN CHỨNG CHỈ":"LỘ TRÌNH HỌC";
+    main.innerHTML=
+      "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">← "+esc(lang.name)+"</button><span>"+label+"</span></div>"+
+      "<section class=\"language-plan-hero\"><span class=\"language-eyebrow\">"+esc(lang.nativeName)+"</span><h1>"+esc(item.name)+"</h1><p>"+esc(item.description)+"</p></section>"+
+      "<section class=\"language-panel\"><h2>"+(S.langMode==="exam"?"NỘI DUNG ÔN TẬP":"CÁC CẤP ĐỘ")+"</h2>"+
+      "<div class=\"language-levels\">"+item.stages.map((x,i)=>"<span class=\"language-level\"><small>"+String(i+1).padStart(2,"0")+"</small><b>"+esc(x)+"</b></span>").join("")+"</div></section>"+
+      "<section class=\"language-panel\"><h2>KỸ NĂNG ĐƯỢC RÈN LUYỆN</h2><div class=\"language-skill-grid\">"+
+      lang.skills.map(x=>"<div class=\"language-skill\"><span>"+esc(x.icon)+"</span><b>"+esc(x.name)+"</b></div>").join("")+
+      "</div></section>"+
+      "<div class=\"language-status-note\">Khung chương trình đang được xây dựng.</div>";
+    $("#langBack").onclick=back;
+    return;
+  }
+  main.innerHTML=
+    "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">← DANH SÁCH NGÔN NGỮ</button><span>"+esc(lang.nativeName)+"</span></div>"+
+    "<section class=\"language-profile\"><span class=\"language-flag large\">"+lang.flag+"</span><div><span class=\"language-eyebrow\">KHÔNG GIAN HỌC TẬP</span><h1>"+esc(lang.name)+"</h1><p>"+esc(lang.description)+"</p></div></section>"+
+    "<section class=\"language-panel\"><div class=\"language-section-head\"><h2>LỘ TRÌNH HỌC</h2><span>THEO CẤP ĐỘ</span></div>"+
+    "<div class=\"language-route-grid\">"+
+    lang.tracks.map(x=>
+      "<button class=\"language-route-card\" data-track=\""+x.id+"\"><span class=\"route-kicker\">NỀN TẢNG</span><b>"+esc(x.name)+"</b><small>"+esc(x.summary)+"</small><span class=\"route-levels\">"+x.stages.map(s=>"<i>"+esc(s)+"</i>").join("")+"</span></button>"
+    ).join("")+
+    "</div></section>"+
+    "<section class=\"language-panel\"><div class=\"language-section-head\"><h2>ÔN CHỨNG CHỈ</h2><span>CHỌN MỤC TIÊU</span></div>"+
+    "<div class=\"language-exam-grid\">"+
+    lang.certificates.map(x=>
+      "<button class=\"language-exam-card\" data-exam=\""+x.id+"\"><span class=\"exam-mark\">"+esc(x.short)+"</span><span><b>"+esc(x.name)+"</b><small>"+esc(x.summary)+"</small></span><i>›</i></button>"
+    ).join("")+
+    "</div></section>"+
+    "<section class=\"language-panel\"><div class=\"language-section-head\"><h2>KHU VỰC HỌC TẬP</h2></div><div class=\"language-skill-grid\">"+
+    lang.skills.map(x=>"<div class=\"language-skill\"><span>"+esc(x.icon)+"</span><b>"+esc(x.name)+"</b></div>").join("")+
+    "</div></section>"+
+    "<section class=\"language-panel\"><div class=\"language-section-head\"><h2>CÔNG CỤ VÀ HỌC LIỆU</h2></div><div class=\"language-tags\">"+
+    lang.features.map(x=>"<span class=\"language-tag\">"+esc(x)+"</span>").join("")+
+    "</div></section>";
+  $("#langBack").onclick=back;
+  main.querySelectorAll("[data-track]").forEach(b=>b.onclick=()=>{
+    S.langMode="track";S.langItem=b.dataset.track;render();
+  });
+  main.querySelectorAll("[data-exam]").forEach(b=>b.onclick=()=>{
+    S.langMode="exam";S.langItem=b.dataset.exam;render();
+  });
 }
 
 function vPractice(){
@@ -689,12 +797,14 @@ document.querySelectorAll("nav button").forEach(b=>
     if(b.dataset.t==="home"){
       S.subj=null;
       S.grade=null;
+      S.language=null;S.langMode=null;S.langItem=null;
     }
 
     if(b.dataset.t==="cat"){
       S.csub=null;
       S.croom=null;
       S.csim=null;
+      S.language=null;S.langMode=null;S.langItem=null;
     }
 
     S.tab=b.dataset.t;
