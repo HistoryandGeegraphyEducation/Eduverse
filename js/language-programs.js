@@ -3,19 +3,19 @@
 const LANGUAGE_PROGRAMS = [
   {
     id:"en",name:"TIẾNG ANH",nativeName:"English",flag:"🇬🇧",
-    shortDescription:"Học tập và ôn chứng chỉ",
     description:"Lộ trình từ nền tảng đến các mục tiêu sử dụng và đánh giá năng lực tiếng Anh.",
     skills:[["📚","Từ vựng"],["🧩","Ngữ pháp"],["📕","Từ điển"],["🎧","Nghe"],["🎙️","Nói"],["📖","Đọc"],["✍️","Viết"]].map(([icon,name])=>({icon,name})),
     features:["Từ điển","Bài học","AI Tutor","Giọng nói","Đánh giá","Video Studio","Kho học liệu"],
     tracks:[{id:"general",name:"Lộ trình nền tảng",summary:"Từ cơ bản đến nâng cao",stages:["A1","A2","B1","B2","C1"],description:"Lộ trình phát triển năng lực tiếng Anh theo các cấp độ tham chiếu CEFR."}],
     certificates:[
       {id:"ielts",name:"IELTS",short:"IELTS",summary:"Ôn tập bốn kỹ năng",stages:["Listening","Reading","Writing","Speaking"],description:"Khung ôn tập IELTS theo bốn kỹ năng và các dạng nhiệm vụ của bài thi."},
-      {id:"vstep",name:"VSTEP",short:"VSTEP",summary:"Định hướng theo bậc năng lực",stages:["Nghe","Đọc","Viết","Nói"],description:"Khung ôn tập VSTEP theo bốn kỹ năng, gắn với mục tiêu bậc năng lực."}
+      {id:"vstep",name:"VSTEP",short:"VSTEP",summary:"Định hướng theo bậc năng lực",stages:["Nghe","Đọc","Viết","Nói"],description:"Khung ôn tập VSTEP theo bốn kỹ năng, gắn với mục tiêu bậc năng lực."},
+      {id:"toeic",name:"TOEIC",short:"TOEIC",summary:"Ôn tập theo cấu trúc bài thi",stages:["Listening","Reading"],description:"Khung ôn tập TOEIC theo hai kỹ năng Listening và Reading."},
+      {id:"aptis",name:"APTIS",short:"APTIS",summary:"Ôn tập các kỹ năng",stages:["Grammar & Vocabulary","Listening","Reading","Speaking","Writing"],description:"Khung ôn tập APTIS theo các phần thi tương ứng."}
     ]
   },
   {
     id:"zh",name:"TIẾNG TRUNG",nativeName:"中文 · Mandarin",flag:"🇨🇳",
-    shortDescription:"Học chữ Hán và luyện HSK",
     description:"Lộ trình kết hợp phát âm, thanh điệu, chữ Hán, từ vựng và giao tiếp.",
     skills:[["📚","Từ vựng"],["🧩","Ngữ pháp"],["📕","Từ điển"],["🎧","Nghe"],["🎙️","Nói"],["📖","Đọc"],["✍️","Viết"],["🀄","Chữ Hán và Pinyin"]].map(([icon,name])=>({icon,name})),
     features:["Từ điển","Bài học","AI Tutor","Giọng nói","Đánh giá","Video Studio","Kho học liệu"],
@@ -24,7 +24,6 @@ const LANGUAGE_PROGRAMS = [
   },
   {
     id:"fr",name:"TIẾNG PHÁP",nativeName:"Français",flag:"🇫🇷",
-    shortDescription:"Học nền tảng và DELF",
     description:"Lộ trình tiếng Pháp theo cấp độ, chú trọng phát âm, giống danh từ và chia động từ.",
     skills:[["📚","Từ vựng"],["🧩","Ngữ pháp"],["📕","Từ điển"],["🎧","Nghe"],["🎙️","Nói"],["📖","Đọc"],["✍️","Viết"]].map(([icon,name])=>({icon,name})),
     features:["Từ điển","Bài học","AI Tutor","Giọng nói","Đánh giá","Video Studio","Kho học liệu"],
@@ -33,7 +32,6 @@ const LANGUAGE_PROGRAMS = [
   },
   {
     id:"es",name:"TIẾNG TÂY BAN NHA",nativeName:"Español",flag:"🇪🇸",
-    shortDescription:"Học nền tảng và DELE",
     description:"Lộ trình tiếng Tây Ban Nha từ phát âm, từ vựng và cấu trúc câu cơ bản.",
     skills:[["📚","Từ vựng"],["🧩","Ngữ pháp"],["🎧","Nghe"],["🎙️","Nói"],["📖","Đọc"],["✍️","Viết"]].map(([icon,name])=>({icon,name})),
     features:["Từ điển","Bài học","AI Tutor","Giọng nói","Đánh giá","Video Studio","Kho học liệu"],
@@ -42,7 +40,6 @@ const LANGUAGE_PROGRAMS = [
   },
   {
     id:"de",name:"TIẾNG ĐỨC",nativeName:"Deutsch",flag:"🇩🇪",
-    shortDescription:"Học nền tảng và Goethe",
     description:"Lộ trình tiếng Đức với trọng tâm giống danh từ, cách (Kasus) và cấu trúc câu.",
     skills:[["📚","Từ vựng"],["🧩","Ngữ pháp"],["🎧","Nghe"],["🎙️","Nói"],["📖","Đọc"],["✍️","Viết"]].map(([icon,name])=>({icon,name})),
     features:["Từ điển","Bài học","AI Tutor","Giọng nói","Đánh giá","Video Studio","Kho học liệu"],
