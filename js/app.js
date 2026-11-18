@@ -188,6 +188,7 @@ function setHdh(){
 }
 
 function vHome(){
+  main.className="main discovery-home";
   if(S.subj==="lsdl"&&S.grade) return vLessons();
   if(S.subj==="lsdl") return vGrades();
 
@@ -228,6 +229,7 @@ function crumb(text,onBack){
 }
 
 function vGrades(){
+  main.className="main discovery-grades";
   const ic=GRADE_ICONS[S.subj]||{};
 
   main.innerHTML=`<h1 class="title">${sName("lsdl")}</h1>`+
@@ -264,6 +266,7 @@ function countBefore(part,ci){
   return c;
 }
 function vLessons(){
+  main.className="main lessons discovery-lessons";
   const key="lsdl-"+S.grade;
   const parts=CONTENT[key];
 
@@ -319,6 +322,7 @@ function vLessons(){
 }
 
 function vLearn(){
+  main.className="main discovery-learn";
   main.innerHTML=`<div class="crumb"><span>HỌC TẬP</span></div>`+
     `<div class="box">🏛️ LỊCH SỬ VÀ ĐỊA LÍ – LỚP 6`+
     `<p>Các bài Lịch sử và Địa lí lớp 6.</p>`+
@@ -333,7 +337,7 @@ function vLearn(){
 }
 // ===== DANH SÁCH HỌC LIỆU THEO PHÒNG =====
 function vSimList(){
-  main.className="main lessons";
+  main.className="main lessons discovery-simlist";
 
   const list=(SIMS[S.csub]||[])
     .filter(s=>s.type===S.croom);
@@ -380,7 +384,7 @@ function vSimList(){
 }
 
 function vSim(){
-  main.className="main lessons";
+  main.className="main lessons discovery-sim";
 
   const sim=(SIMS[S.csub]||[])
     .find(x=>x.id===S.csim);
@@ -405,7 +409,7 @@ function vSim(){
 }
 
 function vCat(){
-  main.className="main lessons";
+  main.className="main lessons discovery-catalog";
 
   if(S.csub){
     return S.csim?vSim():(
@@ -463,6 +467,7 @@ function vCat(){
 
 // ===== PHÂN PHÒNG THEO TAG HỌC LIỆU =====
 function vRooms(){
+  main.className="main lessons discovery-rooms";
   const roomTypes={
     "Phòng mô phỏng":"MÔ PHỎNG",
     "Phòng trưng bày":"TRƯNG BÀY",
@@ -516,6 +521,7 @@ function vPractice(){
     `</div>`;
 }
 function vMe(){
+  main.className="main discovery-profile";
   const roleNames={admin:"QUẢN TRỊ VIÊN",teacher:"GIÁO VIÊN",student:"HỌC SINH",pending:"CHƯA ĐƯỢC PHÂN QUYỀN"};
   if(user){
     const p=userProfile||{};
