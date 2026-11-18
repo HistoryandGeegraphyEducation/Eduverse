@@ -1,49 +1,64 @@
-
-// ===== DỮ LIỆU PHÂN HỆ NGOẠI NGỮ =====
+// ===== DỮ LIỆU PHÂN HỆ NGÔN NGỮ =====
 const LANGUAGE_PROGRAMS = [
   {
     id:"en",name:"TIẾNG ANH",nativeName:"English",flag:"🇬🇧",
-    description:"Lộ trình từ nền tảng đến các mục tiêu sử dụng và đánh giá năng lực tiếng Anh.",
-    skills:[["📚","Từ vựng"],["🧩","Ngữ pháp"],["📕","Từ điển"],["🎧","Nghe"],["🎙️","Nói"],["📖","Đọc"],["✍️","Viết"]].map(([icon,name])=>({icon,name})),
-    features:["Từ điển","Bài học","AI Tutor","Giọng nói","Đánh giá","Video Studio","Kho học liệu"],
-    tracks:[{id:"general",name:"Lộ trình nền tảng",summary:"Từ cơ bản đến nâng cao",stages:["A1","A2","B1","B2","C1"],description:"Lộ trình phát triển năng lực tiếng Anh theo các cấp độ tham chiếu CEFR."}],
+    skills:[["📚","TỪ VỰNG"],["🧩","NGỮ PHÁP"],["📕","TỪ ĐIỂN"],["🎧","NGHE"],["🎙️","NÓI"],["📖","ĐỌC"],["✍️","VIẾT"]].map(([icon,name])=>({icon,name})),
+    rooms:["PHÒNG HỌC","PHÒNG TỰ HỌC","TỪ VỰNG","NGỮ PHÁP","TỪ ĐIỂN","NGHE","NÓI","ĐỌC","VIẾT","HỘI THOẠI","PHÁT ÂM"],
+    features:["AI TUTOR","GIỌNG NÓI","ĐÁNH GIÁ","VIDEO STUDIO","THƯ VIỆN HỌC LIỆU"],
+    tracks:[{id:"general",name:"LỘ TRÌNH A1–C1",stages:["A1","A2","B1","B2","C1"],description:""}],
     certificates:[
-      {id:"ielts",name:"IELTS",short:"IELTS",summary:"Ôn tập bốn kỹ năng",stages:["Listening","Reading","Writing","Speaking"],description:"Khung ôn tập IELTS theo bốn kỹ năng và các dạng nhiệm vụ của bài thi."},
-      {id:"vstep",name:"VSTEP",short:"VSTEP",summary:"Định hướng theo bậc năng lực",stages:["Nghe","Đọc","Viết","Nói"],description:"Khung ôn tập VSTEP theo bốn kỹ năng, gắn với mục tiêu bậc năng lực."},
-      {id:"toeic",name:"TOEIC",short:"TOEIC",summary:"Ôn tập theo cấu trúc bài thi",stages:["Listening","Reading"],description:"Khung ôn tập TOEIC theo hai kỹ năng Listening và Reading."},
-      {id:"aptis",name:"APTIS",short:"APTIS",summary:"Ôn tập các kỹ năng",stages:["Grammar & Vocabulary","Listening","Reading","Speaking","Writing"],description:"Khung ôn tập APTIS theo các phần thi tương ứng."}
+      {id:"ielts",name:"IELTS",short:"IELTS",stages:["LISTENING","READING","WRITING","SPEAKING"],description:""},
+      {id:"vstep",name:"VSTEP",short:"VSTEP",stages:["NGHE","ĐỌC","VIẾT","NÓI"],description:""},
+      {id:"toeic",name:"TOEIC",short:"TOEIC",stages:["LISTENING","READING"],description:""},
+      {id:"aptis",name:"APTIS",short:"APTIS",stages:["GRAMMAR & VOCABULARY","LISTENING","READING","SPEAKING","WRITING"],description:""}
     ]
   },
   {
-    id:"zh",name:"TIẾNG TRUNG",nativeName:"中文 · Mandarin",flag:"🇨🇳",
-    description:"Lộ trình kết hợp phát âm, thanh điệu, chữ Hán, từ vựng và giao tiếp.",
-    skills:[["📚","Từ vựng"],["🧩","Ngữ pháp"],["📕","Từ điển"],["🎧","Nghe"],["🎙️","Nói"],["📖","Đọc"],["✍️","Viết"],["🀄","Chữ Hán và Pinyin"]].map(([icon,name])=>({icon,name})),
-    features:["Từ điển","Bài học","AI Tutor","Giọng nói","Đánh giá","Video Studio","Kho học liệu"],
-    tracks:[{id:"foundation",name:"Lộ trình nền tảng",summary:"Làm quen đến sơ cấp",stages:["Phát âm","Từ vựng","Câu cơ bản","Giao tiếp"],description:"Lộ trình làm quen Pinyin, thanh điệu, chữ Hán và các cấu trúc giao tiếp cơ bản."}],
-    certificates:[{id:"hsk",name:"HSK 1–3",short:"HSK",summary:"Ôn tập cấp độ sơ cấp",stages:["HSK 1","HSK 2","HSK 3"],description:"Khung ôn tập HSK 1–3 ở giai đoạn đầu của phân hệ tiếng Trung."}]
-  },
-  {
     id:"fr",name:"TIẾNG PHÁP",nativeName:"Français",flag:"🇫🇷",
-    description:"Lộ trình tiếng Pháp theo cấp độ, chú trọng phát âm, giống danh từ và chia động từ.",
-    skills:[["📚","Từ vựng"],["🧩","Ngữ pháp"],["📕","Từ điển"],["🎧","Nghe"],["🎙️","Nói"],["📖","Đọc"],["✍️","Viết"]].map(([icon,name])=>({icon,name})),
-    features:["Từ điển","Bài học","AI Tutor","Giọng nói","Đánh giá","Video Studio","Kho học liệu"],
-    tracks:[{id:"foundation",name:"Lộ trình nền tảng",summary:"A1 đến A2",stages:["A1","A2"],description:"Lộ trình tiếng Pháp nền tảng theo hai cấp độ A1 và A2."}],
-    certificates:[{id:"delf",name:"DELF A1–A2",short:"DELF",summary:"Ôn tập cấp độ cơ bản",stages:["A1","A2"],description:"Khung ôn tập DELF A1–A2 theo các kỹ năng nghe, đọc, viết và nói."}]
-  },
-  {
-    id:"es",name:"TIẾNG TÂY BAN NHA",nativeName:"Español",flag:"🇪🇸",
-    description:"Lộ trình tiếng Tây Ban Nha từ phát âm, từ vựng và cấu trúc câu cơ bản.",
-    skills:[["📚","Từ vựng"],["🧩","Ngữ pháp"],["🎧","Nghe"],["🎙️","Nói"],["📖","Đọc"],["✍️","Viết"]].map(([icon,name])=>({icon,name})),
-    features:["Từ điển","Bài học","AI Tutor","Giọng nói","Đánh giá","Video Studio","Kho học liệu"],
-    tracks:[{id:"foundation",name:"Lộ trình nền tảng",summary:"A1 đến A2",stages:["A1","A2"],description:"Lộ trình tiếng Tây Ban Nha nền tảng theo hai cấp độ A1 và A2."}],
-    certificates:[{id:"dele",name:"DELE A1–A2",short:"DELE",summary:"Ôn tập cấp độ cơ bản",stages:["A1","A2"],description:"Khung ôn tập DELE A1–A2 theo các kỹ năng nghe, đọc, viết và nói."}]
+    skills:[["📚","TỪ VỰNG"],["🧩","NGỮ PHÁP"],["📕","TỪ ĐIỂN"],["🎧","NGHE"],["🎙️","NÓI"],["📖","ĐỌC"],["✍️","VIẾT"]].map(([icon,name])=>({icon,name})),
+    rooms:["PHÒNG HỌC","PHÒNG TỰ HỌC","TỪ VỰNG","NGỮ PHÁP","TỪ ĐIỂN","NGHE","NÓI","ĐỌC","VIẾT","HỘI THOẠI","PHÁT ÂM"],
+    features:["AI TUTOR","GIỌNG NÓI","ĐÁNH GIÁ","VIDEO STUDIO","THƯ VIỆN HỌC LIỆU"],
+    tracks:[{id:"foundation",name:"LỘ TRÌNH A1–A2",stages:["A1","A2"],description:""}],
+    certificates:[{id:"delf",name:"DELF",short:"DELF",stages:["A1","A2"],description:""}]
   },
   {
     id:"de",name:"TIẾNG ĐỨC",nativeName:"Deutsch",flag:"🇩🇪",
-    description:"Lộ trình tiếng Đức với trọng tâm giống danh từ, cách (Kasus) và cấu trúc câu.",
-    skills:[["📚","Từ vựng"],["🧩","Ngữ pháp"],["🎧","Nghe"],["🎙️","Nói"],["📖","Đọc"],["✍️","Viết"]].map(([icon,name])=>({icon,name})),
-    features:["Từ điển","Bài học","AI Tutor","Giọng nói","Đánh giá","Video Studio","Kho học liệu"],
-    tracks:[{id:"foundation",name:"Lộ trình nền tảng",summary:"A1 đến A2",stages:["A1","A2"],description:"Lộ trình tiếng Đức nền tảng theo hai cấp độ A1 và A2."}],
-    certificates:[{id:"goethe",name:"Goethe-Zertifikat A1–A2",short:"GOETHE",summary:"Ôn tập cấp độ cơ bản",stages:["A1","A2"],description:"Khung ôn tập Goethe-Zertifikat A1–A2 theo các kỹ năng nghe, đọc, viết và nói."}]
+    skills:[["📚","TỪ VỰNG"],["🧩","NGỮ PHÁP"],["📕","TỪ ĐIỂN"],["🎧","NGHE"],["🎙️","NÓI"],["📖","ĐỌC"],["✍️","VIẾT"]].map(([icon,name])=>({icon,name})),
+    rooms:["PHÒNG HỌC","PHÒNG TỰ HỌC","TỪ VỰNG","NGỮ PHÁP","TỪ ĐIỂN","NGHE","NÓI","ĐỌC","VIẾT","HỘI THOẠI","PHÁT ÂM"],
+    features:["AI TUTOR","GIỌNG NÓI","ĐÁNH GIÁ","VIDEO STUDIO","THƯ VIỆN HỌC LIỆU"],
+    tracks:[{id:"foundation",name:"LỘ TRÌNH A1–A2",stages:["A1","A2"],description:""}],
+    certificates:[{id:"goethe",name:"GOETHE-ZERTIFIKAT",short:"GOETHE",stages:["A1","A2"],description:""}]
+  },
+  {
+    id:"zh",name:"TIẾNG TRUNG",nativeName:"中文",flag:"🇨🇳",
+    skills:[["📚","TỪ VỰNG"],["🧩","NGỮ PHÁP"],["📕","TỪ ĐIỂN"],["🎧","NGHE"],["🎙️","NÓI"],["📖","ĐỌC"],["✍️","VIẾT"],["🀄","CHỮ HÁN"],["拼","PINYIN"]].map(([icon,name])=>({icon,name})),
+    rooms:["PHÒNG HỌC","PHÒNG TỰ HỌC","TỪ VỰNG","NGỮ PHÁP","TỪ ĐIỂN","NGHE","NÓI","ĐỌC","VIẾT","CHỮ HÁN","PINYIN","HỘI THOẠI"],
+    features:["AI TUTOR","GIỌNG NÓI","ĐÁNH GIÁ","VIDEO STUDIO","THƯ VIỆN HỌC LIỆU"],
+    tracks:[{id:"foundation",name:"LỘ TRÌNH NỀN TẢNG",stages:["PHÁT ÂM","TỪ VỰNG","CÂU CƠ BẢN","GIAO TIẾP"],description:""}],
+    certificates:[{id:"hsk",name:"HSK",short:"HSK",stages:["HSK 1","HSK 2","HSK 3"],description:""}]
+  },
+  {
+    id:"es",name:"TIẾNG TÂY BAN NHA",nativeName:"Español",flag:"🇪🇸",
+    skills:[["📚","TỪ VỰNG"],["🧩","NGỮ PHÁP"],["📕","TỪ ĐIỂN"],["🎧","NGHE"],["🎙️","NÓI"],["📖","ĐỌC"],["✍️","VIẾT"]].map(([icon,name])=>({icon,name})),
+    rooms:["PHÒNG HỌC","PHÒNG TỰ HỌC","TỪ VỰNG","NGỮ PHÁP","TỪ ĐIỂN","NGHE","NÓI","ĐỌC","VIẾT","HỘI THOẠI","PHÁT ÂM"],
+    features:["AI TUTOR","GIỌNG NÓI","ĐÁNH GIÁ","VIDEO STUDIO","THƯ VIỆN HỌC LIỆU"],
+    tracks:[{id:"foundation",name:"LỘ TRÌNH A1–A2",stages:["A1","A2"],description:""}],
+    certificates:[{id:"dele",name:"DELE",short:"DELE",stages:["A1","A2"],description:""}]
+  },
+  {
+    id:"ru",name:"TIẾNG NGA",nativeName:"Русский",flag:"🇷🇺",
+    skills:[["📚","TỪ VỰNG"],["🧩","NGỮ PHÁP"],["📕","TỪ ĐIỂN"],["🎧","NGHE"],["🎙️","NÓI"],["📖","ĐỌC"],["✍️","VIẾT"],["АБ","BẢNG CHỮ CÁI CYRILLIC"]].map(([icon,name])=>({icon,name})),
+    rooms:["PHÒNG HỌC","PHÒNG TỰ HỌC","TỪ VỰNG","NGỮ PHÁP","TỪ ĐIỂN","NGHE","NÓI","ĐỌC","VIẾT","BẢNG CHỮ CÁI","HỘI THOẠI","PHÁT ÂM"],
+    features:["AI TUTOR","GIỌNG NÓI","ĐÁNH GIÁ","VIDEO STUDIO","THƯ VIỆN HỌC LIỆU"],
+    tracks:[{id:"foundation",name:"LỘ TRÌNH NỀN TẢNG",stages:["BẢNG CHỮ CÁI","PHÁT ÂM","TỪ VỰNG","GIAO TIẾP"],description:""}],
+    certificates:[]
+  },
+  {
+    id:"vi",name:"TIẾNG VIỆT",nativeName:"Tiếng Việt",flag:"🇻🇳",
+    skills:[["📚","TIẾNG VIỆT HIỆN ĐẠI"],["漢","HÁN VIỆT"],["𡨸","CHỮ NÔM"],["文","HÁN TỰ"],["📜","VĂN HỌC"],["📖","VĂN BẢN CỔ"],["🔤","NGỮ ÂM"],["✍️","CHÍNH TẢ"],["🧩","NGỮ PHÁP"],["📚","TỪ VỰNG"],["📘","ĐỌC HIỂU"],["🖋️","VIẾT"]].map(([icon,name])=>({icon,name})),
+    rooms:["TIẾNG VIỆT HIỆN ĐẠI","HÁN VIỆT","CHỮ NÔM","HÁN TỰ","VĂN HỌC","VĂN BẢN CỔ","NGỮ ÂM","CHÍNH TẢ","NGỮ PHÁP","TỪ VỰNG","ĐỌC HIỂU","VIẾT"],
+    features:["TỪ ĐIỂN HÁN VIỆT","TỪ ĐIỂN NÔM","THƯ VIỆN VĂN BẢN","AI TUTOR","THƯ VIỆN HỌC LIỆU"],
+    tracks:[],
+    certificates:[]
   }
 ];
