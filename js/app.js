@@ -576,7 +576,7 @@ function vLanguages(){
       "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">"+backLabel+"</button></div>"+
       "<div class=\"language-selected-title\"><span class=\"language-flag-wave\"><span class=\"language-flag\">"+lang.flag+"</span></span><h1>"+esc(lang.name)+"</h1></div>"+
       "<div class=\"language-home-skill-grid\">"+
-      lang.skills.map(x=>"<button class=\"language-home-skill\"><span>"+esc(x.icon)+"</span><b>"+esc(x.name)+"</b></button>").join("")+
+      lang.skills.map(x=>"<div class=\"language-home-skill\"><span>"+esc(x.icon)+"</span><b>"+esc(x.name)+"</b></div>").join("")+
       "</div>";
     $("#langBack").onclick=back;
     return;
@@ -602,7 +602,7 @@ function vLanguages(){
     "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">← DANH SÁCH NGÔN NGỮ</button></div>"+
     "<div class=\"language-selected-title catalog\"><span class=\"language-flag-wave\"><span class=\"language-flag\">"+lang.flag+"</span></span><h1>"+esc(lang.name)+"</h1></div>"+
     "<section class=\"language-center-section\"><h2>PHÒNG HỌC</h2><div class=\"language-center-grid\">"+
-    rooms.map((x,i)=>"<button class=\"language-center-room\" data-room=\""+i+"\">"+esc(x)+"</button>").join("")+
+    rooms.map(x=>"<div class=\"language-center-room\">"+esc(x)+"</div>").join("")+
     "</div></section>"+
     (lang.tracks.length?
       "<section class=\"language-center-section\"><h2>LỘ TRÌNH HỌC</h2><div class=\"language-center-grid\">"+
