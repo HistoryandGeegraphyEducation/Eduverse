@@ -473,7 +473,6 @@
           <div>
             <div class="pe-eyebrow">EDUVERSE · ĐỊA LÍ 6</div>
             <h2>KHÁM PHÁ CÁC HÀNH TINH</h2>
-            <p>Quan sát cấu trúc và chuyển động của các thiên thể trong Hệ Mặt Trời.</p>
           </div>
           <button class="pe-reset" type="button" data-action="reset">
             Đặt lại góc nhìn
@@ -495,9 +494,6 @@
                 <span>${p.name}</span>
               </button>
             `).join("")}
-                        <div class="pe-sidebar-note">
-              Chọn một thiên thể để quan sát và tìm hiểu thông tin.
-            </div>
           </aside>
 
           <main class="pe-main">
@@ -505,8 +501,6 @@
               <div class="pe-stage-loading" data-loading>
                 Đang khởi tạo mô hình 3D...
               </div>
-              <div class="pe-stage-label">MÔ HÌNH KHÔNG GIAN 3D</div>
-              <div class="pe-stage-hint">Kéo để xoay · Cuộn để phóng to</div>
             </div>
 
             <div class="pe-controls">
