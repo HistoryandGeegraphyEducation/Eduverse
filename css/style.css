@@ -1211,3 +1211,9 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
  .language-home-sections{grid-template-columns:1fr;gap:8px}
  .language-home-sections>div{min-height:58px}
 }
+
+
+/* NGOẠI NGỮ: dải ngôn ngữ trên trang chủ */
+.language-home-languages{display:flex;flex-wrap:wrap;gap:7px;margin:18px 0 20px}
+.language-home-languages span{padding:7px 9px;border:1px solid rgba(255,255,255,.28);border-radius:999px;color:#e4edf1;font:700 9px/1.2 Arial,sans-serif;letter-spacing:.25px}
+@media(max-width:520px){.language-home-languages{gap:5px;margin:14px 0 17px}.language-home-languages span{font-size:8px;padding:6px 7px}}
