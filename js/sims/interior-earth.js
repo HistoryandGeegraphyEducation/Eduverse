@@ -17,7 +17,7 @@ function simInteriorEarth(root){
         .ie-panels{display:grid;grid-template-columns:1fr;gap:9px}.ie-card{background:rgba(14,37,62,.85);border:1px solid rgba(142,187,232,.17);border-radius:12px;padding:11px;min-width:0}.ie-card h3{font-size:13px;margin:0 0 7px;color:#ffd18b}.ie-card p{font-size:11px;line-height:1.55;color:#d1e0f2;margin:5px 0}.ie-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.ie-fact{padding:7px;background:rgba(255,255,255,.045);border-radius:8px}.ie-fact small{display:block;color:#9fb8d6;font-size:9px}.ie-fact b{font-size:11px;color:#fff;display:block;margin-top:3px}.ie-layerlist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.ie-layer{display:flex;align-items:center;gap:7px;text-align:left}.ie-dot{width:10px;height:10px;border-radius:50%;flex:none;box-shadow:0 0 9px currentColor}.ie-note{font-size:10px!important;color:#9fb5d0!important}.ie-quiz{margin-top:9px}.ie-question{padding:8px 0;border-top:1px solid rgba(142,187,232,.14)}.ie-question:first-of-type{border-top:0}.ie-question p{font-size:12px;font-weight:700;color:#eaf2ff;margin:2px 0 8px}.ie-options{display:flex;flex-wrap:wrap;gap:6px}.ie-options button{font-size:10px;min-height:31px}.ie-options button.selected{background:#f0a84b;color:#17263b;border-color:#ffd18b}.ie-feedback{display:block;min-height:15px;margin-top:5px;color:#c6d9ef;font-size:10px}.ie-quiz-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ie-quiz-actions b{font-size:11px;color:#ffd18b}
         @media(min-width:720px){.ie-panels{grid-template-columns:1.15fr .85fr}.ie-stage{height:440px}}
       </style>
-      <div class="ie-head"><strong>🌎 CẤU TẠO BÊN TRONG TRÁI ĐẤT</strong><small>Quay quả Địa Cầu để quan sát bề mặt; chuyển sang mặt cắt để tìm hiểu cấu trúc bên trong. Kéo để xoay · Chụm hai ngón để thu phóng.</small></div>
+      <div class="ie-head"><strong>🌎 CẤU TẠO BÊN TRONG TRÁI ĐẤT</strong></div>
       <div class="ie-stage"><canvas></canvas><div class="ie-loading" id="ie-load">Đang tải không gian 3D…</div><div class="ie-hud"><span class="ie-tag" id="ie-mode-label">BỀ MẶT TRÁI ĐẤT</span><span class="ie-tag" id="ie-scale-label">Tỉ lệ gần đúng</span><span class="ie-tag">Bản đồ nền: NASA Blue Marble</span></div></div>
       <div class="ie-controls">
         <div class="ie-tabs" id="ie-tabs">
@@ -28,7 +28,7 @@ function simInteriorEarth(root){
         <div class="ie-views"><button data-view="all" class="active">Toàn cảnh</button><button data-view="side">Mặt cắt</button><button data-view="top">Nhìn từ cực</button></div>
       </div>
       <div class="ie-panels">
-        <section class="ie-card"><h3 id="ie-info-title">Trái Đất</h3><p id="ie-info-desc">Trái Đất có cấu trúc phân lớp. Hãy chọn một chế độ hoặc chạm vào phần mô hình để khám phá.</p><div class="ie-facts" id="ie-facts"></div></section>
+        <section class="ie-card"><h3 id="ie-info-title">Trái Đất</h3><p id="ie-info-desc"></p><div class="ie-facts" id="ie-facts"></div></section>
         <section class="ie-card"><h3>Các lớp cấu tạo</h3><div class="ie-layerlist" id="ie-layers"></div><p class="ie-note" id="ie-science-note">Vỏ Trái Đất rất mỏng; bật chế độ phóng đại nếu cần quan sát rõ hơn.</p></section>
       </div>
       <section class="ie-card ie-quiz">
