@@ -1,0 +1,171 @@
+/* EDUVERSE interface refresh: Knowledge Atlas
+   Presentation layer only. Existing application logic and simulation styles remain intact. */
+:root{
+  --ev-ink:#172a35;
+  --ev-ink-2:#263d49;
+  --ev-paper:#f3f5f2;
+  --ev-surface:#ffffff;
+  --ev-line:#dce3df;
+  --ev-muted:#65756f;
+  --ev-teal:#356f6b;
+  --ev-teal-dark:#285753;
+  --ev-sand:#e9e3d6;
+  --ev-coral:#b96d55;
+}
+html,body{min-height:100%;background:var(--ev-paper)}
+body{font-family:Inter,"Segoe UI",Arial,sans-serif;font-weight:400;color:var(--ev-ink);background:var(--ev-paper)}
+button{font-family:inherit}
+#app{max-width:none;width:100%;height:100dvh;min-height:560px;margin:0;background:var(--ev-paper);box-shadow:none;overflow:hidden}
+.top{background:var(--ev-surface);border-bottom:1px solid var(--ev-line);padding:0;z-index:5}
+.brand{margin:0;padding:14px 22px;background:var(--ev-ink);gap:12px;color:#f7f6ef;box-shadow:none;min-height:82px}
+.brand .stars{opacity:.28}
+.brand .logo{width:52px;height:52px}
+.brand .name{font:700 22px/0.9 Inter,"Segoe UI",Arial,sans-serif;letter-spacing:-.8px;text-align:left}
+.brand .tag{font:500 12px/1.35 Inter,"Segoe UI",Arial,sans-serif;letter-spacing:.02em;text-align:left;color:#d1ddd7;max-width:150px}
+.auth{margin:0;padding:12px 22px;gap:10px;justify-content:flex-end;background:#fff}
+.pill-auth{background:#edf2ef;color:var(--ev-ink);border:1px solid var(--ev-line);border-radius:9px;box-shadow:none;font:600 13px/1 Inter,"Segoe UI",Arial,sans-serif;letter-spacing:0;padding:11px 15px}
+.pill-auth svg{stroke:var(--ev-teal);width:17px;height:17px}
+.pill-auth:active{background:#dce9e4}
+.stage{flex:1;min-height:0;margin:0;border-radius:0;background:var(--ev-paper);overflow:hidden}
+.stage>.sky{display:none}
+.main{width:100%;max-width:1500px;margin:0 auto;padding:30px 36px 44px;background:transparent;color:var(--ev-ink);overflow-y:auto;overscroll-behavior:contain}
+.main.fill{padding:24px 32px 42px}
+.main.lessons{padding:22px 32px 42px}
+.main>.subjects::before{content:"KHÔNG GIAN HỌC TẬP";display:block;grid-column:1/-1;color:var(--ev-teal);font:700 11px/1.2 Inter,"Segoe UI",Arial,sans-serif;letter-spacing:.14em;margin:2px 0 2px}
+.main>.subjects::after{content:"Chọn lĩnh vực để bắt đầu khám phá";display:block;grid-column:1/-1;color:var(--ev-muted);font:400 14px/1.5 Inter,"Segoe UI",Arial,sans-serif;margin:-12px 0 12px}
+.subjects{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.subj{position:relative;min-height:142px;justify-content:flex-start;align-items:flex-end;text-align:left;gap:12px;padding:18px;background:var(--ev-surface);color:var(--ev-ink);border:1px solid var(--ev-line);border-radius:14px;box-shadow:0 2px 5px rgba(24,45,48,.035);font:600 16px/1.3 Inter,"Segoe UI",Arial,sans-serif;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+.subj:hover{transform:translateY(-2px);border-color:#a8c1b7;box-shadow:0 9px 22px rgba(24,45,48,.08)}
+.subj.live{background:#fff;border-color:#a9c4b9;color:var(--ev-ink)}
+.subj .e{position:absolute;top:16px;left:17px;width:42px;height:42px;display:grid;place-items:center;border-radius:11px;background:#e9f0ec;color:var(--ev-teal);font-size:24px}
+.subj .e img{width:30px;height:30px;object-fit:contain}
+.subj>span:last-child{max-width:100%;padding-top:44px}
+.status-ribbon{font-family:Inter,"Segoe UI",Arial,sans-serif;letter-spacing:0}
+nav{background:var(--ev-ink);border:0;box-shadow:none;z-index:4}
+nav button{background:transparent;color:#d3ded9;border:0;border-radius:10px;box-shadow:none}
+nav button svg{filter:invert(1);width:21px;height:21px}
+nav button.on{background:#315d59;color:#fff;box-shadow:inset 3px 0 0 #b6d3c4}
+nav button.on svg{filter:invert(1)}
+nav button:not(.on){opacity:.82}
+.crumb{color:var(--ev-muted);font:500 13px/1.4 Inter,"Segoe UI",Arial,sans-serif}
+.back{background:#e8efeb;color:var(--ev-ink);border:1px solid var(--ev-line);border-radius:8px;padding:8px 12px;font:600 13px Inter,"Segoe UI",Arial,sans-serif}
+.title{color:var(--ev-ink);text-shadow:none;font:650 clamp(26px,3vw,38px)/1.12 Inter,"Segoe UI",Arial,sans-serif;margin:0 0 24px}
+.t1{color:var(--ev-ink);font:650 clamp(20px,2.4vw,28px)/1.15 Inter,"Segoe UI",Arial,sans-serif;white-space:normal}
+.t2{color:var(--ev-teal);font:700 18px/1.2 Inter,"Segoe UI",Arial,sans-serif}
+.hd{background:var(--ev-paper);padding:0 0 16px}
+.grades{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:0}
+.gpill{min-height:88px;background:#fff;color:var(--ev-ink);border:1px solid var(--ev-line);border-radius:13px;box-shadow:none;font:650 22px Inter,"Segoe UI",Arial,sans-serif}
+.gpill:hover{border-color:#9dbbb0;background:#f9fcfa}
+.gpill .gi{width:36px;height:36px;object-fit:contain}
+.lab{background:#e6eeea;color:var(--ev-teal-dark);border-radius:7px 7px 0 0;font:700 12px/1.3 Inter,"Segoe UI",Arial,sans-serif;letter-spacing:.04em;padding:7px 13px;margin-left:0}
+.lab img{max-width:100%;height:auto;max-height:30px;object-fit:contain}
+.labrow{background:var(--ev-paper);top:var(--hdh,64px);padding-top:8px}
+.panel{background:transparent;padding:10px 0;overflow:visible}
+.chap{background:#fff;border:1px solid var(--ev-line);border-radius:10px;box-shadow:none;color:var(--ev-ink);margin-bottom:9px}
+.chap>summary{font:600 15px/1.35 Inter,"Segoe UI",Arial,sans-serif;padding:15px 16px}
+.chap>summary::after{color:var(--ev-teal)}
+.lesson{font:400 14px/1.45 Inter,"Segoe UI",Arial,sans-serif;color:#344740;padding:12px 16px;background:#fbfcfa;border-top:1px solid #edf0ed}
+.lesson:hover{background:#eef4f0}
+.box,.row,.gcard{background:#fff;color:var(--ev-ink);border:1px solid var(--ev-line);border-radius:12px;box-shadow:0 2px 5px rgba(24,45,48,.035);font:500 15px/1.5 Inter,"Segoe UI",Arial,sans-serif}
+.box p{color:var(--ev-muted);font:400 14px/1.55 Inter,"Segoe UI",Arial,sans-serif}
+.cta{background:var(--ev-teal-dark);color:#fff;border-radius:8px;font:600 14px Inter,"Segoe UI",Arial,sans-serif}
+.tabs{gap:8px}
+.tab{background:#e7ede9;color:#43554e;border-radius:8px;font:600 13px Inter,"Segoe UI",Arial,sans-serif}
+.tab.on{background:var(--ev-teal-dark);color:#fff}
+.prog{color:var(--ev-muted)}
+.bar{background:#dfe7e2;border-radius:8px}
+.bar i{background:var(--ev-teal)}
+.simhead{color:var(--ev-ink);text-shadow:none;font:650 17px Inter,"Segoe UI",Arial,sans-serif}
+.simlist{gap:9px}
+.simrow{background:#fff;color:var(--ev-ink);border:1px solid var(--ev-line);border-radius:11px;padding:12px 14px;box-shadow:0 2px 5px rgba(24,45,48,.035);animation:none}
+.simrow:hover{border-color:#9bb9ad;box-shadow:0 7px 16px rgba(24,45,48,.07);transform:translateY(-1px)}
+.simrow .si{width:46px;height:46px;border-radius:10px;background:#e9f0ec;color:var(--ev-teal);box-shadow:none}
+.simrow .stx b{color:var(--ev-ink);font:600 15px/1.3 Inter,"Segoe UI",Arial,sans-serif}
+.simrow .stx small{color:var(--ev-muted);font:400 12px/1.35 Inter,"Segoe UI",Arial,sans-serif}
+.simrow .sc{color:var(--ev-teal);font-size:22px}
+.simroot{padding:10px 0 20px}
+.psec{margin-top:28px}
+.ptitle{color:var(--ev-teal);font:700 11px/1.2 Inter,"Segoe UI",Arial,sans-serif;letter-spacing:.12em}
+.ptags{display:flex;flex-wrap:wrap;gap:10px}
+.ptag{background:#fff;color:var(--ev-ink);border:1px solid var(--ev-line);border-radius:9px;padding:12px 15px;font:500 14px Inter,"Segoe UI",Arial,sans-serif}
+.ptag .e{margin-right:8px}
+.toast{background:var(--ev-ink);border:1px solid #49625d;border-radius:9px;font:500 13px Inter,"Segoe UI",Arial,sans-serif;box-shadow:0 8px 24px #10241f30}
+.modal{background:rgba(13,27,30,.58);backdrop-filter:blur(4px)}
+.sheet{background:#fff;color:var(--ev-ink);border:1px solid var(--ev-line);border-radius:16px;box-shadow:0 18px 60px rgba(8,25,22,.2);font-family:Inter,"Segoe UI",Arial,sans-serif}
+.sheet h2{font:650 23px/1.2 Inter,"Segoe UI",Arial,sans-serif;color:var(--ev-ink)}
+.sheet input{border:1px solid #cbd7d0;border-radius:8px;font:400 15px Inter,"Segoe UI",Arial,sans-serif}
+.sheet .auth-links button{color:var(--ev-teal-dark)}
+.sheet .btns button{border-radius:8px;font:600 14px Inter,"Segoe UI",Arial,sans-serif}
+.sheet .btns .ok{background:var(--ev-teal-dark);color:#fff}
+.sheet .btns .no{background:#edf1ee;color:var(--ev-ink)}
+.account-avatar{background:var(--ev-teal-dark);box-shadow:none}
+.account-card h2{color:var(--ev-ink)}
+.account-role{background:#e8f0eb;color:var(--ev-teal-dark)}
+.member-row em{background:#e8f0eb;color:var(--ev-teal-dark)}
+button:focus-visible,summary:focus-visible{outline:3px solid #8eb9a8;outline-offset:2px}
+@media(min-width:760px){
+  #app{display:grid;grid-template-columns:224px minmax(0,1fr);grid-template-rows:82px minmax(0,1fr)}
+  .top{grid-column:1/-1;grid-row:1;display:flex;align-items:stretch;justify-content:space-between}
+  .brand{flex:0 0 224px;min-width:224px;padding:12px 18px}
+  .brand .tag{display:none}
+  .auth{flex:1}
+  .stage{grid-column:2;grid-row:2;min-width:0;min-height:0}
+  nav{grid-column:1;grid-row:2;height:auto;min-height:0;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:7px;padding:24px 14px}
+  nav button{width:100%;height:46px;min-height:46px;display:flex;align-items:center;justify-content:flex-start;gap:13px;padding:0 13px;border-radius:9px;text-align:left}
+  nav button::after{content:attr(aria-label);color:inherit;font:550 13px/1 Inter,"Segoe UI",Arial,sans-serif}
+  nav button svg{width:19px;height:19px;flex:none}
+  nav button.on{width:100%;height:46px;margin:0;box-shadow:inset 3px 0 0 #b6d3c4}
+  nav button.on svg{width:19px;height:19px}
+  .main>.subjects{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .main.lessons>.hd{position:sticky;top:-22px;z-index:3;padding:12px 0 16px}
+}
+@media(min-width:1180px){
+  .main{padding-left:48px;padding-right:48px}
+  .main.fill,.main.lessons{padding-left:48px;padding-right:48px}
+  .subjects{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+  .subj{min-height:154px;padding:20px}
+}
+@media(max-width:759px){
+  #app{display:flex;max-width:none;width:100%;height:100dvh;min-height:0}
+  .top{display:block;flex:none}
+  .brand{min-height:72px;padding:10px 14px 18px;gap:9px}
+  .brand .logo{width:46px;height:46px}
+  .brand .name{font-size:21px}
+  .brand .tag{display:block;font-size:11px}
+  .auth{padding:9px 12px 10px;gap:9px}
+  .pill-auth{flex:1;justify-content:center;padding:10px 8px;font-size:12px}
+  .stage{flex:1;min-height:0;margin:0;border-radius:0}
+  .main,.main.lessons,.main.fill{padding:22px 16px 28px}
+  .subjects{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  .subj{min-height:124px;padding:13px;border-radius:11px;font-size:14px}
+  .subj .e{top:12px;left:13px;width:36px;height:36px;font-size:21px}
+  .subj .e img{width:27px;height:27px}
+  .subj>span:last-child{padding-top:39px}
+  nav{height:calc(68px + env(safe-area-inset-bottom,0));padding:5px 8px calc(7px + env(safe-area-inset-bottom,0));display:flex;flex-direction:row;align-items:center;justify-content:space-around}
+  nav button,nav button.on{width:46px;height:46px;min-height:46px;margin:0;border-radius:12px;display:grid;place-items:center;padding:0}
+  nav button::after{display:none}
+  nav button svg,nav button.on svg{width:21px;height:21px}
+  .title{font-size:27px;margin:0 0 20px}
+  .t1{font-size:18px}
+  .t2{font-size:16px}
+  .grades{gap:10px}
+  .gpill{min-height:72px;font-size:18px}
+  .gpill .gi{width:29px;height:29px}
+  .main.lessons>.hd{padding:12px 0 10px;top:0}
+  .labrow{top:var(--hdh,60px)}
+  .panel{padding:8px 0}
+  .simrow{padding:10px}
+  .simrow .si{width:40px;height:40px}
+  .simrow .stx b{font-size:14px}
+  .sheet{max-height:88dvh}
+}
+@media(max-width:380px){
+  .brand .tag{font-size:10px}
+  .brand .name{font-size:19px}
+  .main,.main.lessons,.main.fill{padding-left:12px;padding-right:12px}
+  .subj{font-size:13px}
+  .pill-auth{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
