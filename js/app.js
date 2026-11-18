@@ -84,7 +84,20 @@ function syncRoute(){
     history.pushState({eduverse:true},"",next);
   }
 }
-const $=s=>document.querySelector(s);
+function languageFlag(id){
+  const art={
+    en:'<path fill="#24436b" d="M0 0h120v72H0z"/><path stroke="#fff" stroke-width="14" d="M0 0l120 72M120 0L0 72"/><path stroke="#c93645" stroke-width="6" d="M0 0l120 72M120 0L0 72"/><path stroke="#fff" stroke-width="24" d="M60 0v72M0 36h120"/><path stroke="#c93645" stroke-width="12" d="M60 0v72M0 36h120"/>',
+    fr:'<path fill="#183b79" d="M0 0h40v72H0z"/><path fill="#fff" d="M40 0h40v72H40z"/><path fill="#e4474e" d="M80 0h40v72H80z"/>',
+    de:'<path fill="#202020" d="M0 0h120v24H0z"/><path fill="#c83c43" d="M0 24h120v24H0z"/><path fill="#e6bd45" d="M0 48h120v24H0z"/>',
+    zh:'<path fill="#d72e36" d="M0 0h120v72H0z"/><path fill="#f7d64a" d="M24 10l3.8 11.5h12l-9.7 7.1 3.7 11.5L24 33l-9.8 7.1 3.7-11.5-9.7-7.1h12z"/><path fill="#f7d64a" d="M52 9l1.4 4.2 4.4.1-3.5 2.6 1.3 4.2-3.6-2.6-3.6 2.6 1.3-4.2-3.5-2.6 4.4-.1zM64 21l1.4 4.2 4.4.1-3.5 2.6 1.3 4.2-3.6-2.6-3.6 2.6 1.3-4.2-3.5-2.6 4.4-.1zM64 39l1.4 4.2 4.4.1-3.5 2.6 1.3 4.2-3.6-2.6-3.6 2.6 1.3-4.2-3.5-2.6 4.4-.1zM52 51l1.4 4.2 4.4.1-3.5 2.6 1.3 4.2-3.6-2.6-3.6 2.6 1.3-4.2-3.5-2.6 4.4-.1z"/>',
+    es:'<path fill="#bd303b" d="M0 0h120v72H0z"/><path fill="#f4cf4c" d="M0 18h120v36H0z"/>',
+    ru:'<path fill="#fff" d="M0 0h120v24H0z"/><path fill="#3566a8" d="M0 24h120v24H0z"/><path fill="#c93d49" d="M0 48h120v24H0z"/>',
+    vi:'<path fill="#d72e36" d="M0 0h120v72H0z"/><path fill="#f7d64a" d="M60 12l5.7 17.6h18.5L69.2 40.5l5.7 17.6L60 47.2 45.1 58.1l5.7-17.6-15-10.9h18.5z"/>'
+  };
+  const uid="flag-"+id;
+  return '<span class="language-flag-wave" aria-hidden="true"><span class="language-flag-pole"></span><svg class="language-flag-cloth" viewBox="0 0 120 72" role="img"><defs><clipPath id="'+uid+'"><path d="M1 1 Q28 5 58 1 T119 1 L119 71 Q88 65 59 71 T1 71Z"/></clipPath><filter id="'+uid+'-fabric" x="-8%" y="-12%" width="116%" height="124%"><feTurbulence type="fractalNoise" baseFrequency=".018 .075" numOctaves="2" seed="5"><animate attributeName="baseFrequency" values=".018 .075;.025 .11;.018 .075" dur="3.4s" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" scale="4.5" xChannelSelector="R" yChannelSelector="G"/></filter><linearGradient id="'+uid+'-shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".16"/><stop offset=".22" stop-color="#fff" stop-opacity=".2"/><stop offset=".48" stop-color="#000" stop-opacity=".13"/><stop offset=".7" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient></defs><g clip-path="url(#'+uid+')" filter="url(#'+uid+'-fabric)">'+(art[id]||art.en)+'</g><path d="M1 1 Q28 5 58 1 T119 1 L119 71 Q88 65 59 71 T1 71Z" fill="url(#'+uid+'-shade)" opacity=".72"/><path d="M2 2 Q30 7 60 2 T118 2" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="1.2"/></svg></span>';
+}
+\nconst $=s=>document.querySelector(s);
 const main=$("#main");
 
 const esc=s=>String(s??"").replace(
@@ -559,7 +572,7 @@ function vLanguages(){
       "<div class=\""+gridClass+"\">"+
       LANGUAGE_PROGRAMS.map(x=>
         "<button class=\"language-card\" data-language=\""+x.id+"\">"+
-        "<span class=\"language-flag-wave\"><span class=\"language-flag\">"+x.flag+"</span></span>"+
+        languageFlag(x.id)+
         "<span class=\"language-card-copy\"><b>"+esc(x.name)+"</b></span>"+
         "<span class=\"language-arrow\">›</span></button>"
       ).join("")+
@@ -570,13 +583,25 @@ function vLanguages(){
     return;
   }
 
+  if(S.langMode==="skill"){
+    const skill=lang.skills[Number(S.langItem)];
+    if(!skill){S.langMode=null;S.langItem=null;return vLanguages();}
+    main.innerHTML="<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">← "+esc(lang.name)+"</button></div>"+
+      "<div class=\"language-plan-hero\"><h1>"+esc(skill.name)+"</h1></div>"+
+      "<section class=\"language-panel\"><div class=\"language-topic-list\">"+
+      skill.topics.map((topic,i)=>"<div class=\"language-topic\"><span>"+String(i+1).padStart(2,"0")+"</span><b>"+esc(topic)+"</b></div>").join("")+
+      "</div></section>";
+    $("#langBack").onclick=()=>{S.langMode=null;S.langItem=null;render();};
+    return;
+  }
+
   if(isHome){
     const backLabel="← DANH SÁCH NGÔN NGỮ";
     main.innerHTML=
       "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">"+backLabel+"</button></div>"+
-      "<div class=\"language-selected-title\"><span class=\"language-flag-wave\"><span class=\"language-flag\">"+lang.flag+"</span></span><h1>"+esc(lang.name)+"</h1></div>"+
+      "<div class=\"language-selected-title\">"+languageFlag(lang.id)+"<h1>"+esc(lang.name)+"</h1></div>"+
       "<div class=\"language-home-skill-grid\">"+
-      lang.skills.map(x=>"<div class=\"language-home-skill\"><span>"+esc(x.icon)+"</span><b>"+esc(x.name)+"</b></div>").join("")+
+      lang.skills.map((x,i)=>"<button class=\"language-home-skill\" data-skill=\""+i+"\"><span>"+esc(x.icon)+"</span><b>"+esc(x.name)+"</b></button>").join("")+
       "</div>";
     $("#langBack").onclick=back;
     return;
@@ -600,9 +625,9 @@ function vLanguages(){
   const rooms=lang.rooms||["PHÒNG HỌC","PHÒNG TỰ HỌC","TỪ VỰNG","NGỮ PHÁP","TỪ ĐIỂN","NGHE","NÓI","ĐỌC","VIẾT","HỘI THOẠI","PHÁT ÂM"];
   main.innerHTML=
     "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">← DANH SÁCH NGÔN NGỮ</button></div>"+
-    "<div class=\"language-selected-title catalog\"><span class=\"language-flag-wave\"><span class=\"language-flag\">"+lang.flag+"</span></span><h1>"+esc(lang.name)+"</h1></div>"+
+    "<div class=\"language-selected-title catalog\">"+languageFlag(lang.id)+"<h1>"+esc(lang.name)+"</h1></div>"+
     "<section class=\"language-center-section\"><h2>PHÒNG HỌC</h2><div class=\"language-center-grid\">"+
-    rooms.map(x=>"<div class=\"language-center-room\">"+esc(x)+"</div>").join("")+
+    lang.skills.map((x,i)=>"<button class=\"language-center-room\" data-skill=\""+i+"\">"+esc(x.name)+"</button>").join("")+
     "</div></section>"+
     (lang.tracks.length?
       "<section class=\"language-center-section\"><h2>LỘ TRÌNH HỌC</h2><div class=\"language-center-grid\">"+
