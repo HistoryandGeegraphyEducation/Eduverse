@@ -579,7 +579,7 @@ function vLanguages(){
       LANGUAGE_PROGRAMS.map(x=>
         "<button class=\"language-card\" data-language=\""+x.id+"\">"+
         "<span class=\"language-flag\">"+x.flag+"</span>"+
-        "<span class=\"language-card-copy\"><b>"+esc(x.name)+"</b><small>"+esc(x.nativeName)+"</small><em>"+esc(x.shortDescription)+"</em></span>"+
+        "<span class=\"language-card-copy\"><b>"+esc(x.name)+"</b><small>"+esc(x.nativeName)+"</small></span>"+
         "<span class=\"language-arrow\">›</span></button>"
       ).join("")+
       "</div>";
