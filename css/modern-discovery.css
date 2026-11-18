@@ -155,3 +155,81 @@ body:has(#main.discovery-home,#main.discovery-grades,#main.discovery-learn,#main
   #main.discovery-rooms .tools{gap:9px}
   #main.discovery-rooms .tool{padding:11px 9px;min-height:145px}
 }
+
+
+/* ===== Role-specific learning areas ===== */
+#main.discovery-profile.role-teacher .account-card{
+  border-top:3px solid #356b89;
+}
+#main.discovery-profile.role-teacher .account-avatar{
+  background:linear-gradient(145deg,#285675,#4d8792);
+}
+#main.discovery-profile.role-teacher .account-role{
+  background:#e7eff4;color:#254e69;
+}
+#main.discovery-profile.role-admin .account-admin{
+  padding:16px;background:#fff;border:1px solid var(--ev-line);
+  border-radius:16px;box-shadow:0 4px 14px rgba(25,55,75,.05);
+}
+#main.discovery-profile.role-admin .account-admin h3{
+  color:var(--ev-navy);font:750 15px/1.3 Inter,"Segoe UI",Arial,sans-serif;
+  letter-spacing:.015em;
+}
+#main.discovery-profile.role-admin .account-admin>p{
+  color:var(--ev-muted);font:400 12px/1.5 Inter,"Segoe UI",Arial,sans-serif;
+}
+#main.discovery-profile.role-admin #memberList{
+  border-top:1px solid var(--ev-line);margin-top:12px;
+}
+#main.discovery-profile.role-admin .member-row{
+  padding:12px 2px;border-top:0;border-bottom:1px solid var(--ev-line);
+}
+#main.discovery-profile.role-admin .member-row:last-child{border-bottom:0}
+#main.discovery-profile.role-admin .member-row em{
+  background:#edf2f5;color:#36566b;border-radius:8px;
+}
+
+/* ===== Digital Science: simulation viewport and control surfaces ===== */
+#main.discovery-sim{background:#e9eff2;color:var(--ev-ink)}
+#main.discovery-sim>.hd{
+  background:#e9eff2;border-bottom:1px solid #d7e1e6;
+}
+#main.discovery-sim .simroot{gap:14px;padding:14px 0 22px}
+#main.discovery-sim .simcv{
+  background:#0d2235;border:1px solid #29475d;border-radius:16px;
+  box-shadow:0 8px 22px rgba(12,35,53,.18);overflow:hidden;
+}
+#main.discovery-sim .simcv canvas{
+  display:block;max-width:100%;touch-action:pan-y;
+}
+#main.discovery-sim .simctl{
+  background:#fff;color:#203447;border:1px solid #dce5e9;
+  border-radius:15px;box-shadow:0 4px 14px rgba(25,55,75,.07);
+  padding:14px;margin-top:0;
+}
+#main.discovery-sim .simctl label{
+  color:#29465d;font:650 13px/1.4 Inter,"Segoe UI",Arial,sans-serif;
+}
+#main.discovery-sim .simctl label b{color:#245d7b}
+#main.discovery-sim .simctl input[type=range]{accent-color:#356f8d}
+#main.discovery-sim .simst{
+  color:#536879;font:400 13px/1.5 Inter,"Segoe UI",Arial,sans-serif;
+}
+#main.discovery-sim .simbtns{gap:8px}
+#main.discovery-sim .simbtns button{
+  border-radius:10px;font:650 12px/1.25 Inter,"Segoe UI",Arial,sans-serif;
+}
+#main.discovery-sim .simbtns .no{background:#eaf0f3;color:#31536b}
+#main.discovery-sim .simbtns .chip{background:#e5eef2;color:#285a75}
+#main.discovery-sim .siminfo{
+  background:#f8fafb;color:#42586a;border:1px solid #dce5e9;
+  border-radius:14px;box-shadow:none;font:400 13px/1.5 Inter,"Segoe UI",Arial,sans-serif;
+}
+#main.discovery-sim .siminfo b{color:#1e4965}
+#main.discovery-sim iframe{
+  display:block;width:100%;border:0;border-radius:16px;background:#0d2235;
+}
+@media(min-width:820px){
+  #main.discovery-sim .simroot{gap:18px}
+  #main.discovery-sim .simctl{padding:18px}
+}
