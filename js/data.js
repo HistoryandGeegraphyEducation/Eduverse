@@ -6,7 +6,7 @@ const SUBJECTS = [
   {id:"gdcd", n:"GIÁO DỤC CÔNG DÂN", e:"⚖️"},
   {id:"toan", n:"TOÁN", e:"➗"},
   {id:"nv",   n:"NGỮ VĂN", e:"📖"},
-  {id:"nn",   n:"NGOẠI NGỮ", e:"🌐"},
+  {id:"nn",   n:"NGOẠI NGỮ", e:"🌐", live:true},
   {id:"gddp", n:"GDĐP", e:"📍"},
   {id:"hdtn", n:"HĐTN, HN", e:"🧭"},
   {id:"tin",  n:"TIN HỌC", e:"💻"},
