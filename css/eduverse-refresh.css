@@ -169,3 +169,126 @@ button:focus-visible,summary:focus-visible{outline:3px solid #8eb9a8;outline-off
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* ===== EDUVERSE / MODERN ATLAS LAYER =====
+   Visual-only refinement. No application or simulation logic is changed. */
+:root{
+  --ev-ink:#142b35;
+  --ev-ink-2:#29434b;
+  --ev-paper:#f5f7f5;
+  --ev-surface:#fff;
+  --ev-line:#e1e8e3;
+  --ev-muted:#687a73;
+  --ev-teal:#2e716b;
+  --ev-teal-dark:#205650;
+  --ev-lime:#dce9a8;
+  --ev-shadow:0 12px 34px rgba(24,48,42,.07);
+}
+html,body{background:#f5f7f5}
+body{letter-spacing:-.01em}
+#app{background:#f5f7f5}
+.top{box-shadow:0 1px 0 rgba(20,43,53,.04)}
+.brand{position:relative;overflow:hidden;background:linear-gradient(145deg,#102a35 0%,#1b4146 100%)}
+.brand:after{content:"";position:absolute;width:190px;height:190px;right:-100px;top:-112px;border:1px solid rgba(220,233,168,.18);border-radius:50%;box-shadow:0 0 0 18px rgba(220,233,168,.035),0 0 0 38px rgba(220,233,168,.025);pointer-events:none}
+.brand .logo{filter:drop-shadow(0 5px 12px rgba(0,0,0,.18))}
+.brand .name{letter-spacing:-1.2px}
+.auth{background:rgba(255,255,255,.96)}
+.pill-auth{min-height:40px;transition:background .18s,border-color .18s,transform .18s}
+.pill-auth:hover{background:#e4eee8;border-color:#c4d7cb;transform:translateY(-1px)}
+.stage{background:
+  radial-gradient(ellipse at 82% 8%,rgba(215,230,213,.32),transparent 30%),
+  linear-gradient(180deg,#f7f9f6 0%,#f3f6f3 100%)}
+.main{max-width:1580px;padding-top:38px}
+.main>.subjects:before{font-size:10px;letter-spacing:.19em;color:#62877b;margin-bottom:7px}
+.main>.subjects:after{font-size:15px;color:#72827b;margin:-7px 0 17px}
+.subjects{gap:18px}
+.subj{
+  min-height:166px;padding:21px;border-radius:17px;
+  border-color:#e2e9e4;
+  box-shadow:0 3px 10px rgba(25,48,41,.035);
+  background:linear-gradient(145deg,#fff 0%,#fbfdfb 100%);
+}
+.subj:before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:0 4px 4px 0;background:#b7d1c3;opacity:0;transition:opacity .18s}
+.subj:hover:before,.subj.live:before{opacity:1}
+.subj:hover{transform:translateY(-3px);border-color:#c5d9cd;box-shadow:0 14px 28px rgba(25,48,41,.09)}
+.subj .e{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,#edf4ef,#e4eee8);color:#2e716b}
+.subj>span:last-child{font-size:16px;letter-spacing:-.025em}
+.status-ribbon{border-radius:6px!important;font-size:9px!important;letter-spacing:.07em!important}
+nav{background:linear-gradient(180deg,#142f39,#102630);padding-top:26px}
+nav button{position:relative;transition:background .18s,color .18s,transform .18s}
+nav button:hover{background:rgba(255,255,255,.09);opacity:1}
+nav button.on{background:linear-gradient(100deg,rgba(75,139,119,.35),rgba(75,139,119,.12));box-shadow:inset 3px 0 0 #c6dda0}
+nav button.on:after{color:#f4f8f4}
+.crumb{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.back{transition:background .18s,border-color .18s}
+.back:hover{background:#dce9e2;border-color:#c4d8cb}
+.title{letter-spacing:-.045em}
+.t1{letter-spacing:-.035em}
+.hd{background:transparent}
+.grades{gap:16px}
+.gpill{border-radius:16px;min-height:96px;box-shadow:0 3px 12px rgba(25,48,41,.035);transition:transform .18s,border-color .18s,box-shadow .18s}
+.gpill:hover{transform:translateY(-2px);box-shadow:var(--ev-shadow)}
+.chap{border-radius:13px;overflow:hidden;transition:border-color .18s,box-shadow .18s}
+.chap[open]{border-color:#c5d9cd;box-shadow:0 7px 20px rgba(25,48,41,.045)}
+.chap>summary{padding:17px 18px}
+.lesson{padding:13px 18px}
+.box,.row,.gcard{border-radius:16px;box-shadow:0 4px 14px rgba(25,48,41,.04)}
+.cta{min-height:42px;padding:0 18px;border-radius:10px;box-shadow:0 5px 12px rgba(32,86,80,.14);transition:transform .18s,box-shadow .18s}
+.cta:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(32,86,80,.2)}
+.tabs{padding:4px}
+.tab{border-radius:9px;min-height:36px}
+.simrow{border-radius:14px;padding:14px 16px;transition:transform .18s,border-color .18s,box-shadow .18s}
+.simrow:hover{transform:translateY(-2px);border-color:#bdd5c7;box-shadow:0 10px 24px rgba(25,48,41,.08)}
+.simrow .si{border-radius:13px;background:linear-gradient(145deg,#eef5f0,#e2eee7)}
+.ptag{border-radius:11px;transition:transform .18s,border-color .18s,box-shadow .18s}
+.ptag:hover{transform:translateY(-2px);border-color:#bfd5c7;box-shadow:0 7px 18px rgba(25,48,41,.06)}
+.sheet{border-radius:20px}
+.sheet input{min-height:44px}
+.account-card,.account-admin{border-radius:18px}
+.account-avatar{width:58px;height:58px;border-radius:18px}
+:where(button,input,summary):focus-visible{outline:3px solid #8eb9a8;outline-offset:3px}
+@media(min-width:760px){
+  #app{grid-template-columns:238px minmax(0,1fr);grid-template-rows:86px minmax(0,1fr)}
+  .brand{flex-basis:238px;min-width:238px;padding:13px 20px}
+  .brand .logo{width:55px;height:55px}
+  .brand .name{font-size:23px}
+  .auth{padding-right:34px}
+  nav{padding:30px 16px;gap:9px}
+  nav button{height:49px;min-height:49px;border-radius:11px}
+  nav button.on{height:49px}
+  .main{padding:44px 48px 54px}
+  .main.lessons,.main.fill{padding:30px 48px 50px}
+  .main>.subjects:before{margin-top:3px}
+}
+@media(min-width:1180px){
+  .main{padding-left:58px;padding-right:58px}
+  .main.lessons,.main.fill{padding-left:58px;padding-right:58px}
+  .subjects{gap:20px}
+  .subj{min-height:174px}
+}
+@media(max-width:759px){
+  .brand{background:linear-gradient(120deg,#102a35 0%,#1b4146 100%);min-height:74px;padding:10px 15px 15px}
+  .brand .logo{width:47px;height:47px}
+  .auth{padding:9px 13px 11px;background:#fff}
+  .pill-auth{min-height:39px;border-radius:10px}
+  .stage{background:linear-gradient(180deg,#f7f9f6,#f2f5f2)}
+  .main,.main.lessons,.main.fill{padding:24px 16px 34px}
+  .main>.subjects:after{font-size:13px;margin-bottom:12px}
+  .subjects{gap:12px}
+  .subj{min-height:132px;padding:14px;border-radius:14px}
+  .subj .e{width:39px;height:39px;top:13px;left:14px;border-radius:12px}
+  .subj>span:last-child{font-size:13px;padding-top:42px}
+  nav{background:#122e38;border-top:1px solid rgba(255,255,255,.08);box-shadow:0 -7px 24px rgba(17,42,47,.08)}
+  nav button,nav button.on{border-radius:13px}
+  nav button.on{background:rgba(105,166,139,.24);box-shadow:inset 0 2px 0 #c6dda0}
+  .gpill{min-height:78px;border-radius:13px}
+  .simrow{border-radius:12px;padding:11px}
+  .box,.row,.gcard{border-radius:14px}
+  .sheet{border-radius:18px}
+}
+@media(max-width:380px){
+  .main,.main.lessons,.main.fill{padding-left:12px;padding-right:12px}
+  .subjects{gap:9px}
+  .subj{min-height:122px}
+}
