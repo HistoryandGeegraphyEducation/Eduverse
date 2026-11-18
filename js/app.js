@@ -270,8 +270,6 @@ function vLessons(){
   const key="lsdl-"+S.grade;
   const parts=CONTENT[key];
 
-  main.className="main lessons";
-
   const sec=(part,label)=>{
     const list=parts[part].map(([title,ls],ci)=>
       `<details class="chap"><summary>${esc(title)}</summary>`+
@@ -521,8 +519,9 @@ function vPractice(){
     `</div>`;
 }
 function vMe(){
-  main.className="main discovery-profile";
   const roleNames={admin:"QUẢN TRỊ VIÊN",teacher:"GIÁO VIÊN",student:"HỌC SINH",pending:"CHƯA ĐƯỢC PHÂN QUYỀN"};
+  const role=user?(userProfile||{}).role||"pending":"guest";
+  main.className="main discovery-profile role-"+role;
   if(user){
     const p=userProfile||{};
     main.innerHTML=`<div class="crumb"><span>TÀI KHOẢN</span></div>`+
