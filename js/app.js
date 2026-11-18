@@ -553,6 +553,7 @@ function vLanguages(){
   };
   if(!lang){
     main.innerHTML=
+      "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">← "+(isHome?"TRANG CHỦ":"DANH MỤC")+"</button><span>LANGUAGE LEARNING</span></div>"+
       "<div class=\"language-head\"><div><span class=\"language-eyebrow\">EDUVERSE · LANGUAGE LEARNING</span>"+
       "<h1 class=\"language-title\">NGOẠI NGỮ</h1>"+
       "<p class=\"language-lead\">Chọn ngôn ngữ để mở không gian học tập và lộ trình phù hợp.</p></div></div>"+
@@ -564,6 +565,7 @@ function vLanguages(){
         "<span class=\"language-arrow\">›</span></button>"
       ).join("")+
       "</div>";
+    $("#langBack").onclick=back;
     main.querySelectorAll("[data-language]").forEach(b=>b.onclick=()=>{
       S.language=b.dataset.language;S.langMode=null;S.langItem=null;render();
     });
