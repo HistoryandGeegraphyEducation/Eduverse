@@ -29,7 +29,7 @@ function simInteriorEarth(root){
       </div>
       <div class="ie-panels">
         <section class="ie-card"><h3 id="ie-info-title">Trái Đất</h3><p id="ie-info-desc"></p><div class="ie-facts" id="ie-facts"></div></section>
-        <section class="ie-card"><h3>Các lớp cấu tạo</h3><div class="ie-layerlist" id="ie-layers"></div><p class="ie-note" id="ie-science-note">Vỏ Trái Đất rất mỏng; bật chế độ phóng đại nếu cần quan sát rõ hơn.</p></section>
+        <section class="ie-card"><h3>Các lớp cấu tạo</h3><div class="ie-layerlist" id="ie-layers"></div><p class="ie-note" id="ie-science-note"></p></section>
       </div>
       <section class="ie-card ie-quiz">
         <h3>Kiểm tra kiến thức</h3>
