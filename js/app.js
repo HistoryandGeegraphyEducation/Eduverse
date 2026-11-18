@@ -552,27 +552,14 @@ function vLanguages(){
     S.language=null;S.langMode=null;S.langItem=null;render();
   };
 
-  if(!lang && isHome){
-    main.innerHTML=
-      "<section class=\"language-home-hero\">"+
-        "<div class=\"language-home-copy\"><h1>NGOẠI NGỮ</h1>"+
-        "<div class=\"language-home-languages\"><span>TIẾNG ANH</span><span>TIẾNG TRUNG</span><span>TIẾNG PHÁP</span><span>TIẾNG TÂY BAN NHA</span><span>TIẾNG ĐỨC</span></div>"+
-        "<button class=\"language-home-open\" id=\"openLanguageCatalog\">DANH MỤC NGÔN NGỮ <span>→</span></button></div>"+
-      "</section>";
-    $("#openLanguageCatalog").onclick=()=>{
-      S.tab="cat";S.subj=null;S.grade=null;S.csub="nn";
-      S.language=null;S.langMode=null;S.langItem=null;render();
-    };
-    return;
-  }
-
   if(!lang){
+    const gridClass=isHome?"language-home-grid":"language-grid";
     main.innerHTML=
-      "<div class=\"language-catalog-head\"><h1>NGOẠI NGỮ</h1></div>"+
-      "<div class=\"language-grid\">"+
+      "<div class=\"language-catalog-head\"><h1>NGÔN NGỮ</h1></div>"+
+      "<div class=\""+gridClass+"\">"+
       LANGUAGE_PROGRAMS.map(x=>
         "<button class=\"language-card\" data-language=\""+x.id+"\">"+
-        "<span class=\"language-flag\">"+x.flag+"</span>"+
+        "<span class=\"language-flag-wave\"><span class=\"language-flag\">"+x.flag+"</span></span>"+
         "<span class=\"language-card-copy\"><b>"+esc(x.name)+"</b></span>"+
         "<span class=\"language-arrow\">›</span></button>"
       ).join("")+
@@ -582,6 +569,19 @@ function vLanguages(){
     });
     return;
   }
+
+  if(isHome){
+    const backLabel="← DANH SÁCH NGÔN NGỮ";
+    main.innerHTML=
+      "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">"+backLabel+"</button></div>"+
+      "<div class=\"language-selected-title\"><span class=\"language-flag-wave\"><span class=\"language-flag\">"+lang.flag+"</span></span><h1>"+esc(lang.name)+"</h1></div>"+
+      "<div class=\"language-home-skill-grid\">"+
+      lang.skills.map(x=>"<button class=\"language-home-skill\"><span>"+esc(x.icon)+"</span><b>"+esc(x.name)+"</b></button>").join("")+
+      "</div>";
+    $("#langBack").onclick=back;
+    return;
+  }
+
   if(S.langMode){
     const item=S.langMode==="exam"
       ?lang.certificates.find(x=>x.id===S.langItem)
@@ -590,36 +590,30 @@ function vLanguages(){
     const label=S.langMode==="exam"?"ÔN CHỨNG CHỈ":"LỘ TRÌNH HỌC";
     main.innerHTML=
       "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">← "+esc(lang.name)+"</button><span>"+label+"</span></div>"+
-      "<section class=\"language-plan-hero\"><h1>"+esc(item.name)+"</h1><p>"+esc(item.description)+"</p></section>"+
+      "<section class=\"language-plan-hero\"><h1>"+esc(item.name)+"</h1></section>"+
       "<section class=\"language-panel\"><h2>"+(S.langMode==="exam"?"NỘI DUNG ÔN TẬP":"CÁC CẤP ĐỘ")+"</h2>"+
-      "<div class=\"language-levels\">"+item.stages.map((x,i)=>"<span class=\"language-level\"><small>"+String(i+1).padStart(2,"0")+"</small><b>"+esc(x)+"</b></span>").join("")+"</div></section>"+
-      "<section class=\"language-panel\"><h2>KỸ NĂNG ĐƯỢC RÈN LUYỆN</h2><div class=\"language-skill-grid\">"+
-      lang.skills.map(x=>"<div class=\"language-skill\"><span>"+esc(x.icon)+"</span><b>"+esc(x.name)+"</b></div>").join("")+
-      "</div></section>"+
-      "";
+      "<div class=\"language-levels\">"+item.stages.map((x,i)=>"<span class=\"language-level\"><b>"+esc(x)+"</b></span>").join("")+"</div></section>";
     $("#langBack").onclick=back;
     return;
   }
+
+  const rooms=lang.rooms||["PHÒNG HỌC","PHÒNG TỰ HỌC","TỪ VỰNG","NGỮ PHÁP","TỪ ĐIỂN","NGHE","NÓI","ĐỌC","VIẾT","HỘI THOẠI","PHÁT ÂM"];
   main.innerHTML=
-    "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">← DANH SÁCH NGÔN NGỮ</button><span>"+esc(lang.nativeName)+"</span></div>"+
-    "<section class=\"language-profile\"><span class=\"language-flag large\">"+lang.flag+"</span><div><h1>"+esc(lang.name)+"</h1><p>"+esc(lang.description)+"</p></div></section>"+
-    "<section class=\"language-panel\"><div class=\"language-section-head\"><h2>LỘ TRÌNH HỌC</h2></div>"+
-    "<div class=\"language-route-grid\">"+
-    lang.tracks.map(x=>
-      "<button class=\"language-route-card\" data-track=\""+x.id+"\"><span class=\"route-kicker\">NỀN TẢNG</span><b>"+esc(x.name)+"</b><small>"+esc(x.summary)+"</small><span class=\"route-levels\">"+x.stages.map(s=>"<i>"+esc(s)+"</i>").join("")+"</span></button>"
-    ).join("")+
+    "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">← DANH SÁCH NGÔN NGỮ</button></div>"+
+    "<div class=\"language-selected-title catalog\"><span class=\"language-flag-wave\"><span class=\"language-flag\">"+lang.flag+"</span></span><h1>"+esc(lang.name)+"</h1></div>"+
+    "<section class=\"language-center-section\"><h2>PHÒNG HỌC</h2><div class=\"language-center-grid\">"+
+    rooms.map((x,i)=>"<button class=\"language-center-room\" data-room=\""+i+"\">"+esc(x)+"</button>").join("")+
     "</div></section>"+
-    "<section class=\"language-panel\"><div class=\"language-section-head\"><h2>ÔN CHỨNG CHỈ</h2></div>"+
-    "<div class=\"language-exam-grid\">"+
-    lang.certificates.map(x=>
-      "<button class=\"language-exam-card\" data-exam=\""+x.id+"\"><span class=\"exam-mark\">"+esc(x.short)+"</span><span><b>"+esc(x.name)+"</b><small>"+esc(x.summary)+"</small></span><i>›</i></button>"
-    ).join("")+
-    "</div></section>"+
-    "<section class=\"language-panel\"><div class=\"language-section-head\"><h2>KHU VỰC HỌC TẬP</h2></div><div class=\"language-skill-grid\">"+
-    lang.skills.map(x=>"<div class=\"language-skill\"><span>"+esc(x.icon)+"</span><b>"+esc(x.name)+"</b></div>").join("")+
-    "</div></section>"+
-    "<section class=\"language-panel\"><div class=\"language-section-head\"><h2>CÔNG CỤ VÀ HỌC LIỆU</h2></div><div class=\"language-tags\">"+
-    lang.features.map(x=>"<span class=\"language-tag\">"+esc(x)+"</span>").join("")+
+    (lang.tracks.length?
+      "<section class=\"language-center-section\"><h2>LỘ TRÌNH HỌC</h2><div class=\"language-center-grid\">"+
+      lang.tracks.map(x=>"<button class=\"language-center-room\" data-track=\""+x.id+"\">"+esc(x.name)+"</button>").join("")+
+      "</div></section>":"")+
+    (lang.certificates.length?
+      "<section class=\"language-center-section\"><h2>ÔN CHỨNG CHỈ</h2><div class=\"language-center-grid\">"+
+      lang.certificates.map(x=>"<button class=\"language-center-room\" data-exam=\""+x.id+"\">"+esc(x.name)+"</button>").join("")+
+      "</div></section>":"")+
+    "<section class=\"language-center-section\"><h2>CÔNG CỤ VÀ HỌC LIỆU</h2><div class=\"language-center-grid\">"+
+    lang.features.map(x=>"<div class=\"language-center-room\">"+esc(x)+"</div>").join("")+
     "</div></section>";
   $("#langBack").onclick=back;
   main.querySelectorAll("[data-track]").forEach(b=>b.onclick=()=>{
