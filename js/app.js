@@ -628,6 +628,9 @@ function vLanguages(){
     "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">← DANH SÁCH NGÔN NGỮ</button></div>"+
     "<div class=\"language-selected-title catalog\">"+languageFlag(lang.id)+"<h1>"+esc(lang.name)+"</h1></div>"+
     "<section class=\"language-center-section\"><h2>PHÒNG HỌC</h2><div class=\"language-center-grid\">"+
+    rooms.map(x=>"<div class=\"language-center-room\">"+esc(x)+"</div>").join("")+
+    "</div></section>"+
+    "<section class=\"language-center-section\"><h2>NỘI DUNG HỌC TẬP</h2><div class=\"language-center-grid\">"+
     lang.skills.map((x,i)=>"<button class=\"language-center-room\" data-skill=\""+i+"\">"+esc(x.name)+"</button>").join("")+
     "</div></section>"+
     (lang.tracks.length?
