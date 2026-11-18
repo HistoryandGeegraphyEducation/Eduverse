@@ -24,7 +24,7 @@ function simVolcano(root){
       <div class="gauge"><span>⏱️ Áp suất</span><div class="bar2"><i id="vpb"></i></div><b id="vpv"></b></div>
       <div class="gauge"><span>⚡ Năng lượng</span><div class="bar2"><i id="veb"></i></div><b id="vev"></b></div>
       <div class="vnote">Thông số mang tính minh hoạ.</div>
-      <div class="vpart" id="vpart"><b>Chạm vào núi lửa</b> để xem tên và chức năng từng bộ phận.</div>
+      <div class="vpart" id="vpart"></div>
       <div class="vquiz" id="vquiz" hidden></div>
     </div>`;
   const cv = root.querySelector("canvas"), ctx = cv.getContext("2d");
@@ -139,7 +139,7 @@ function simVolcano(root){
   }
   function showPart(id,x,y,r){
     sel=id?{id,x,y,r}:null;
-    q("#vpart").innerHTML=id?`<b>${PARTS[id][0]}</b>: ${PARTS[id][1]}`:"<b>Chạm vào núi lửa</b> để xem tên và chức năng từng bộ phận.";
+    q("#vpart").innerHTML=id?`<b>${PARTS[id][0]}</b>: ${PARTS[id][1]}`:"";
   }
   let qi=0,score=0;
   function renderQuiz(){
