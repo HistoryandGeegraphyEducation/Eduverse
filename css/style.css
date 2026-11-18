@@ -1023,8 +1023,8 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
   background:linear-gradient(180deg,#f2f4f2,#e3e9e6)!important;
   color:#26343a!important;border-color:#c2ceca!important
 }
-.evgeo .evgeo-section-title,.evgeo .evgeo-kicker{color:#435d63!important}
-.evgeo .evgeo-lead,.evgeo .evgeo-footer label{color:#43545a!important}
+.evgeo .evgeo-section-title{color:#435d63!important}
+.evgeo .evgeo-footer label{color:#43545a!important}
 .evgeo button,.evgeo .evgeo-water-toggle,.evgeo .evgeo-water-children button{
   background:#dce4e1!important;color:#304148!important;border-color:#bdcac6!important
 }
