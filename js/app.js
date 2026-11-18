@@ -604,6 +604,7 @@ function vLanguages(){
       lang.skills.map((x,i)=>"<button class=\"language-home-skill\" data-skill=\""+i+"\"><span>"+esc(x.icon)+"</span><b>"+esc(x.name)+"</b></button>").join("")+
       "</div>";
     $("#langBack").onclick=back;
+    main.querySelectorAll("[data-skill]").forEach(b=>b.onclick=()=>{S.langMode="skill";S.langItem=b.dataset.skill;render();});
     return;
   }
 
@@ -641,6 +642,7 @@ function vLanguages(){
     lang.features.map(x=>"<div class=\"language-center-room\">"+esc(x)+"</div>").join("")+
     "</div></section>";
   $("#langBack").onclick=back;
+  main.querySelectorAll("[data-skill]").forEach(b=>b.onclick=()=>{S.langMode="skill";S.langItem=b.dataset.skill;render();});
   main.querySelectorAll("[data-track]").forEach(b=>b.onclick=()=>{
     S.langMode="track";S.langItem=b.dataset.track;render();
   });
