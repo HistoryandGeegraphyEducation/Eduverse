@@ -1102,3 +1102,74 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
   .sheet h2{font-size:23px}
   .member-row{align-items:flex-start}
 }
+
+
+/* ===== EDUVERSE · Không gian Ngoại ngữ ===== */
+.language-space{padding:clamp(12px,2.5vw,24px)!important;overflow-y:auto}
+.language-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:2px 0 18px}
+.language-eyebrow{display:block;color:#536c79;font:700 10px/1.4 Arial,sans-serif;letter-spacing:1.5px}
+.language-title{margin:5px 0 0;color:#172f45;font:800 clamp(25px,5vw,36px)/1.08 Arial,sans-serif;letter-spacing:.2px}
+.language-lead{margin:8px 0 0;color:#526473;font:400 14px/1.5 Arial,sans-serif}
+.language-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.language-card{position:relative;display:flex;align-items:center;gap:12px;min-width:0;min-height:104px;padding:15px 13px;border:1px solid rgba(38,65,82,.13);border-radius:17px;background:linear-gradient(145deg,#fff 0%,#e9f0f4 100%);box-shadow:0 5px 14px rgba(20,48,67,.12);color:#19354a;text-align:left}
+.language-flag{display:grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border-radius:15px;background:#dce8ed;font-size:27px}
+.language-card-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
+.language-card-copy b{font:800 14px/1.2 Arial,sans-serif;letter-spacing:.25px}
+.language-card-copy small{color:#506879;font:600 11px/1.25 Arial,sans-serif}
+.language-card-copy em{margin-top:3px;color:#647785;font:400 11px/1.3 Arial,sans-serif;font-style:normal}
+.language-arrow{color:#587487;font:400 26px/1 Arial,sans-serif}
+.language-topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px;color:#607687;font:700 10px/1.3 Arial,sans-serif;letter-spacing:1px}
+.language-back{border:0;border-radius:999px;padding:8px 12px;background:#e0e9ed;color:#29485c;font:700 11px/1 Arial,sans-serif}
+.language-profile{display:flex;align-items:center;gap:15px;padding:18px;border:1px solid rgba(35,64,82,.12);border-radius:19px;background:linear-gradient(135deg,#fdfefe,#e4edf1);box-shadow:0 6px 15px rgba(20,48,67,.1)}
+.language-flag.large{width:62px;height:62px;flex-basis:62px;font-size:34px}
+.language-profile h1,.language-plan-hero h1{margin:4px 0;color:#18354a;font:800 clamp(22px,4.8vw,30px)/1.1 Arial,sans-serif}
+.language-profile p,.language-plan-hero p{margin:5px 0 0;color:#526777;font:400 13px/1.45 Arial,sans-serif}
+.language-panel{margin-top:14px;padding:16px;border:1px solid rgba(38,65,82,.12);border-radius:17px;background:rgba(249,252,253,.94);box-shadow:0 5px 13px rgba(20,48,67,.08)}
+.language-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.language-section-head h2,.language-panel h2{margin:0;color:#244459;font:800 13px/1.25 Arial,sans-serif;letter-spacing:.6px}
+.language-section-head>span{color:#738795;font:700 9px/1.2 Arial,sans-serif;letter-spacing:.8px}
+.language-route-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.language-route-card{display:flex;min-width:0;flex-direction:column;align-items:flex-start;gap:7px;padding:13px;border:1px solid #d5e0e5;border-radius:13px;background:#f0f5f7;color:#244459;text-align:left}
+.route-kicker{color:#6c8796;font:700 9px/1 Arial,sans-serif;letter-spacing:1px}
+.language-route-card>b{font:800 14px/1.25 Arial,sans-serif}
+.language-route-card>small{color:#617684;font:400 11px/1.4 Arial,sans-serif}
+.route-levels{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.route-levels i{padding:4px 6px;border-radius:5px;background:#dce8ed;color:#31556a;font:700 9px/1 Arial,sans-serif;font-style:normal}
+.language-exam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.language-exam-card{display:flex;align-items:center;gap:9px;min-width:0;padding:10px;border:1px solid #d8e2e7;border-radius:12px;background:#f5f8f9;color:#26485d;text-align:left}
+.exam-mark{display:grid;place-items:center;flex:0 0 42px;height:38px;border-radius:9px;background:#dce8ed;color:#31586d;font:800 11px/1 Arial,sans-serif}
+.language-exam-card>span:nth-child(2){display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
+.language-exam-card b{font:800 12px/1.2 Arial,sans-serif}
+.language-exam-card small{color:#667b89;font:400 10px/1.3 Arial,sans-serif}
+.language-exam-card>i{color:#648091;font:400 20px/1 Arial,sans-serif;font-style:normal}
+.language-skill-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.language-skill{display:flex;align-items:center;gap:7px;min-width:0;padding:10px 8px;border-radius:10px;background:#eaf1f4;color:#2c4e61}
+.language-skill>span{font-size:17px}
+.language-skill>b{font:700 10px/1.2 Arial,sans-serif}
+.language-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.language-tag{padding:7px 10px;border:1px solid #d7e2e7;border-radius:999px;background:#f0f5f7;color:#405e70;font:700 10px/1 Arial,sans-serif}
+.language-plan-hero{padding:20px;border-radius:18px;background:linear-gradient(135deg,#193b51,#315d70);color:#fff}
+.language-plan-hero .language-eyebrow{color:#c0d5df}
+.language-plan-hero h1{color:#fff}
+.language-plan-hero p{color:#e0ebef}
+.language-plan-hero+.language-panel{margin-top:14px}
+.language-levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:13px}
+.language-level{display:flex;align-items:center;gap:8px;padding:10px;border-radius:10px;background:#eaf1f4;color:#2d4d60}
+.language-level small{color:#79909d;font:700 9px/1 Arial,sans-serif}
+.language-level b{font:800 12px/1 Arial,sans-serif}
+.language-status-note{margin:12px 2px 2px;color:#6a7d88;font:400 11px/1.4 Arial,sans-serif;text-align:center}
+@media(max-width:520px){
+ .language-space{padding:10px!important}
+ .language-grid{gap:9px}
+ .language-card{min-height:92px;padding:11px 9px;gap:8px;border-radius:14px}
+ .language-flag{flex-basis:39px;width:39px;height:39px;border-radius:12px;font-size:23px}
+ .language-card-copy b{font-size:12px}
+ .language-card-copy small{font-size:10px}
+ .language-card-copy em{font-size:10px}
+ .language-profile{gap:11px;padding:14px}
+ .language-flag.large{flex-basis:50px;width:50px;height:50px;font-size:28px}
+ .language-panel{padding:13px}
+ .language-route-grid,.language-exam-grid{grid-template-columns:1fr}
+ .language-skill-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .language-levels{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
