@@ -97,7 +97,8 @@ function languageFlag(id){
   const uid="flag-"+id;
   return '<span class="language-flag-wave" aria-hidden="true"><span class="language-flag-pole"></span><svg class="language-flag-cloth" viewBox="0 0 120 72" role="img"><defs><clipPath id="'+uid+'"><path d="M1 1 Q28 5 58 1 T119 1 L119 71 Q88 65 59 71 T1 71Z"/></clipPath><filter id="'+uid+'-fabric" x="-8%" y="-12%" width="116%" height="124%"><feTurbulence type="fractalNoise" baseFrequency=".018 .075" numOctaves="2" seed="5"><animate attributeName="baseFrequency" values=".018 .075;.025 .11;.018 .075" dur="3.4s" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" scale="4.5" xChannelSelector="R" yChannelSelector="G"/></filter><linearGradient id="'+uid+'-shade" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".16"/><stop offset=".22" stop-color="#fff" stop-opacity=".2"/><stop offset=".48" stop-color="#000" stop-opacity=".13"/><stop offset=".7" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient></defs><g clip-path="url(#'+uid+')" filter="url(#'+uid+'-fabric)">'+(art[id]||art.en)+'</g><path d="M1 1 Q28 5 58 1 T119 1 L119 71 Q88 65 59 71 T1 71Z" fill="url(#'+uid+'-shade)" opacity=".72"/><path d="M2 2 Q30 7 60 2 T118 2" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="1.2"/></svg></span>';
 }
-\nconst $=s=>document.querySelector(s);
+
+const $=s=>document.querySelector(s);
 const main=$("#main");
 
 const esc=s=>String(s??"").replace(
