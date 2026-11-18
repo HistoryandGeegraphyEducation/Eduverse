@@ -12,14 +12,14 @@
   --ev-soft:#eaf1f3;
   --ev-shadow:0 8px 24px rgba(25,55,75,.08);
 }
-body{font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;background:#e9eff2;color:var(--ev-ink)}
-#app{background:var(--ev-paper)}
-#app>.top{background:#e6edf0}
-#app>.top>.brand{background:linear-gradient(115deg,#153b59,#245b78);color:#fff;border-radius:0 0 20px 20px;padding:12px 16px 26px}
-#app>.top>.brand .name{font-family:Inter,"Segoe UI",Arial,sans-serif;font-weight:750;letter-spacing:.02em}
-#app>.top>.brand .tag{font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:clamp(13px,3.7vw,17px);font-weight:500;line-height:1.25}
-#app>.top>.auth{gap:10px;padding:0 12px 8px}
-#app>.top .pill-auth{background:#fff;color:var(--ev-navy);border:1px solid #d5e0e5;box-shadow:0 3px 10px rgba(22,54,76,.09);font:600 13px Inter,"Segoe UI",Arial,sans-serif}
+body:has(#main.discovery-home,#main.discovery-grades,#main.discovery-learn,#main.discovery-catalog,#main.discovery-rooms,#main.discovery-simlist,#main.discovery-lessons,#main.discovery-profile){font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;background:#e9eff2;color:var(--ev-ink)}
+#app:has(#main.discovery-home,#main.discovery-grades,#main.discovery-learn,#main.discovery-catalog,#main.discovery-rooms,#main.discovery-simlist,#main.discovery-lessons,#main.discovery-profile){background:var(--ev-paper)}
+#app:has(#main.discovery-home,#main.discovery-grades,#main.discovery-learn,#main.discovery-catalog,#main.discovery-rooms,#main.discovery-simlist,#main.discovery-lessons,#main.discovery-profile)>.top{background:#e6edf0}
+#app:has(#main.discovery-home,#main.discovery-grades,#main.discovery-learn,#main.discovery-catalog,#main.discovery-rooms,#main.discovery-simlist,#main.discovery-lessons,#main.discovery-profile)>.top>.brand{background:linear-gradient(115deg,#153b59,#245b78);color:#fff;border-radius:0 0 20px 20px;padding:12px 16px 26px}
+#app:has(#main.discovery-home,#main.discovery-grades,#main.discovery-learn,#main.discovery-catalog,#main.discovery-rooms,#main.discovery-simlist,#main.discovery-lessons,#main.discovery-profile)>.top>.brand .name{font-family:Inter,"Segoe UI",Arial,sans-serif;font-weight:750;letter-spacing:.02em}
+#app:has(#main.discovery-home,#main.discovery-grades,#main.discovery-learn,#main.discovery-catalog,#main.discovery-rooms,#main.discovery-simlist,#main.discovery-lessons,#main.discovery-profile)>.top>.brand .tag{font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:clamp(13px,3.7vw,17px);font-weight:500;line-height:1.25}
+#app:has(#main.discovery-home,#main.discovery-grades,#main.discovery-learn,#main.discovery-catalog,#main.discovery-rooms,#main.discovery-simlist,#main.discovery-lessons,#main.discovery-profile)>.top>.auth{gap:10px;padding:0 12px 8px}
+#app:has(#main.discovery-home,#main.discovery-grades,#main.discovery-learn,#main.discovery-catalog,#main.discovery-rooms,#main.discovery-simlist,#main.discovery-lessons,#main.discovery-profile)>.top .pill-auth{background:#fff;color:var(--ev-navy);border:1px solid #d5e0e5;box-shadow:0 3px 10px rgba(22,54,76,.09);font:600 13px Inter,"Segoe UI",Arial,sans-serif}
 #main.discovery-home,#main.discovery-grades,#main.discovery-learn,
 #main.discovery-catalog,#main.discovery-rooms,#main.discovery-simlist,
 #main.discovery-lessons,#main.discovery-profile{
@@ -137,7 +137,7 @@ body{font-family:Inter,"Segoe UI",Roboto,Arial,sans-serif;font-weight:400;backgr
 #main.discovery-rooms .back,#main.discovery-simlist .back,#main.discovery-sim .back,
 #main.discovery-lessons .back{background:#e6eef1;color:var(--ev-navy);border:1px solid #d5e1e6;border-radius:11px;padding:8px 11px;font:600 12px Inter,"Segoe UI",Arial,sans-serif}
 @media(min-width:820px){
-  #app{max-width:1120px}
+  #app:has(#main.discovery-home,#main.discovery-grades,#main.discovery-learn,#main.discovery-catalog,#main.discovery-rooms,#main.discovery-simlist,#main.discovery-lessons,#main.discovery-profile){max-width:1120px}
   #main.discovery-home,#main.discovery-grades,#main.discovery-learn,
   #main.discovery-catalog,#main.discovery-rooms,#main.discovery-simlist,
   #main.discovery-lessons,#main.discovery-profile{padding:28px 30px 36px}
