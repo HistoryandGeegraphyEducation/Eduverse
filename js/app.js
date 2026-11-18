@@ -556,14 +556,8 @@ function vLanguages(){
     main.innerHTML=
       "<section class=\"language-home-hero\">"+
         "<div class=\"language-home-copy\"><h1>NGOẠI NGỮ</h1>"+
-        "<p>Không gian học tập và ôn luyện các ngôn ngữ.</p>"+
-        "<button class=\"language-home-open\" id=\"openLanguageCatalog\">KHÁM PHÁ NGÔN NGỮ <span>→</span></button></div>"+
-        "<div class=\"language-home-orbit\"><span>EN</span><span>中</span><span>FR</span><span>ES</span><span>DE</span></div>"+
-      "</section>"+
-      "<section class=\"language-home-sections\">"+
-        "<div><span class=\"home-section-icon\">文</span><b>HỌC THEO LỘ TRÌNH</b></div>"+
-        "<div><span class=\"home-section-icon\">A+</span><b>ÔN LUYỆN CHỨNG CHỈ</b></div>"+
-        "<div><span class=\"home-section-icon\">◎</span><b>RÈN LUYỆN KỸ NĂNG</b></div>"+
+        "<div class=\"language-home-languages\"><span>TIẾNG ANH</span><span>TIẾNG TRUNG</span><span>TIẾNG PHÁP</span><span>TIẾNG TÂY BAN NHA</span><span>TIẾNG ĐỨC</span></div>"+
+        "<button class=\"language-home-open\" id=\"openLanguageCatalog\">DANH MỤC NGÔN NGỮ <span>→</span></button></div>"+
       "</section>";
     $("#openLanguageCatalog").onclick=()=>{
       S.tab="cat";S.subj=null;S.grade=null;S.csub="nn";
@@ -602,7 +596,7 @@ function vLanguages(){
       "<section class=\"language-panel\"><h2>KỸ NĂNG ĐƯỢC RÈN LUYỆN</h2><div class=\"language-skill-grid\">"+
       lang.skills.map(x=>"<div class=\"language-skill\"><span>"+esc(x.icon)+"</span><b>"+esc(x.name)+"</b></div>").join("")+
       "</div></section>"+
-      "<div class=\"language-status-note\">Khung chương trình đang được xây dựng.</div>";
+      "";
     $("#langBack").onclick=back;
     return;
   }
