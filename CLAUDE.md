@@ -54,3 +54,13 @@ Phải nêu rõ:
 BẢO TOÀN DỰ ÁN > CHỈNH SỬA TỐI THIỂU > TỐI ƯU HÓA.
 
 Không đánh đổi tính ổn định của toàn bộ dự án để giải quyết một lỗi cục bộ.
+
+7. Quy tắc thực hiện yêu cầu và render giao diện
+
+- Chỉ thực hiện đúng yêu cầu được giao.
+- Thiếu thông tin cần thiết thì hỏi, không tự suy đoán.
+- Không tự ý thay đổi những thành phần ngoài phạm vi.
+- Chỉ tìm kiếm, kiểm tra những nội dung nằm trong khả năng thực hiện.
+- Không báo cáo kết quả chưa được xác minh.
+- Không chèn lời dẫn, chú thích, khẩu hiệu hoặc hướng dẫn thừa vào giao diện khi render.
+- Không tự thêm các câu như “Mô hình 3D • xoay để thay đổi góc nhìn...” nếu người dùng không yêu cầu.
