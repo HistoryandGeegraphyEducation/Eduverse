@@ -21,7 +21,7 @@ function simEarth(root){
       <div class="chips" id="ecity"><span>Địa điểm:</span></div>
       <div class="eout" id="eo"></div>
     </div>
-    <div class="siminfo">Trái Đất tự quay quanh trục từ <b>Tây sang Đông</b>, một vòng hết khoảng <b>24 giờ</b>. Nửa hướng về Mặt Trời là <b>ban ngày</b>, nửa còn lại là <b>ban đêm</b>. Kéo để xoay góc nhìn, chụm hai ngón để thu phóng, chạm vào địa cầu để chọn địa điểm.</div>`;
+    <div class="siminfo">Trái Đất tự quay quanh trục từ <b>Tây sang Đông</b>, một vòng hết khoảng <b>24 giờ</b>. Nửa hướng về Mặt Trời là <b>ban ngày</b>, nửa còn lại là <b>ban đêm</b>.</div>`;
   const q = s=>root.querySelector(s);
   let dead = false; const cleanup = [];
   loadScript("https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js", ()=>window.THREE)
@@ -141,7 +141,7 @@ function simEarth(root){
     // thông số hiển thị
     function readout(){
       const c = sel===-1 ? custom : CITIES[sel], out = q("#eo");
-      if(!c){ out.textContent = "Chạm vào địa cầu hoặc chọn một địa điểm."; return; }
+      if(!c){ out.textContent = ""; return; }
       scene.updateMatrixWorld(true);
       const n = latLon(c.la,c.lo,1).applyQuaternion(earth.getWorldQuaternion(qa)).normalize(), se = n.dot(sunDir);
       const axisW = new T.Vector3(0,1,0).applyQuaternion(tg.quaternion), rate = axisW.clone().cross(n).dot(sunDir)*dir;
