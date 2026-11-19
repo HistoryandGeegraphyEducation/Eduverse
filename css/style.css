@@ -1327,3 +1327,27 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 .ll-video-slide h2{color:#fff!important}
 .ll-video-slide p{max-width:680px;color:#fff!important;font-size:17px!important}
 @media(max-width:560px){.ll-shell{padding-bottom:18px}.ll-content{padding:13px}.ll-word-grid{grid-template-columns:1fr}.ll-exam-select{grid-template-columns:1fr}.ll-dict-row{grid-template-columns:1fr auto}.ll-dict-row strong{grid-column:1}.ll-dict-row button{grid-column:2;grid-row:1/3}.ll-video-slide{min-height:170px;padding:18px}}
+
+/* Vietnamese learning module */
+.vl-shell{gap:14px}
+.vl-lesson,.vl-dictionary{background:#fff;color:#172b45;border-radius:18px;padding:18px;margin:12px 0;box-shadow:0 2px 8px rgba(12,30,55,.08)}
+.vl-lesson h2,.vl-dictionary h2{font-size:20px;margin:0 0 10px;color:#17385e}
+.vl-lesson p{line-height:1.65;font-size:15px}
+.vl-lesson ul{padding-left:20px;line-height:1.6}
+.vl-lesson li{margin:6px 0}
+.vl-lesson blockquote{margin:14px 0;padding:12px 14px;border-left:3px solid #547da8;background:#f1f5f9;border-radius:0 10px 10px 0;line-height:1.6}
+.vl-quiz{border-top:1px solid #e3e9f0;padding-top:14px;margin-top:16px;display:grid;gap:10px}
+.vl-quiz label{display:flex;gap:9px;align-items:flex-start;padding:9px;border-radius:9px;background:#f5f7fa}
+.vl-quiz input{margin-top:3px;accent-color:#234b77}
+.vl-quiz button{justify-self:start;border:0;border-radius:20px;background:#17385e;color:#fff;padding:9px 18px}
+.vl-quiz output{font-weight:600;min-height:20px}
+.vl-dictionary input{width:100%;box-sizing:border-box;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font-size:16px;margin-bottom:12px}
+#vlResults{display:grid;gap:8px}
+#vlResults article{display:grid;grid-template-columns:52px 1fr;gap:3px 10px;align-items:center;padding:10px;border-bottom:1px solid #e7edf3}
+#vlResults article b{grid-row:span 2;font-size:24px;text-align:center}
+#vlResults article strong{font-size:15px}
+#vlResults article span,#vlResults article small{font-size:13px;color:#526176}
+.vl-sources{padding:10px 2px 24px;display:grid;gap:8px}
+.vl-sources h3{font-size:14px;color:inherit;margin:8px 0}
+.vl-sources a{color:inherit;text-decoration:underline;font-size:13px;line-height:1.45}
+@media(max-width:480px){.vl-lesson,.vl-dictionary{padding:14px}.vl-lesson h2{font-size:18px}}
