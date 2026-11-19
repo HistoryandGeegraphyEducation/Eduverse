@@ -1366,3 +1366,9 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 .ll-exam-practice label{display:flex;gap:8px;align-items:flex-start;padding:9px;background:#f2f5f9;border-radius:9px}
 .ll-exam-practice input{margin-top:3px}
 .ll-exam-practice textarea{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:10px;padding:12px;font:inherit}
+
+.ll-writing-rubric{display:grid;gap:8px;padding:12px;background:#f5f7fa;border-radius:10px;margin-top:12px}
+.ll-writing-rubric b{font-size:13px;color:#17385e}
+.ll-writing-rubric label{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:#34445a}
+.ll-writing-rubric input{margin-top:3px;accent-color:#234b77}
+.ll-exam-disclaimer{font-size:13px;color:#526176;margin:0 4px 10px}
