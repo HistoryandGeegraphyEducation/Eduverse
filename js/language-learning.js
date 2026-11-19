@@ -195,6 +195,29 @@ function mountExam(root,lang,exam,onBack){
  }
  draw();
 }
+function mountAssessment(root,lang,onBack){
+ const words=wordsFor(lang).slice(0,5);let submitted=false;
+ root.innerHTML='<div class="ll-shell"><div class="ll-head"><button type="button" class="language-back" id="llBack">← '+esc(lang.name)+'</button></div><div class="ll-title"><h1>KIỂM TRA</h1></div><section class="ll-content"><p>Bài kiểm tra đầu vào gồm 5 câu từ vựng cơ bản. Đây là bài đánh giá khởi đầu, chưa thay thế bài kiểm tra chuẩn hóa theo cấp độ.</p>'+words.map((w,i)=>'<div class="ll-exam-q"><p>'+(i+1)+'. '+esc("Chọn nghĩa phù hợp với: "+w[0])+'</p>'+words.map((opt,j)=>'<label><input type="radio" name="assessment'+i+'" value="'+j+'">'+esc(opt[2])+'</label>').join("")+'</div>').join("")+'<button type="button" id="llAssessmentSubmit">NỘP BÀI</button><output id="llAssessmentResult"></output></section></div>';
+ root.querySelector("#llBack").onclick=onBack;
+ root.querySelector("#llAssessmentSubmit").onclick=()=>{if(submitted)return;let score=0,answered=0;words.forEach((w,i)=>{const v=root.querySelector('input[name="assessment'+i+'"]:checked');if(v){answered++;if(Number(v.value)===i)score++;}});submitted=true;root.querySelector("#llAssessmentResult").textContent="Kết quả: "+score+"/5 · Đã trả lời "+answered+"/5 câu. Hãy dùng kết quả để chọn nội dung cần ôn lại.";};
+}
+function mountProgress(root,lang,onBack){
+ let progress={};try{progress=JSON.parse(localStorage.getItem(storeKey)||"{}")||{};}catch(e){progress={};}
+ let viProgress={};try{viProgress=JSON.parse(localStorage.getItem("eduverse-vietnamese-progress")||"{}")||{};}catch(e){viProgress={};}
+ const rows=lang.skills.map(skill=>{const a=(progress[lang.id]||{})[skill.name]||[];const b=viProgress[skill.name]||{};const done=Math.max(a.length,Object.keys(b).filter(k=>b[k]).length);return '<article class="ll-progress-row"><b>'+esc(skill.name)+'</b><span>'+done+'/'+skill.topics.length+'</span><div class="ll-progress-track"><i style="width:'+Math.min(100,done/Math.max(1,skill.topics.length)*100)+'%"></i></div></article>';}).join("");
+ root.innerHTML='<div class="ll-shell"><div class="ll-head"><button type="button" class="language-back" id="llBack">← '+esc(lang.name)+'</button></div><div class="ll-title"><h1>ĐÁNH GIÁ TIẾN ĐỘ</h1></div><section class="ll-content">'+rows+'</section></div>';
+ root.querySelector("#llBack").onclick=onBack;
+}
+function mountLibrary(root,lang,onBack){
+ const vi=lang.id==="vi";
+ const links=vi?[
+  ["Công cụ tra cứu chữ Nôm","https://www.nomfoundation.org/nom-tools/Nom-Lookup-Tool?uiLang=vn"],
+  ["Thư viện và công cụ nghiên cứu Hán-Nôm","https://www.digitizingvietnam.com/en/research/han-nom"],
+  ["Tư liệu chữ Quốc ngữ thế kỷ XVII – Library of Congress","https://blogs.loc.gov/international-collections/2018/03/early-european-resources-on-vietnam-at-the-library-of-congress/"]
+ ]:[["Wiktionary","https://www.wiktionary.org/"]];
+ root.innerHTML='<div class="ll-shell"><div class="ll-head"><button type="button" class="language-back" id="llBack">← '+esc(lang.name)+'</button></div><div class="ll-title"><h1>THƯ VIỆN HỌC LIỆU</h1></div><section class="ll-content"><div class="ll-library-links">'+links.map(x=>'<a href="'+esc(x[1])+'" target="_blank" rel="noopener">'+esc(x[0])+'</a>').join("")+'</div></section></div>';
+ root.querySelector("#llBack").onclick=onBack;
+}
 function mountTutor(root,lang,onBack){
 root.innerHTML='<div class="ll-shell"><div class="ll-head"><button type="button" class="language-back" id="llBack">← '+esc(lang.name)+'</button></div><div class="ll-title"><h1>AI TUTOR</h1></div><section class="ll-content"><label>CHỦ ĐỀ HỌC<input id="llTutorTopic" placeholder="Nhập chủ đề cần hỗ trợ"></label><label>CÂU HỎI<textarea id="llTutorQuestion" rows="4" placeholder="Nhập câu hỏi"></textarea></label><button type="button" id="llTutorSend">GỬI CÂU HỎI</button><output id="llTutorResult"></output></section></div>';
 root.querySelector("#llBack").onclick=onBack;
@@ -208,5 +231,5 @@ const build=()=>{const title=root.querySelector("#llVideoTitle").value.trim();co
 root.querySelector("#llVideoPreview").onclick=build;
 root.querySelector("#llVideoExport").onclick=()=>{const scenes=build();if(!scenes.length){root.querySelector("#llVideoResult").textContent="Nhập nội dung trước khi xuất video.";return;}if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream){root.querySelector("#llVideoResult").textContent="Trình duyệt chưa hỗ trợ xuất video.";return;}const canvas=document.createElement("canvas");canvas.width=1280;canvas.height=720;const ctx=canvas.getContext("2d");const stream=canvas.captureStream(24);let recorder;try{recorder=new MediaRecorder(stream,{mimeType:"video/webm"});}catch(e){recorder=new MediaRecorder(stream);}const chunks=[];recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};recorder.onstop=()=>{const blob=new Blob(chunks,{type:"video/webm"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="eduverse-language-video.webm";a.click();setTimeout(()=>URL.revokeObjectURL(url),3000);root.querySelector("#llVideoResult").textContent="Đã xuất video WebM.";};recorder.start();let i=0;function frame(){ctx.fillStyle="#17384e";ctx.fillRect(0,0,1280,720);ctx.fillStyle="#fff";ctx.textAlign="center";ctx.font="bold 38px Arial";ctx.fillText(root.querySelector("#llVideoTitle").value.trim().slice(0,42),640,150);ctx.font="30px Arial";const words=scenes[i].split(/\s+/);let line="",y=300;for(const word of words){const test=line?line+" "+word:word;if(ctx.measureText(test).width>1000){ctx.fillText(line,640,y);line=word;y+=52;}else line=test;}if(line)ctx.fillText(line,640,y);ctx.font="18px Arial";ctx.fillText((i+1)+" / "+scenes.length,640,650);i++;if(i<scenes.length)setTimeout(frame,2500);else setTimeout(()=>recorder.stop(),2500);}frame();root.querySelector("#llVideoResult").textContent="Đang dựng video...";};
 }
-window.LanguageLearning={mountSkill,mountExam,mountTutor,mountVideoStudio};
+window.LanguageLearning={mountSkill,mountExam,mountTutor,mountVideoStudio,mountAssessment,mountProgress,mountLibrary};
 })();
