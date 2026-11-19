@@ -591,6 +591,9 @@ function vLanguages(){
     else     LanguageLearning.mountSkill(main,lang,skill,()=>{S.langMode=null;S.langItem=null;render();});
     return;
   }
+  if(S.langMode==="assessment"){LanguageLearning.mountAssessment(main,lang,()=>{S.langMode=null;S.langItem=null;render();});return;}
+  if(S.langMode==="progress"){LanguageLearning.mountProgress(main,lang,()=>{S.langMode=null;S.langItem=null;render();});return;}
+  if(S.langMode==="library"){LanguageLearning.mountLibrary(main,lang,()=>{S.langMode=null;S.langItem=null;render();});return;}
   if(S.langMode==="tutor"){
     LanguageLearning.mountTutor(main,lang,()=>{S.langMode=null;S.langItem=null;render();});
     return;
@@ -610,6 +613,28 @@ function vLanguages(){
       "</div>";
     $("#langBack").onclick=back;
     main.querySelectorAll("[data-skill]").forEach(b=>b.onclick=()=>{S.langMode="skill";S.langItem=b.dataset.skill;render();});
+
+  main.querySelectorAll("[data-room]").forEach(b=>b.onclick=()=>{
+    const room=rooms[Number(b.dataset.room)]||"";
+    const roomMap={"PHÒNG LUYỆN NGHE":"NGHE","PHÒNG LUYỆN NÓI":"NÓI","PHÒNG ĐỌC":"ĐỌC","PHÒNG LUYỆN VIẾT":"VIẾT","PHÒNG NGỮ PHÁP":"NGỮ PHÁP","PHÒNG TỪ VỰNG":"TỪ VỰNG","PHÒNG TỪ ĐIỂN":"TỪ ĐIỂN","TỪ ĐIỂN HÁN VIỆT":"HÁN VIỆT","TỪ ĐIỂN NÔM":"CHỮ NÔM","THƯ VIỆN VĂN BẢN":"VĂN BẢN CỔ","CHỮ NÔM":"CHỮ NÔM","HÁN TỰ":"HÁN TỰ","HÁN VIỆT":"HÁN VIỆT","VĂN BẢN CỔ":"VĂN BẢN CỔ","VĂN HỌC":"VĂN HỌC","TIẾNG VIỆT HIỆN ĐẠI":"TIẾNG VIỆT HIỆN ĐẠI","NGỮ ÂM":"NGỮ ÂM","CHÍNH TẢ":"CHÍNH TẢ","NGỮ PHÁP":"NGỮ PHÁP","TỪ VỰNG":"TỪ VỰNG","ĐỌC HIỂU":"ĐỌC HIỂU","VIẾT":"VIẾT"};
+    if(room==="KIỂM TRA"){S.langMode="assessment";S.langItem=null;render();return;}
+    if(room==="ĐÁNH GIÁ"){S.langMode="progress";S.langItem=null;render();return;}
+    if(room==="THƯ VIỆN HỌC LIỆU"||room==="THƯ VIỆN VĂN BẢN"){S.langMode="library";S.langItem=null;render();return;}
+    const skillName=roomMap[room]||room.replace(/^PHÒNG /,"");
+    const si=lang.skills.findIndex(x=>x.name===skillName);
+    if(si>=0){S.langMode="skill";S.langItem=String(si);render();}
+  });
+  main.querySelectorAll("[data-feature]").forEach(b=>b.onclick=()=>{
+    const feature=b.dataset.feature;
+    if(feature==="AI TUTOR"){S.langMode="tutor";S.langItem=null;render();return;}
+    if(feature==="VIDEO STUDIO"){S.langMode="video";S.langItem=null;render();return;}
+    if(feature==="ĐÁNH GIÁ"){S.langMode="progress";S.langItem=null;render();return;}
+    if(feature==="THƯ VIỆN HỌC LIỆU"||feature==="THƯ VIỆN VĂN BẢN"){S.langMode="library";S.langItem=null;render();return;}
+    const target=feature==="GIỌNG NÓI"?"NÓI":feature==="TỪ ĐIỂN HÁN VIỆT"?"HÁN VIỆT":feature==="TỪ ĐIỂN NÔM"?"CHỮ NÔM":feature;
+    const si=lang.skills.findIndex(x=>x.name===target);
+    if(si>=0){S.langMode="skill";S.langItem=String(si);render();}
+  });
+
     return;
   }
 
@@ -636,7 +661,7 @@ function vLanguages(){
     "<div class=\"language-topline\"><button class=\"language-back\" id=\"langBack\">← DANH SÁCH NGÔN NGỮ</button></div>"+
     "<div class=\"language-selected-title catalog\">"+languageFlag(lang.id)+"<h1>"+esc(lang.name)+"</h1></div>"+
     "<section class=\"language-center-section\"><h2>PHÒNG HỌC</h2><div class=\"language-center-grid\">"+
-    rooms.map(x=>"<div class=\"language-center-room\">"+esc(x)+"</div>").join("")+
+    rooms.map((x,i)=>"<button type=\"button\" class=\"language-center-room\" data-room=\""+i+"\">"+esc(x)+"</button>").join("")+
     "</div></section>"+
     "<section class=\"language-center-section\"><h2>NỘI DUNG HỌC TẬP</h2><div class=\"language-center-grid\">"+
     lang.skills.map((x,i)=>"<button class=\"language-center-room\" data-skill=\""+i+"\">"+esc(x.name)+"</button>").join("")+
@@ -650,7 +675,7 @@ function vLanguages(){
       lang.certificates.map(x=>"<button class=\"language-center-room\" data-exam=\""+x.id+"\">"+esc(x.name)+"</button>").join("")+
       "</div></section>":"")+
     "<section class=\"language-center-section\"><h2>CÔNG CỤ VÀ HỌC LIỆU</h2><div class=\"language-center-grid\">"+
-    lang.features.map(x=>x==="AI TUTOR"||x==="VIDEO STUDIO"?"<button class=\"language-center-room\" data-tool=\""+(x==="AI TUTOR"?"tutor":"video")+"\">"+esc(x)+"</button>":"<div class=\"language-center-room\">"+esc(x)+"</div>").join("")+
+    lang.features.map(x=>"<button type=\"button\" class=\"language-center-room\" data-feature=\""+esc(x)+"\">"+esc(x)+"</button>").join("")+
     "</div></section>";
   $("#langBack").onclick=back;
   main.querySelectorAll("[data-skill]").forEach(b=>b.onclick=()=>{S.langMode="skill";S.langItem=b.dataset.skill;render();});
