@@ -147,7 +147,7 @@ const examProfiles={
   {name:"COMPRÉHENSION ÉCRITE",time:"Thay đổi theo cấp độ",tasks:"Đọc văn bản đời sống, thư từ, bài báo và văn bản lập luận",criteria:"Hiểu thông tin, mục đích và quan điểm."},
   {name:"PRODUCTION ÉCRITE",time:"Thay đổi theo cấp độ",tasks:"Viết văn bản theo nhiệm vụ và độ dài quy định của cấp độ",criteria:"Hoàn thành nhiệm vụ, mạch lạc, từ vựng và ngữ pháp."},
   {name:"PRODUCTION ORALE",time:"Thay đổi theo cấp độ",tasks:"Phỏng vấn, trình bày quan điểm và tương tác",criteria:"Khả năng diễn đạt, tương tác, lập luận và phát âm."}
- ],route:["Chọn cấp độ A1–B2","Học từ vựng và cấu trúc theo chủ đề cấp độ","Luyện bốn kỹ năng theo dạng đề chính thức","Làm đề mẫu và đối chiếu thang điểm từng kỹ năng"],source:"https://www.france-education-international.fr/en/node/105"},
+ ],route:["Chọn cấp độ A1–B2","Học từ vựng và cấu trúc theo chủ đề cấp độ","Luyện bốn kỹ năng theo dạng đề chính thức","Làm đề mẫu và đối chiếu thang điểm từng kỹ năng"],note:"Theo quy định DELF, mỗi kỹ năng được chấm trên 25 điểm; tổng điểm tối thiểu để đạt là 50/100 và không kỹ năng nào được dưới 5/25. Cần kiểm tra hướng dẫn của đúng cấp độ và phiên bản thi.",source:"https://www.france-education-international.fr/en/node/105"},
  goethe:{levels:["A1","A2","B1","B2","C1","C2"],sections:[
   {name:"HÖREN",time:"Thay đổi theo cấp độ",tasks:"Nghe hội thoại, thông báo, phỏng vấn và bài nói",criteria:"Hiểu ý chính, chi tiết và thông tin hàm ẩn theo cấp độ."},
   {name:"LESEN",time:"Thay đổi theo cấp độ",tasks:"Đọc tin nhắn, thư, quảng cáo, bài báo và văn bản dài",criteria:"Hiểu thông tin, lập trường, cấu trúc và suy luận."},
