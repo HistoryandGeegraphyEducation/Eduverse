@@ -118,13 +118,13 @@ function mountExam(root,lang,exam,onBack){
  function draw(){
   const part=profile.sections.find(x=>x.name===section)||profile.sections[0];
   let exercise="";
-  if(started&&/WRITING|VIẾT|SCHREIBEN|PRODUCTION ÉCRITE|EXPRESIÓN E INTERACCIÓN ESCRITAS/.test(section)){
+  if(started&&/WRITING|VIẾT|SCHREIBEN|PRODUCTION ÉCRITE|EXPRESIÓN E INTERACCIÓN ESCRITAS|书写/.test(section)){
    exercise='<label>PHẦN TRẢ LỜI<textarea id="examWriting" rows="8" placeholder="Viết câu trả lời theo yêu cầu của đề luyện"></textarea></label><p id="examCount">0 từ</p><button type="button" id="examEvaluate">TỰ ĐÁNH GIÁ</button><output id="examResult"></output>';
   }else if(started&&/SPEAKING|NÓI|SPRECHEN|PRODUCTION ORALE|EXPRESIÓN E INTERACCIÓN ORALES/.test(section)){
    exercise='<p>'+esc(sample.sentence)+'</p><button type="button" id="examListen">NGHE MẪU</button><button type="button" id="examSpeak">GHI NHẬN CÂU TRẢ LỜI</button><output id="examResult"></output>';
-  }else if(started&&/LISTENING|NGHE|HÖREN|ORAL|AUDITIVA/.test(section)){
+  }else if(started&&/LISTENING|NGHE|HÖREN|ORAL|AUDITIVA|听力/.test(section)){
    exercise='<p>'+esc(sample.sentence)+'</p><button type="button" id="examListen">PHÁT ÂM THANH MẪU</button><p>'+esc(sample.question)+'</p>'+sample.answer.map((x,i)=>'<label><input type="radio" name="examChoice" value="'+i+'">'+esc(x)+'</label>').join("");
-  }else if(started&&/READING|ĐỌC|LESEN|ÉCRITE|LECTURA/.test(section)){
+  }else if(started&&/READING|ĐỌC|LESEN|ÉCRITE|LECTURA|阅读/.test(section)){
    exercise='<p>'+esc(sample.reading)+'</p><p>'+esc(sample.question)+'</p>'+sample.answer.map((x,i)=>'<label><input type="radio" name="examChoice" value="'+i+'">'+esc(x)+'</label>').join("");
   }else if(started){
    exercise=words.slice(0,5).map((w,i)=>'<div class="ll-exam-q"><p>'+(i+1)+'. '+esc("Chọn nghĩa phù hợp với: "+w[0])+'</p>'+words.slice(0,5).map((opt,j)=>'<label><input type="radio" name="examQ'+i+'" value="'+j+'">'+esc(opt[2])+'</label>').join("")+'</div>').join("");
