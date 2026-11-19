@@ -587,7 +587,7 @@ function vLanguages(){
   if(S.langMode==="skill"){
     const skill=lang.skills[Number(S.langItem)];
     if(!skill){S.langMode=null;S.langItem=null;return vLanguages();}
-    if(lang.id==="vi"&&window.VietnameseLearning){VietnameseLearning.mountSkill(main,lang,skill,()=>{S.langMode=null;S.langItem=null;render();});}
+    if(lang.id==="vi"&&skill.name!=="TỪ ĐIỂN"&&window.VietnameseLearning){VietnameseLearning.mountSkill(main,lang,skill,()=>{S.langMode=null;S.langItem=null;render();});}
     else     LanguageLearning.mountSkill(main,lang,skill,()=>{S.langMode=null;S.langItem=null;render();});
     return;
   }
@@ -661,7 +661,7 @@ function vLanguages(){
   main.querySelectorAll("[data-skill]").forEach(b=>b.onclick=()=>{S.langMode="skill";S.langItem=b.dataset.skill;render();});
   main.querySelectorAll("[data-room]").forEach(b=>b.onclick=()=>{
     const room=rooms[Number(b.dataset.room)]||"";
-    const roomMap={"PHÒNG LUYỆN NGHE":"NGHE","PHÒNG LUYỆN NÓI":"NÓI","PHÒNG ĐỌC":"ĐỌC","PHÒNG LUYỆN VIẾT":"VIẾT","PHÒNG NGỮ PHÁP":"NGỮ PHÁP","PHÒNG TỪ VỰNG":"TỪ VỰNG","PHÒNG TỪ ĐIỂN":"TỪ ĐIỂN","TỪ ĐIỂN HÁN VIỆT":"HÁN VIỆT","TỪ ĐIỂN NÔM":"CHỮ NÔM","THƯ VIỆN VĂN BẢN":"VĂN BẢN CỔ","CHỮ NÔM":"CHỮ NÔM","HÁN TỰ":"HÁN TỰ","HÁN VIỆT":"HÁN VIỆT","VĂN BẢN CỔ":"VĂN BẢN CỔ","VĂN HỌC":"VĂN HỌC","TIẾNG VIỆT HIỆN ĐẠI":"TIẾNG VIỆT HIỆN ĐẠI","NGỮ ÂM":"NGỮ ÂM","CHÍNH TẢ":"CHÍNH TẢ","NGỮ PHÁP":"NGỮ PHÁP","TỪ VỰNG":"TỪ VỰNG","ĐỌC HIỂU":"ĐỌC HIỂU","VIẾT":"VIẾT"};
+    const roomMap={"PHÒNG LUYỆN NGHE":"NGHE","PHÒNG LUYỆN NÓI":"NÓI","PHÒNG ĐỌC":"ĐỌC","PHÒNG LUYỆN VIẾT":"VIẾT","PHÒNG NGỮ PHÁP":"NGỮ PHÁP","PHÒNG TỪ VỰNG":"TỪ VỰNG","PHÒNG TỪ ĐIỂN":"TỪ ĐIỂN","TỪ ĐIỂN TIẾNG VIỆT":"TỪ ĐIỂN","TỪ ĐIỂN HÁN VIỆT":"HÁN VIỆT","TỪ ĐIỂN NÔM":"CHỮ NÔM","THƯ VIỆN VĂN BẢN":"VĂN BẢN CỔ","CHỮ NÔM":"CHỮ NÔM","HÁN TỰ":"HÁN TỰ","HÁN VIỆT":"HÁN VIỆT","VĂN BẢN CỔ":"VĂN BẢN CỔ","VĂN HỌC":"VĂN HỌC","TIẾNG VIỆT HIỆN ĐẠI":"TIẾNG VIỆT HIỆN ĐẠI","NGỮ ÂM":"NGỮ ÂM","CHÍNH TẢ":"CHÍNH TẢ","NGỮ PHÁP":"NGỮ PHÁP","TỪ VỰNG":"TỪ VỰNG","ĐỌC HIỂU":"ĐỌC HIỂU","VIẾT":"VIẾT"};
     if(room==="KIỂM TRA"){S.langMode="assessment";S.langItem=null;render();return;}
     if(room==="ĐÁNH GIÁ"||room==="PHÒNG TỰ HỌC"){S.langMode="progress";S.langItem=null;render();return;}
     if(room==="ÔN THI CHỨNG CHỈ"&&lang.certificates.length){S.langMode="exam";S.langItem=lang.certificates[0].id;render();return;}
@@ -678,7 +678,7 @@ function vLanguages(){
     if(feature==="VIDEO STUDIO"){S.langMode="video";S.langItem=null;render();return;}
     if(feature==="ĐÁNH GIÁ"){S.langMode="progress";S.langItem=null;render();return;}
     if(feature==="THƯ VIỆN HỌC LIỆU"||feature==="THƯ VIỆN VĂN BẢN"){S.langMode="library";S.langItem=null;render();return;}
-    const target=feature==="GIỌNG NÓI"?"NÓI":feature==="TỪ ĐIỂN HÁN VIỆT"?"HÁN VIỆT":feature==="TỪ ĐIỂN NÔM"?"CHỮ NÔM":feature;
+    const target=feature==="GIỌNG NÓI"?"NÓI":feature==="TỪ ĐIỂN TIẾNG VIỆT"?"TỪ ĐIỂN":feature==="TỪ ĐIỂN HÁN VIỆT"?"HÁN VIỆT":feature==="TỪ ĐIỂN NÔM"?"CHỮ NÔM":feature;
     const si=lang.skills.findIndex(x=>x.name===target);
     if(si>=0){S.langMode="skill";S.langItem=String(si);render();}
   });
