@@ -126,11 +126,12 @@ const LANGUAGE_PROGRAMS = [
       {icon:"✍️",name:"CHÍNH TẢ",topics:["Quy tắc viết hoa","Quy tắc i/y","Phân biệt phụ âm đầu dễ nhầm","Phân biệt vần và âm cuối","Dấu câu và trình bày văn bản","Lỗi chính tả thường gặp"]},
       {icon:"🧩",name:"NGỮ PHÁP",topics:["Từ loại tiếng Việt","Cụm từ và thành phần câu","Câu đơn và câu ghép","Liên kết câu và đoạn văn","Phong cách chức năng","Biện pháp tu từ và hiệu quả biểu đạt"]},
       {icon:"📚",name:"TỪ VỰNG",topics:["Từ đơn và từ phức","Từ ghép và từ láy","Từ đồng nghĩa và trái nghĩa","Từ nhiều nghĩa và đồng âm","Thành ngữ và tục ngữ","Từ vay mượn và thuật ngữ"]},
+      {icon:"📕",name:"TỪ ĐIỂN",topics:["Tra cứu từ tiếng Việt hiện đại","Nghĩa gốc và nghĩa chuyển","Từ loại và cách dùng","Từ đồng âm và đa nghĩa","Ví dụ và kết hợp từ","Từ địa phương và từ cổ"]},
       {icon:"📘",name:"ĐỌC HIỂU",topics:["Đọc hiểu văn bản thông tin","Đọc hiểu văn bản nghị luận","Đọc hiểu văn bản văn học","Xác định chủ đề và thông điệp","Phân tích hình thức và nội dung","Đọc hiểu văn bản đa phương thức"]},
       {icon:"🖋️",name:"VIẾT",topics:["Viết câu đúng ngữ pháp","Viết đoạn văn","Văn bản thuyết minh","Văn bản tự sự và miêu tả","Văn bản nghị luận","Biên tập và sửa lỗi diễn đạt"]}
     ],
-    rooms:["TIẾNG VIỆT HIỆN ĐẠI","HÁN VIỆT","CHỮ NÔM","HÁN TỰ","VĂN HỌC","VĂN BẢN CỔ","NGỮ ÂM","CHÍNH TẢ","NGỮ PHÁP","TỪ VỰNG","ĐỌC HIỂU","VIẾT","KIỂM TRA","ĐÁNH GIÁ","THƯ VIỆN VĂN BẢN"],
-    features:["TỪ ĐIỂN HÁN VIỆT","TỪ ĐIỂN NÔM","THƯ VIỆN VĂN BẢN","AI TUTOR","THƯ VIỆN HỌC LIỆU"],
+    rooms:["TIẾNG VIỆT HIỆN ĐẠI","HÁN VIỆT","CHỮ NÔM","HÁN TỰ","VĂN HỌC","VĂN BẢN CỔ","NGỮ ÂM","CHÍNH TẢ","NGỮ PHÁP","TỪ VỰNG","TỪ ĐIỂN","ĐỌC HIỂU","VIẾT","KIỂM TRA","ĐÁNH GIÁ","THƯ VIỆN VĂN BẢN"],
+    features:["TỪ ĐIỂN TIẾNG VIỆT","TỪ ĐIỂN HÁN VIỆT","TỪ ĐIỂN NÔM","THƯ VIỆN VĂN BẢN","AI TUTOR","VIDEO STUDIO","THƯ VIỆN HỌC LIỆU"],
     tracks:[],
     certificates:[]
   }
