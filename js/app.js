@@ -614,26 +614,6 @@ function vLanguages(){
     $("#langBack").onclick=back;
     main.querySelectorAll("[data-skill]").forEach(b=>b.onclick=()=>{S.langMode="skill";S.langItem=b.dataset.skill;render();});
 
-  main.querySelectorAll("[data-room]").forEach(b=>b.onclick=()=>{
-    const room=rooms[Number(b.dataset.room)]||"";
-    const roomMap={"PHÒNG LUYỆN NGHE":"NGHE","PHÒNG LUYỆN NÓI":"NÓI","PHÒNG ĐỌC":"ĐỌC","PHÒNG LUYỆN VIẾT":"VIẾT","PHÒNG NGỮ PHÁP":"NGỮ PHÁP","PHÒNG TỪ VỰNG":"TỪ VỰNG","PHÒNG TỪ ĐIỂN":"TỪ ĐIỂN","TỪ ĐIỂN HÁN VIỆT":"HÁN VIỆT","TỪ ĐIỂN NÔM":"CHỮ NÔM","THƯ VIỆN VĂN BẢN":"VĂN BẢN CỔ","CHỮ NÔM":"CHỮ NÔM","HÁN TỰ":"HÁN TỰ","HÁN VIỆT":"HÁN VIỆT","VĂN BẢN CỔ":"VĂN BẢN CỔ","VĂN HỌC":"VĂN HỌC","TIẾNG VIỆT HIỆN ĐẠI":"TIẾNG VIỆT HIỆN ĐẠI","NGỮ ÂM":"NGỮ ÂM","CHÍNH TẢ":"CHÍNH TẢ","NGỮ PHÁP":"NGỮ PHÁP","TỪ VỰNG":"TỪ VỰNG","ĐỌC HIỂU":"ĐỌC HIỂU","VIẾT":"VIẾT"};
-    if(room==="KIỂM TRA"){S.langMode="assessment";S.langItem=null;render();return;}
-    if(room==="ĐÁNH GIÁ"){S.langMode="progress";S.langItem=null;render();return;}
-    if(room==="THƯ VIỆN HỌC LIỆU"||room==="THƯ VIỆN VĂN BẢN"){S.langMode="library";S.langItem=null;render();return;}
-    const skillName=roomMap[room]||room.replace(/^PHÒNG /,"");
-    const si=lang.skills.findIndex(x=>x.name===skillName);
-    if(si>=0){S.langMode="skill";S.langItem=String(si);render();}
-  });
-  main.querySelectorAll("[data-feature]").forEach(b=>b.onclick=()=>{
-    const feature=b.dataset.feature;
-    if(feature==="AI TUTOR"){S.langMode="tutor";S.langItem=null;render();return;}
-    if(feature==="VIDEO STUDIO"){S.langMode="video";S.langItem=null;render();return;}
-    if(feature==="ĐÁNH GIÁ"){S.langMode="progress";S.langItem=null;render();return;}
-    if(feature==="THƯ VIỆN HỌC LIỆU"||feature==="THƯ VIỆN VĂN BẢN"){S.langMode="library";S.langItem=null;render();return;}
-    const target=feature==="GIỌNG NÓI"?"NÓI":feature==="TỪ ĐIỂN HÁN VIỆT"?"HÁN VIỆT":feature==="TỪ ĐIỂN NÔM"?"CHỮ NÔM":feature;
-    const si=lang.skills.findIndex(x=>x.name===target);
-    if(si>=0){S.langMode="skill";S.langItem=String(si);render();}
-  });
 
     return;
   }
@@ -679,6 +659,27 @@ function vLanguages(){
     "</div></section>";
   $("#langBack").onclick=back;
   main.querySelectorAll("[data-skill]").forEach(b=>b.onclick=()=>{S.langMode="skill";S.langItem=b.dataset.skill;render();});
+  main.querySelectorAll("[data-room]").forEach(b=>b.onclick=()=>{
+    const room=rooms[Number(b.dataset.room)]||"";
+    const roomMap={"PHÒNG LUYỆN NGHE":"NGHE","PHÒNG LUYỆN NÓI":"NÓI","PHÒNG ĐỌC":"ĐỌC","PHÒNG LUYỆN VIẾT":"VIẾT","PHÒNG NGỮ PHÁP":"NGỮ PHÁP","PHÒNG TỪ VỰNG":"TỪ VỰNG","PHÒNG TỪ ĐIỂN":"TỪ ĐIỂN","TỪ ĐIỂN HÁN VIỆT":"HÁN VIỆT","TỪ ĐIỂN NÔM":"CHỮ NÔM","THƯ VIỆN VĂN BẢN":"VĂN BẢN CỔ","CHỮ NÔM":"CHỮ NÔM","HÁN TỰ":"HÁN TỰ","HÁN VIỆT":"HÁN VIỆT","VĂN BẢN CỔ":"VĂN BẢN CỔ","VĂN HỌC":"VĂN HỌC","TIẾNG VIỆT HIỆN ĐẠI":"TIẾNG VIỆT HIỆN ĐẠI","NGỮ ÂM":"NGỮ ÂM","CHÍNH TẢ":"CHÍNH TẢ","NGỮ PHÁP":"NGỮ PHÁP","TỪ VỰNG":"TỪ VỰNG","ĐỌC HIỂU":"ĐỌC HIỂU","VIẾT":"VIẾT"};
+    if(room==="KIỂM TRA"){S.langMode="assessment";S.langItem=null;render();return;}
+    if(room==="ĐÁNH GIÁ"){S.langMode="progress";S.langItem=null;render();return;}
+    if(room==="THƯ VIỆN HỌC LIỆU"||room==="THƯ VIỆN VĂN BẢN"){S.langMode="library";S.langItem=null;render();return;}
+    const skillName=roomMap[room]||room.replace(/^PHÒNG /,"");
+    const si=lang.skills.findIndex(x=>x.name===skillName);
+    if(si>=0){S.langMode="skill";S.langItem=String(si);render();}
+  });
+  main.querySelectorAll("[data-feature]").forEach(b=>b.onclick=()=>{
+    const feature=b.dataset.feature;
+    if(feature==="AI TUTOR"){S.langMode="tutor";S.langItem=null;render();return;}
+    if(feature==="VIDEO STUDIO"){S.langMode="video";S.langItem=null;render();return;}
+    if(feature==="ĐÁNH GIÁ"){S.langMode="progress";S.langItem=null;render();return;}
+    if(feature==="THƯ VIỆN HỌC LIỆU"||feature==="THƯ VIỆN VĂN BẢN"){S.langMode="library";S.langItem=null;render();return;}
+    const target=feature==="GIỌNG NÓI"?"NÓI":feature==="TỪ ĐIỂN HÁN VIỆT"?"HÁN VIỆT":feature==="TỪ ĐIỂN NÔM"?"CHỮ NÔM":feature;
+    const si=lang.skills.findIndex(x=>x.name===target);
+    if(si>=0){S.langMode="skill";S.langItem=String(si);render();}
+  });
+
   main.querySelectorAll("[data-track]").forEach(b=>b.onclick=()=>{
     S.langMode="track";S.langItem=b.dataset.track;render();
   });
