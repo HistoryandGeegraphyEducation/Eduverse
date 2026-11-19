@@ -1399,3 +1399,38 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 .language-catalog-certificate{background:#fff}
 .language-catalog-room:active,.language-catalog-path:active,.language-catalog-certificate:active{transform:translateY(1px)}
 @media(max-width:520px){.language-catalog-room-grid{gap:7px}.language-catalog-room{min-height:51px;padding:10px;font-size:10px}.language-catalog-identity .language-flag-wave{width:68px;height:48px}.language-catalog-identity .language-flag-cloth{width:60px;height:41px}.language-catalog-certificates>div{gap:7px}}
+
+
+/* ===== EDUVERSE AUTH · Glass interface using existing brand palette ===== */
+#modal{background:rgba(12,24,76,.42);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);padding:16px}
+#modal .sheet{position:relative;isolation:isolate;overflow:hidden;width:min(100%,430px);max-height:min(88dvh,760px);padding:clamp(22px,5vw,30px);border:1px solid rgba(255,255,255,.72);border-radius:26px;background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(238,243,255,.76));box-shadow:0 24px 70px rgba(12,24,92,.28),inset 0 1px rgba(255,255,255,.9);color:var(--deep);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+#modal .sheet:before,#modal .sheet:after{content:"";position:absolute;z-index:-1;pointer-events:none;border-radius:50%;filter:blur(1px)}
+#modal .sheet:before{width:190px;height:190px;right:-90px;top:-105px;background:radial-gradient(circle,rgba(73,99,220,.18),transparent 70%)}
+#modal .sheet:after{width:160px;height:160px;left:-95px;bottom:-100px;background:radial-gradient(circle,rgba(80,130,190,.16),transparent 70%)}
+.auth-glass-orbit{position:absolute;right:20px;top:20px;width:34px;height:34px;border:1px solid rgba(52,76,180,.28);border-radius:12px;transform:rotate(12deg);pointer-events:none}
+.auth-glass-orbit:before,.auth-glass-orbit:after{content:"";position:absolute;inset:5px;border:1px solid rgba(52,76,180,.2);border-radius:8px}
+.auth-glass-orbit:after{inset:11px;background:rgba(52,76,180,.12);border:0}
+#modal .auth-sheet-head{position:relative;padding-right:42px;margin-bottom:20px}
+#modal .auth-eyebrow{display:block;margin-bottom:9px;color:var(--blue);font:800 10px/1.2 Arial,sans-serif;letter-spacing:1.5px}
+#modal .auth-sheet-head h2{margin:0 0 8px;color:var(--deep);font:800 clamp(23px,6vw,29px)/1.15 Arial,sans-serif;letter-spacing:.2px}
+#modal .auth-sheet-head p{margin:0;color:#53627c;font:400 14px/1.5 Arial,sans-serif}
+#modal .auth-field{display:block;margin:0 0 13px;color:#344466;font:700 12px/1.3 Arial,sans-serif}
+#modal .auth-field>span:first-child{display:block;margin:0 0 6px}
+#modal .auth-field input{width:100%;min-width:0;box-sizing:border-box;height:48px;margin:0;padding:0 14px;border:1px solid rgba(72,91,151,.22);border-radius:13px;background:rgba(255,255,255,.66);box-shadow:inset 0 1px 3px rgba(27,45,100,.04);color:var(--deep);font:500 15px Arial,sans-serif;outline:none;transition:border-color .18s,box-shadow .18s,background .18s}
+#modal .auth-field input::placeholder{color:#8a95aa}
+#modal .auth-field input:focus{border-color:var(--blue);background:rgba(255,255,255,.92);box-shadow:0 0 0 3px rgba(49,71,184,.12)}
+#modal .auth-password{display:flex;align-items:center;position:relative}
+#modal .auth-password input{padding-right:62px}
+#modal .auth-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;border-radius:8px;padding:7px 8px;background:rgba(49,71,184,.08);color:var(--blue);font:700 11px Arial,sans-serif}
+#modal .auth-error{min-height:18px;margin:0 0 8px;color:#b42318;font:600 12px/1.4 Arial,sans-serif}
+#modal .auth-links{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 16px}
+#modal .auth-links button{border:0;padding:4px 0;background:transparent;color:var(--blue);font:700 12px Arial,sans-serif;text-align:left}
+#modal .sheet .btns{display:flex;gap:10px;margin-top:4px}
+#modal .sheet .btns button{min-height:46px;flex:1;padding:11px 13px;border:1px solid transparent;border-radius:13px;font:700 13px Arial,sans-serif;transition:transform .16s,filter .16s}
+#modal .sheet .btns button:active{transform:translateY(1px)}
+#modal .sheet .btns .ok{background:linear-gradient(135deg,var(--blue),var(--deep));color:#fff;box-shadow:0 7px 16px rgba(35,55,160,.2)}
+#modal .sheet .btns .no{background:rgba(255,255,255,.58);border-color:rgba(72,91,151,.2);color:#43516d}
+#modal .sheet .btns button:disabled{opacity:.6;cursor:wait}
+.account-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.72);background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(237,243,255,.72));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 12px 30px rgba(25,48,110,.12),inset 0 1px rgba(255,255,255,.9)}
+.account-card .cta{min-width:150px;border-radius:13px}
+@media(max-width:420px){#modal{padding:12px}#modal .sheet{padding:22px 19px;border-radius:22px}#modal .auth-sheet-head{margin-bottom:17px}#modal .auth-field input{height:46px}}
