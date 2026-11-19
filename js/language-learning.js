@@ -24,6 +24,52 @@ ru:{sentence:"Доброе утро. Меня зовут Анна. Я студе
 vi:{sentence:"Chào buổi sáng. Tôi tên là An. Tôi là học sinh.",meaning:"Good morning. My name is An. I am a student.",reading:"An là học sinh. Bạn sống cùng gia đình trong một thành phố nhỏ. Mỗi buổi sáng, An đi bộ đến trường và đọc sách trước giờ học.",question:"Mỗi buổi sáng An đi đâu?",answer:["Đến trường","Đến bệnh viện","Đến chợ"],correct:0}
 };
 const voices={en:"en-GB",fr:"fr-FR",de:"de-DE",zh:"zh-CN",es:"es-ES",ru:"ru-RU",vi:"vi-VN"};
+
+const grammarLessons={
+en:[
+ {key:"Danh từ, mạo từ",rule:"Danh từ đếm được số ít thường cần từ hạn định. Dùng a/an khi nhắc đến một đối tượng chưa xác định; dùng the khi người nghe có thể nhận diện đối tượng.",example:"I saw a book. The book was on the table.",meaning:"Tôi thấy một quyển sách. Quyển sách ở trên bàn."},
+ {key:"Các thì hiện tại",rule:"Present Simple diễn tả thói quen, sự thật và trạng thái. Present Continuous diễn tả hành động đang diễn ra hoặc tình huống tạm thời.",example:"She works at a school. / She is working now.",meaning:"Cô ấy làm việc tại một trường học. / Hiện cô ấy đang làm việc."},
+ {key:"Các thì quá khứ",rule:"Past Simple dùng cho sự việc đã kết thúc tại thời điểm quá khứ. Present Perfect liên hệ trải nghiệm hoặc kết quả quá khứ với hiện tại.",example:"I visited Hue last year. / I have visited Hue twice.",meaning:"Tôi đã thăm Huế năm ngoái. / Tôi đã thăm Huế hai lần."},
+ {key:"Câu bị động",rule:"Câu bị động nhấn mạnh đối tượng chịu tác động. Cấu trúc cơ bản: be + past participle; thì được thể hiện qua động từ be.",example:"The report was written yesterday.",meaning:"Báo cáo được viết hôm qua."}
+],
+fr:[
+ {key:"Giống và số của danh từ",rule:"Danh từ tiếng Pháp có giống đực hoặc giống cái; hình thức số nhiều thường thêm -s nhưng cách phát âm không phải lúc nào cũng thay đổi.",example:"un livre / une maison / des livres",meaning:"một quyển sách / một ngôi nhà / những quyển sách"},
+ {key:"Mạo từ xác định",rule:"Le, la, les dùng với danh từ xác định; un, une, des thường dùng khi giới thiệu một đối tượng chưa xác định.",example:"J'ai un livre. Le livre est intéressant.",meaning:"Tôi có một quyển sách. Quyển sách ấy thú vị."},
+ {key:"Présent",rule:"Động từ được chia theo chủ ngữ. Với động từ nhóm -er, đuôi hiện tại thường là -e, -es, -e, -ons, -ez, -ent.",example:"Je parle français. Nous parlons français.",meaning:"Tôi nói tiếng Pháp. Chúng tôi nói tiếng Pháp."},
+ {key:"Phủ định",rule:"Cấu trúc phủ định cơ bản là ne + động từ + pas; trong khẩu ngữ, ne thường bị lược nhưng văn viết chuẩn cần giữ.",example:"Je ne comprends pas.",meaning:"Tôi không hiểu."}
+],
+de:[
+ {key:"Danh từ, giống",rule:"Danh từ tiếng Đức viết hoa và có giống đực (der), giống cái (die), giống trung (das). Nên học danh từ cùng mạo từ và dạng số nhiều.",example:"der Tisch, die Lampe, das Buch",meaning:"cái bàn, chiếc đèn, quyển sách"},
+ {key:"Quán từ xác định",rule:"Mạo từ biến đổi theo giống, số và cách. Nominativ thường đánh dấu chủ ngữ; Akkusativ thường đánh dấu bổ ngữ trực tiếp.",example:"Der Mann sieht den Hund.",meaning:"Người đàn ông nhìn thấy con chó."},
+ {key:"Chia động từ hiện tại",rule:"Động từ thường chia theo ngôi; động từ đứng vị trí thứ hai trong câu trần thuật chính.",example:"Heute lerne ich Deutsch.",meaning:"Hôm nay tôi học tiếng Đức."},
+ {key:"Mệnh đề phụ",rule:"Trong nhiều mệnh đề phụ có liên từ như weil, dass, động từ chia đứng cuối mệnh đề.",example:"Ich lerne Deutsch, weil ich in Berlin arbeite.",meaning:"Tôi học tiếng Đức vì tôi làm việc ở Berlin."}
+],
+zh:[
+ {key:"Trật tự từ",rule:"Trật tự cơ bản của câu tiếng Trung thường là Chủ ngữ – Động từ – Tân ngữ. Trạng ngữ thời gian thường đứng trước động từ.",example:"我今天学习中文。",meaning:"Hôm nay tôi học tiếng Trung."},
+ {key:" 是 và 有",rule:"是 thường nối chủ ngữ với danh từ/cụm danh từ; 有 diễn đạt sự sở hữu hoặc tồn tại. Không dùng 是 trước tính từ vị ngữ thông thường.",example:"我是学生。 / 我有一本书。",meaning:"Tôi là học sinh. / Tôi có một quyển sách."},
+ {key:" 的, 得 và 地",rule:"的 thường nối định ngữ với danh từ; 得 đứng sau động từ/tính từ để dẫn bổ ngữ; 地 đứng trước động từ để đánh dấu trạng ngữ.",example:"我的书。 / 他说得很好。 / 慢慢地走。",meaning:"Sách của tôi. / Anh ấy nói rất tốt. / Đi một cách chậm rãi."},
+ {key:"了, 过, 着",rule:"了 thường đánh dấu sự thay đổi hoặc sự việc đã hoàn thành trong ngữ cảnh; 过 nhấn mạnh trải nghiệm; 着 biểu thị trạng thái tiếp diễn.",example:"我去过北京。",meaning:"Tôi từng đến Bắc Kinh."}
+],
+es:[
+ {key:"Giống và số",rule:"Danh từ tiếng Tây Ban Nha có giống và số. Nhiều danh từ kết thúc bằng -o là giống đực, -a là giống cái, nhưng có ngoại lệ cần học theo từ.",example:"el libro / la casa / los libros",meaning:"quyển sách / ngôi nhà / những quyển sách"},
+ {key:"Ser, estar và hay",rule:"Ser thường diễn đạt đặc tính/định danh; estar diễn đạt trạng thái hoặc vị trí; hay diễn đạt sự tồn tại.",example:"Soy estudiante. Estoy en casa. Hay un libro.",meaning:"Tôi là sinh viên. Tôi đang ở nhà. Có một quyển sách."},
+ {key:"Chia động từ hiện tại",rule:"Động từ chia theo ngôi và nhóm -ar, -er, -ir. Chủ ngữ có thể lược khi đuôi động từ đã cho biết ngôi.",example:"Hablo español. / Vivimos en Hanoi.",meaning:"Tôi nói tiếng Tây Ban Nha. / Chúng tôi sống ở Hà Nội."},
+ {key:"Pretérito perfecto",rule:"Pretérito perfecto thường dùng haber ở hiện tại + phân từ quá khứ để nói về sự việc đã xảy ra có liên hệ với hiện tại.",example:"He terminado el trabajo.",meaning:"Tôi đã hoàn thành công việc."}
+],
+ru:[
+ {key:"Giống và số",rule:"Danh từ tiếng Nga có giống đực, giống cái và giống trung; hình thức số nhiều và biến cách phụ thuộc nhóm danh từ.",example:"стол, книга, окно",meaning:"cái bàn, quyển sách, cửa sổ"},
+ {key:"Sáu cách danh từ",rule:"Danh từ thay đổi hình thức theo chức năng cú pháp và quan hệ ngữ nghĩa. Cần học cách cùng giới từ và động từ chi phối.",example:"Я читаю книгу. / У меня есть книга.",meaning:"Tôi đọc sách. / Tôi có một quyển sách."},
+ {key:"Chia động từ hiện tại",rule:"Động từ hiện tại chia theo ngôi và số; chủ ngữ đại từ thường có thể lược khi ngữ cảnh rõ.",example:"Я читаю. Мы читаем.",meaning:"Tôi đọc. Chúng tôi đọc."},
+ {key:"Thể hoàn thành và chưa hoàn thành",rule:"Thể chưa hoàn thành thường nhìn hành động như quá trình, thói quen hoặc sự lặp lại; thể hoàn thành nhìn hành động như sự việc đạt kết quả.",example:"Я читал книгу. / Я прочитал книгу.",meaning:"Tôi đã đọc sách (quá trình). / Tôi đã đọc xong quyển sách."}
+],
+vi:[
+ {key:"Từ loại tiếng Việt",rule:"Tiếng Việt là ngôn ngữ đơn lập điển hình: từ không biến đổi hình thái theo giống, số hay ngôi. Từ loại được nhận diện qua khả năng kết hợp và chức năng trong câu.",example:"những quyển sách mới / đang học / rất đẹp",meaning:"Từ chỉ số lượng, danh từ, động từ và tính từ được nhận diện qua ngữ cảnh kết hợp."},
+ {key:"Cụm từ và thành phần câu",rule:"Cụm danh từ, cụm động từ và cụm tính từ có trung tâm và các thành tố phụ. Cần phân biệt thành phần câu với thành phần cấu tạo cụm từ.",example:"Những học sinh lớp sáu đang đọc sách.",meaning:"Cụm chủ ngữ và vị ngữ có cấu trúc nội bộ riêng."},
+ {key:"Câu đơn và câu ghép",rule:"Câu đơn có một kết cấu chủ-vị nòng cốt; câu ghép có từ hai kết cấu chủ-vị trở lên, liên hệ bằng quan hệ ngữ pháp hoặc phương tiện liên kết.",example:"Trời mưa. / Trời mưa nên đường trơn.",meaning:"Câu thứ hai thể hiện quan hệ nguyên nhân – kết quả."},
+ {key:"Liên kết câu",rule:"Các câu trong đoạn được liên kết bằng phép lặp, thế, nối, liên tưởng và quan hệ nghĩa. Cần dùng phương tiện liên kết đúng quan hệ logic.",example:"Lan đọc xong cuốn sách. Cô ấy ghi lại những ý chính.",meaning:"Đại từ 'cô ấy' thực hiện phép thế."}
+]
+};
+
 function speak(text,lang){if(!("speechSynthesis" in window))return false;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=voices[lang.id]||"en-US";u.rate=.88;window.speechSynthesis.speak(u);return true;}
 function progressCount(lang,skill){const p=getProgress();return ((p[lang.id]||{})[skill.name]||[]).length;}
 function contentFor(lang,skill,topic){
@@ -32,7 +78,7 @@ const sample=samples[lang.id]||samples.en;
 const name=skill.name.toUpperCase();
 if(name.includes("TỪ VỰNG"))return '<div class="ll-word-grid">'+words.map((w,i)=>'<article class="ll-word-card"><div><b>'+esc(w[0])+'</b><small>'+esc(w[1])+'</small></div><strong>'+esc(w[2])+'</strong><p>'+esc(w[3])+'</p><button type="button" data-say="'+i+'">NGHE PHÁT ÂM</button></article>').join("")+'</div>';
 if(name.includes("TỪ ĐIỂN"))return '<div class="ll-dictionary"><input id="llSearch" type="search" placeholder="Nhập từ cần tra"><button type="button" data-wiktionary>TRA WIKTIONARY</button><output id="llWiktionary"></output><div id="llResults">'+words.map((w,i)=>'<article class="ll-dict-row"><div><b>'+esc(w[0])+'</b><small>'+esc(w[1])+'</small></div><strong>'+esc(w[2])+'</strong><button type="button" data-say="'+i+'">NGHE</button></article>').join("")+'</div></div>';
-if(name.includes("NGỮ PHÁP")){const examples={en:"I am a student. / She studies English every day.",fr:"Je suis étudiant(e). / Elle étudie le français chaque jour.",de:"Ich bin Student(in). / Sie lernt jeden Tag Deutsch.",zh:"我是学生。/ 她每天学习中文。",es:"Soy estudiante. / Ella estudia español cada día.",ru:"Я студент(ка). / Она каждый день изучает русский язык.",vi:"Tôi là học sinh. / Bạn ấy học tiếng Việt mỗi ngày."};return '<div class="ll-lesson"><h3>'+esc(topic)+'</h3><p>'+esc(topic)+' được trình bày theo ví dụ và ngữ cảnh sử dụng của '+esc(lang.name.toLowerCase())+'.</p><blockquote>'+esc(examples[lang.id]||examples.en)+'</blockquote><button type="button" data-say-example>NGHE VÍ DỤ</button></div>';}
+if(name.includes("NGỮ PHÁP")){const notes=(grammarLessons[lang.id]||[]).find(x=>topic.includes(x.key));if(notes)return '<div class="ll-lesson"><h3>'+esc(topic)+'</h3><p>'+esc(notes.rule)+'</p><blockquote>'+esc(notes.example)+'<br>'+esc(notes.meaning)+'</blockquote><button type="button" data-say-example>NGHE VÍ DỤ</button></div>';return '<div class="ll-lesson"><h3>'+esc(topic)+'</h3><p>Chủ đề này cần được học cùng cấu trúc câu, ví dụ theo ngữ cảnh và bài tập vận dụng.</p></div>';}
 if(name.includes("NGHE"))return '<div class="ll-lesson"><h3>'+esc(topic)+'</h3><p class="ll-target">'+esc(sample.sentence)+'</p><button type="button" data-play-sample>PHÁT BÀI NGHE</button><div class="ll-quiz"><p>'+esc(sample.question)+'</p>'+sample.answer.map((x,i)=>'<label><input type="radio" name="llListen" value="'+i+'">'+esc(x)+'</label>').join("")+'<button type="button" data-check-listen>KIỂM TRA</button><output id="llListenResult"></output></div></div>';
 if(name.includes("NÓI")||name.includes("PHÁT ÂM"))return '<div class="ll-lesson"><h3>'+esc(topic)+'</h3><p class="ll-target">'+esc(sample.sentence)+'</p><button type="button" data-play-sample>NGHE MẪU</button><button type="button" data-recognize>BẮT ĐẦU NÓI</button><p id="llSpeechStatus" class="ll-result"></p><div class="ll-phrase-list">'+words.slice(0,5).map((w,i)=>'<button type="button" data-say="'+i+'">'+esc(w[0])+'</button>').join("")+'</div></div>';
 if(name.includes("ĐỌC"))return '<div class="ll-lesson"><h3>'+esc(topic)+'</h3><p class="ll-reading">'+esc(sample.reading)+'</p><div class="ll-quiz"><p>'+esc(sample.question)+'</p>'+sample.answer.map((x,i)=>'<label><input type="radio" name="llRead" value="'+i+'">'+esc(x)+'</label>').join("")+'<button type="button" data-check-read>KIỂM TRA</button><output id="llReadResult"></output></div></div>';
