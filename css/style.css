@@ -1351,3 +1351,18 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 .vl-sources h3{font-size:14px;color:inherit;margin:8px 0}
 .vl-sources a{color:inherit;text-decoration:underline;font-size:13px;line-height:1.45}
 @media(max-width:480px){.vl-lesson,.vl-dictionary{padding:14px}.vl-lesson h2{font-size:18px}}
+
+/* Certificate preparation */
+.ll-exam-blueprint{border:1px solid #dce4ed;border-radius:14px;padding:14px;margin:14px 0;background:#f8fafc;color:#172b45}
+.ll-exam-blueprint h2{font-size:16px;margin:0 0 10px;color:#17385e}
+.ll-exam-blueprint article{padding:10px 0;border-top:1px solid #e3e9f0;display:grid;gap:4px}
+.ll-exam-blueprint article:first-of-type{border-top:0}
+.ll-exam-blueprint article b{font-size:14px}
+.ll-exam-blueprint article span,.ll-exam-blueprint article small{font-size:13px;color:#526176}
+.ll-exam-blueprint article p{margin:0;font-size:14px;line-height:1.5}
+.ll-exam-blueprint ol{padding-left:22px;line-height:1.65;margin:0 0 10px}
+.ll-exam-blueprint a{font-size:13px;color:#234b77;text-decoration:underline}
+.ll-exam-practice{padding:12px 0;display:grid;gap:12px}
+.ll-exam-practice label{display:flex;gap:8px;align-items:flex-start;padding:9px;background:#f2f5f9;border-radius:9px}
+.ll-exam-practice input{margin-top:3px}
+.ll-exam-practice textarea{width:100%;box-sizing:border-box;border:1px solid #cbd5e1;border-radius:10px;padding:12px;font:inherit}
