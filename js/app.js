@@ -663,6 +663,9 @@ function vLanguages(){
     const room=rooms[Number(b.dataset.room)]||"";
     const roomMap={"PHÒNG LUYỆN NGHE":"NGHE","PHÒNG LUYỆN NÓI":"NÓI","PHÒNG ĐỌC":"ĐỌC","PHÒNG LUYỆN VIẾT":"VIẾT","PHÒNG NGỮ PHÁP":"NGỮ PHÁP","PHÒNG TỪ VỰNG":"TỪ VỰNG","PHÒNG TỪ ĐIỂN":"TỪ ĐIỂN","TỪ ĐIỂN HÁN VIỆT":"HÁN VIỆT","TỪ ĐIỂN NÔM":"CHỮ NÔM","THƯ VIỆN VĂN BẢN":"VĂN BẢN CỔ","CHỮ NÔM":"CHỮ NÔM","HÁN TỰ":"HÁN TỰ","HÁN VIỆT":"HÁN VIỆT","VĂN BẢN CỔ":"VĂN BẢN CỔ","VĂN HỌC":"VĂN HỌC","TIẾNG VIỆT HIỆN ĐẠI":"TIẾNG VIỆT HIỆN ĐẠI","NGỮ ÂM":"NGỮ ÂM","CHÍNH TẢ":"CHÍNH TẢ","NGỮ PHÁP":"NGỮ PHÁP","TỪ VỰNG":"TỪ VỰNG","ĐỌC HIỂU":"ĐỌC HIỂU","VIẾT":"VIẾT"};
     if(room==="KIỂM TRA"){S.langMode="assessment";S.langItem=null;render();return;}
+    if(room==="ĐÁNH GIÁ"||room==="PHÒNG TỰ HỌC"){S.langMode="progress";S.langItem=null;render();return;}
+    if(room==="ÔN THI CHỨNG CHỈ"&&lang.certificates.length){S.langMode="exam";S.langItem=lang.certificates[0].id;render();return;}
+    if(room==="PHÒNG HỌC"&&lang.skills.length){S.langMode="skill";S.langItem="0";render();return;}
     if(room==="ĐÁNH GIÁ"){S.langMode="progress";S.langItem=null;render();return;}
     if(room==="THƯ VIỆN HỌC LIỆU"||room==="THƯ VIỆN VĂN BẢN"){S.langMode="library";S.langItem=null;render();return;}
     const skillName=roomMap[room]||room.replace(/^PHÒNG /,"");
