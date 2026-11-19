@@ -587,7 +587,8 @@ function vLanguages(){
   if(S.langMode==="skill"){
     const skill=lang.skills[Number(S.langItem)];
     if(!skill){S.langMode=null;S.langItem=null;return vLanguages();}
-    LanguageLearning.mountSkill(main,lang,skill,()=>{S.langMode=null;S.langItem=null;render();});
+    if(lang.id==="vi"&&window.VietnameseLearning){VietnameseLearning.mountSkill(main,lang,skill,()=>{S.langMode=null;S.langItem=null;render();});}
+    else     LanguageLearning.mountSkill(main,lang,skill,()=>{S.langMode=null;S.langItem=null;render();});
     return;
   }
   if(S.langMode==="tutor"){
