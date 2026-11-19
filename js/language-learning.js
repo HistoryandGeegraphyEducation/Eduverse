@@ -63,19 +63,82 @@ const recognize=root.querySelector("[data-recognize]");if(recognize)recognize.on
 function wordsFor(l){return dictionary[l.id]||[]}
 draw();
 }
+const examProfiles={
+ ielts:{levels:["Academic","General Training"],sections:[
+  {name:"LISTENING",time:"Khoảng 30 phút",tasks:"4 phần, 40 câu; hội thoại và độc thoại",criteria:"Đáp án đúng được quy đổi sang thang band Listening."},
+  {name:"READING",time:"60 phút",tasks:"3 bài đọc, 40 câu; Academic và General Training dùng bộ văn bản khác nhau",criteria:"Đáp án đúng được quy đổi sang thang band Reading."},
+  {name:"WRITING",time:"60 phút",tasks:"2 task; Academic: mô tả dữ liệu và bài luận. General: viết thư và bài luận",criteria:"Task achievement/response; coherence and cohesion; lexical resource; grammatical range and accuracy."},
+  {name:"SPEAKING",time:"11–14 phút",tasks:"3 phần: phỏng vấn, nói dài theo chủ đề, thảo luận",criteria:"Fluency and coherence; lexical resource; grammatical range and accuracy; pronunciation."}
+ ],route:["Chẩn đoán bốn kỹ năng và chọn Academic hoặc General Training","Luyện dạng bài riêng từng kỹ năng","Luyện quản lý thời gian và chiến lược làm bài","Làm đề tổng hợp, phân tích lỗi theo tiêu chí band"] ,source:"https://takeielts.britishcouncil.org/what-is-ielts/how-it-works/test-format"},
+ vstep:{levels:["B1","B2","C1"],sections:[
+  {name:"NGHE",time:"Khoảng 40 phút",tasks:"3 phần, 35 câu trắc nghiệm; thông báo, hội thoại, bài nói",criteria:"Nghe ý chính, chi tiết, thái độ và suy luận."},
+  {name:"ĐỌC",time:"60 phút",tasks:"4 bài đọc, 40 câu trắc nghiệm",criteria:"Đọc chi tiết, ý chính, thái độ, suy luận và từ vựng theo ngữ cảnh."},
+  {name:"VIẾT",time:"60 phút",tasks:"2 bài: thư/email tối thiểu 120 từ và bài luận tối thiểu 250 từ",criteria:"Task 1 chiếm 1/3; Task 2 chiếm 2/3 điểm phần viết."},
+  {name:"NÓI",time:"Khoảng 12 phút",tasks:"3 phần: tương tác xã hội, thảo luận giải pháp, phát triển chủ đề",criteria:"Khả năng tương tác, lập luận, phát triển ý và trình bày."}
+ ],route:["Xác định mục tiêu B1, B2 hoặc C1","Củng cố ngữ pháp và từ vựng theo chủ đề","Luyện từng kỹ năng theo đúng dạng bài VSTEP","Làm đề đủ thời gian và phân tích điểm yếu"],source:"https://vstep.vn/test-format/"},
+ toeic:{levels:["Mục tiêu 450+","Mục tiêu 650+","Mục tiêu 785+","Mục tiêu 900+"],sections:[
+  {name:"LISTENING",time:"45 phút",tasks:"100 câu; Photographs, Question–Response, Conversations, Talks",criteria:"Thang điểm Listening 5–495; tập trung ý chính, chi tiết và suy luận trong ngữ cảnh công việc."},
+  {name:"READING",time:"75 phút",tasks:"100 câu; Incomplete Sentences, Text Completion, Reading Comprehension",criteria:"Thang điểm Reading 5–495; ngữ pháp, từ vựng, đọc hiểu đơn và đa văn bản."}
+ ],route:["Kiểm tra trình độ đầu vào và chọn mốc điểm","Luyện Part 1–4 Listening và Part 5–7 Reading","Tăng tốc độ xử lý câu hỏi và quản lý thời gian","Làm đề 200 câu trong điều kiện giới hạn thời gian"],source:"https://www.ets.org/toeic/about/listening-reading.html"},
+ aptis:{levels:["Aptis ESOL General","Aptis ESOL Advanced","Aptis ESOL for Teachers"],sections:[
+  {name:"GRAMMAR & VOCABULARY",time:"25 phút",tasks:"Phần Core gồm ngữ pháp và từ vựng",criteria:"Độ chính xác và khả năng sử dụng cấu trúc, từ vựng."},
+  {name:"LISTENING",time:"General: 40 phút; Advanced: 30 phút",tasks:"Nhận diện thông tin, nối thông tin, ý kiến và độc thoại",criteria:"Nắm thông tin cụ thể, quan điểm và nội dung tổng thể."},
+  {name:"READING",time:"General: 35 phút; Advanced: 60 phút",tasks:"Hiểu câu, liên kết văn bản, đối chiếu ý kiến và đọc văn bản dài",criteria:"Hiểu thông tin, mạch liên kết và lập trường."},
+  {name:"WRITING",time:"General: 50 phút; Advanced: 45 phút",tasks:"Từ/câu, phản hồi ngắn và bài viết theo tình huống",criteria:"Hoàn thành nhiệm vụ, mạch lạc, từ vựng và ngữ pháp."},
+  {name:"SPEAKING",time:"General: 12 phút; Advanced: 10 phút",tasks:"Thông tin cá nhân, mô tả, so sánh và trình bày quan điểm",criteria:"Độ trôi chảy, phát âm, ngữ pháp và phát triển nội dung."}
+ ],route:["Chọn đúng biến thể Aptis cần thi","Làm bài Core Grammar & Vocabulary","Luyện từng module theo giới hạn thời gian","Luyện đề tổng hợp và tự đánh giá theo CEFR"],source:"https://england.britishcouncil.org/exam/aptis-esol/prepare"},
+ delf:{levels:["A1","A2","B1","B2"],sections:[
+  {name:"COMPRÉHENSION ORALE",time:"Thay đổi theo cấp độ",tasks:"Nghe thông báo, hội thoại, phỏng vấn hoặc chương trình phát thanh",criteria:"Nắm ý chính, thông tin cụ thể và chi tiết phù hợp cấp độ."},
+  {name:"COMPRÉHENSION ÉCRITE",time:"Thay đổi theo cấp độ",tasks:"Đọc văn bản đời sống, thư từ, bài báo và văn bản lập luận",criteria:"Hiểu thông tin, mục đích và quan điểm."},
+  {name:"PRODUCTION ÉCRITE",time:"Thay đổi theo cấp độ",tasks:"Viết văn bản theo nhiệm vụ và độ dài quy định của cấp độ",criteria:"Hoàn thành nhiệm vụ, mạch lạc, từ vựng và ngữ pháp."},
+  {name:"PRODUCTION ORALE",time:"Thay đổi theo cấp độ",tasks:"Phỏng vấn, trình bày quan điểm và tương tác",criteria:"Khả năng diễn đạt, tương tác, lập luận và phát âm."}
+ ],route:["Chọn cấp độ A1–B2","Học từ vựng và cấu trúc theo chủ đề cấp độ","Luyện bốn kỹ năng theo dạng đề chính thức","Làm đề mẫu và đối chiếu thang điểm từng kỹ năng"],source:"https://www.france-education-international.fr/en/node/105"},
+ goethe:{levels:["A1","A2","B1","B2","C1","C2"],sections:[
+  {name:"HÖREN",time:"Thay đổi theo cấp độ",tasks:"Nghe hội thoại, thông báo, phỏng vấn và bài nói",criteria:"Hiểu ý chính, chi tiết và thông tin hàm ẩn theo cấp độ."},
+  {name:"LESEN",time:"Thay đổi theo cấp độ",tasks:"Đọc tin nhắn, thư, quảng cáo, bài báo và văn bản dài",criteria:"Hiểu thông tin, lập trường, cấu trúc và suy luận."},
+  {name:"SCHREIBEN",time:"Thay đổi theo cấp độ",tasks:"Điền biểu mẫu, viết tin nhắn, thư hoặc văn bản lập luận",criteria:"Hoàn thành nhiệm vụ, bố cục, liên kết, từ vựng và ngữ pháp."},
+  {name:"SPRECHEN",time:"Thay đổi theo cấp độ",tasks:"Giới thiệu, trao đổi thông tin, trình bày và thảo luận",criteria:"Tương tác, độ trôi chảy, phát âm và độ chính xác."}
+ ],route:["Chọn cấp độ A1–C2 và đúng loại chứng chỉ","Luyện các dạng bài theo từng module","Thực hành nói/viết theo tiêu chí cấp độ","Làm đề luyện chính thức và rà soát lỗi"],source:"https://www.goethe.de/en/spr/prf.html"},
+ hsk:{levels:["HSK 1","HSK 2","HSK 3","HSK 4","HSK 5","HSK 6"],sections:[
+  {name:"听力 · LISTENING",time:"Thay đổi theo cấp độ và phiên bản",tasks:"Nghe từ, câu, hội thoại và bài nói",criteria:"Nhận diện thông tin và hiểu nội dung nghe."},
+  {name:"阅读 · READING",time:"Thay đổi theo cấp độ và phiên bản",tasks:"Nhận diện từ, hoàn thành câu, đọc đoạn và văn bản",criteria:"Từ vựng, ngữ pháp và đọc hiểu."},
+  {name:"书写 · WRITING",time:"Có ở các cấp độ yêu cầu",tasks:"Sắp xếp từ, viết chữ hoặc viết đoạn theo cấp độ",criteria:"Độ chính xác chữ Hán, cấu trúc câu và khả năng diễn đạt."}
+ ],route:["Xác định phiên bản HSK và cấp độ đang đăng ký","Học chữ Hán, từ vựng và ngữ pháp theo chuẩn cấp độ","Luyện nghe, đọc và viết theo dạng bài","Làm đề mẫu đúng phiên bản và kiểm tra thời gian"],source:"https://www.chinesetest.cn/userfiles/file/HSKbyWord.pdf",note:"HSK đang có lộ trình chuyển đổi sang khung Ba giai đoạn, Chín cấp độ. Cần xác nhận phiên bản áp dụng tại kỳ thi cụ thể trước khi xây dựng đề mô phỏng."},
+ dele:{levels:["A1","A2","B1","B2","C1","C2"],sections:[
+  {name:"COMPRENSIÓN DE LECTURA",time:"Thay đổi theo cấp độ",tasks:"Đọc văn bản và trả lời câu hỏi",criteria:"Hiểu thông tin, ý chính và suy luận."},
+  {name:"COMPRENSIÓN AUDITIVA",time:"Thay đổi theo cấp độ",tasks:"Nghe hội thoại, thông báo và bài nói",criteria:"Hiểu thông tin và nội dung nghe."},
+  {name:"EXPRESIÓN E INTERACCIÓN ESCRITAS",time:"Thay đổi theo cấp độ",tasks:"Viết văn bản theo tình huống và yêu cầu cấp độ",criteria:"Hoàn thành nhiệm vụ, mạch lạc, ngữ pháp và từ vựng."},
+  {name:"EXPRESIÓN E INTERACCIÓN ORALES",time:"Thay đổi theo cấp độ",tasks:"Trình bày, mô tả và tương tác",criteria:"Khả năng diễn đạt, tương tác và phát âm."}
+ ],route:["Chọn cấp độ DELE A1–C2","Ôn cấu trúc ngữ pháp và từ vựng theo cấp độ","Luyện bốn kỹ năng và dạng bài tương ứng","Làm đề mẫu theo hướng dẫn Instituto Cervantes"],source:"https://londres.cervantes.es/en/courses_spanish/students_spanish/dele_diplomas_info/exam_format.htm"}
+};
 function mountExam(root,lang,exam,onBack){
-const levels=exam.stages||[];
-const sections=exam.id==="ielts"?["LISTENING","READING","WRITING","SPEAKING"]:exam.id==="toeic"?["LISTENING","READING"]:exam.id==="aptis"?["GRAMMAR & VOCABULARY","LISTENING","READING","SPEAKING","WRITING"]:exam.id==="vstep"?["NGHE","ĐỌC","VIẾT","NÓI"]:exam.id==="delf"?["COMPRÉHENSION ORALE","COMPRÉHENSION ÉCRITE","PRODUCTION ÉCRITE","PRODUCTION ORALE"]:exam.id==="goethe"?["HÖREN","LESEN","SCHREIBEN","SPRECHEN"]:exam.id==="hsk"?["听力","阅读","书写"]:["NGHE","ĐỌC","VIẾT","NÓI"];
-let level=levels[0]||"NỀN TẢNG",section=sections[0],started=false;
-function draw(){
-const words=wordsFor(lang);const q=words.slice(0,5);
-root.innerHTML='<div class="ll-shell"><div class="ll-head"><button type="button" class="language-back" id="llBack">← '+esc(lang.name)+'</button></div><div class="ll-title"><h1>'+esc(exam.name)+'</h1><p>'+esc(section)+'</p></div><div class="ll-exam-select"><label>CẤP ĐỘ<select id="llExamLevel">'+levels.map(x=>'<option '+(x===level?'selected':'')+'>'+esc(x)+'</option>').join("")+'</select></label><label>KỸ NĂNG<select id="llExamSection">'+sections.map(x=>'<option '+(x===section?'selected':'')+'>'+esc(x)+'</option>').join("")+'</select></label></div><section class="ll-content"><h2>'+esc(started?"BÀI LUYỆN MẪU":"NỘI DUNG ÔN TẬP")+'</h2>'+(started?q.map((w,i)=>'<div class="ll-exam-q"><p>'+(i+1)+'. '+esc(section.includes("LISTEN")||section.includes("NGHE")||section.includes("HÖREN")||section.includes("ORAL")?"Chọn nghĩa phù hợp với: "+w[0]:"Chọn từ tương ứng với nghĩa: "+w[2])+'</p>'+q.map((opt,j)=>'<label><input type="radio" name="llq'+i+'" value="'+j+'">'+esc(section.includes("LISTEN")||section.includes("NGHE")||section.includes("HÖREN")||section.includes("ORAL")?opt[2]:opt[0])+'</label>').join("")+'</div>').join(""):'<p>'+esc(level)+' · '+esc(section)+'</p><p>'+esc("Bài luyện gồm câu hỏi theo vốn từ nền tảng của "+lang.name.toLowerCase()+".")+'</p>')+'</section><div class="ll-actions"><button type="button" id="llStart">'+(started?"CHẤM BÀI":"BẮT ĐẦU LUYỆN")+'</button></div><output id="llExamResult"></output></div>';
-root.querySelector("#llBack").onclick=onBack;
-root.querySelector("#llExamLevel").onchange=e=>{level=e.target.value;started=false;draw()};
-root.querySelector("#llExamSection").onchange=e=>{section=e.target.value;started=false;draw()};
-root.querySelector("#llStart").onclick=()=>{if(!started){started=true;draw();return;}let score=0,answered=0;q.forEach((w,i)=>{const v=root.querySelector('input[name="llq'+i+'"]:checked');if(v){answered++;if(Number(v.value)===i)score++;}});root.querySelector("#llExamResult").textContent="Kết quả: "+score+"/"+q.length+" · Đã trả lời "+answered+"/"+q.length+" câu.";};
-}
-draw();
+ const profile=examProfiles[exam.id]||{levels:exam.stages||["NỀN TẢNG"],sections:["NGHE","ĐỌC","VIẾT","NÓI"].map(name=>({name,time:"Theo cấp độ",tasks:"Bài tập theo kỹ năng",criteria:"Đánh giá theo mức độ hoàn thành nhiệm vụ."})),route:["Xác định trình độ","Luyện từng kỹ năng","Làm bài tổng hợp"]};
+ let level=profile.levels[0],section=profile.sections[0].name,started=false;
+ const sample=samples[lang.id]||samples.en,words=wordsFor(lang);
+ function draw(){
+  const part=profile.sections.find(x=>x.name===section)||profile.sections[0];
+  let exercise="";
+  if(started&&/WRITING|VIẾT|SCHREIBEN|PRODUCTION ÉCRITE|EXPRESIÓN E INTERACCIÓN ESCRITAS/.test(section)){
+   exercise='<label>PHẦN TRẢ LỜI<textarea id="examWriting" rows="8" placeholder="Viết câu trả lời theo yêu cầu của đề luyện"></textarea></label><p id="examCount">0 từ</p><button type="button" id="examEvaluate">TỰ ĐÁNH GIÁ</button><output id="examResult"></output>';
+  }else if(started&&/SPEAKING|NÓI|SPRECHEN|PRODUCTION ORALE|EXPRESIÓN E INTERACCIÓN ORALES/.test(section)){
+   exercise='<p>'+esc(sample.sentence)+'</p><button type="button" id="examListen">NGHE MẪU</button><button type="button" id="examSpeak">GHI NHẬN CÂU TRẢ LỜI</button><output id="examResult"></output>';
+  }else if(started&&/LISTENING|NGHE|HÖREN|ORAL|AUDITIVA/.test(section)){
+   exercise='<p>'+esc(sample.sentence)+'</p><button type="button" id="examListen">PHÁT ÂM THANH MẪU</button><p>'+esc(sample.question)+'</p>'+sample.answer.map((x,i)=>'<label><input type="radio" name="examChoice" value="'+i+'">'+esc(x)+'</label>').join("");
+  }else if(started&&/READING|ĐỌC|LESEN|ÉCRITE|LECTURA/.test(section)){
+   exercise='<p>'+esc(sample.reading)+'</p><p>'+esc(sample.question)+'</p>'+sample.answer.map((x,i)=>'<label><input type="radio" name="examChoice" value="'+i+'">'+esc(x)+'</label>').join("");
+  }else if(started){
+   exercise=words.slice(0,5).map((w,i)=>'<div class="ll-exam-q"><p>'+(i+1)+'. '+esc("Chọn nghĩa phù hợp với: "+w[0])+'</p>'+words.slice(0,5).map((opt,j)=>'<label><input type="radio" name="examQ'+i+'" value="'+j+'">'+esc(opt[2])+'</label>').join("")+'</div>').join("");
+  }
+  root.innerHTML='<div class="ll-shell"><div class="ll-head"><button type="button" class="language-back" id="llBack">← '+esc(lang.name)+'</button></div><div class="ll-title"><h1>'+esc(exam.name)+'</h1></div><section class="ll-content"><label>CẤP ĐỘ / BIẾN THỂ<select id="llExamLevel">'+profile.levels.map(x=>'<option '+(x===level?'selected':'')+'>'+esc(x)+'</option>').join("")+'</select></label><div class="ll-exam-blueprint"><h2>CẤU TRÚC KỲ THI</h2>'+profile.sections.map(p=>'<article><b>'+esc(p.name)+'</b><span>'+esc(p.time)+'</span><p>'+esc(p.tasks)+'</p><small>'+esc(p.criteria)+'</small></article>').join("")+'</div><div class="ll-exam-blueprint"><h2>LỘ TRÌNH ÔN TẬP</h2><ol>'+profile.route.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol>'+(profile.note?'<p>'+esc(profile.note)+'</p>':'')+'<a href="'+esc(profile.source)+'" target="_blank" rel="noopener">TÀI LIỆU ĐỊNH DẠNG TỪ ĐƠN VỊ TỔ CHỨC</a></div><label>KỸ NĂNG<select id="llExamSection">'+profile.sections.map(x=>'<option '+(x.name===section?'selected':'')+'>'+esc(x.name)+'</option>').join("")+'</select></label><p><b>'+esc(part.name)+'</b> · '+esc(part.time)+'</p>'+(started?'<div class="ll-exam-practice">'+exercise+'</div>':'')+'<button type="button" id="llStart">'+(started?"NỘP / ĐÁNH GIÁ BÀI":"BẮT ĐẦU BÀI LUYỆN")+'</button><output id="llExamResult"></output></section></div>';
+  root.querySelector("#llBack").onclick=onBack;
+  root.querySelector("#llExamLevel").onchange=e=>{level=e.target.value;started=false;draw()};
+  root.querySelector("#llExamSection").onchange=e=>{section=e.target.value;started=false;draw()};
+  const play=root.querySelector("#examListen");if(play)play.onclick=()=>speak(sample.sentence,lang);
+  const writing=root.querySelector("#examWriting");if(writing){writing.oninput=()=>root.querySelector("#examCount").textContent=(writing.value.trim()?writing.value.trim().split(/\s+/).length:0)+" từ";root.querySelector("#examEvaluate").onclick=()=>{const n=writing.value.trim().split(/\s+/).filter(Boolean).length;root.querySelector("#examResult").textContent=n<40?"Bài viết còn ngắn; cần phát triển nội dung.":"Đã ghi nhận bài viết. Hãy tự đối chiếu mức độ hoàn thành nhiệm vụ, bố cục, liên kết, từ vựng và ngữ pháp.";};}
+  const speaking=root.querySelector("#examSpeak");if(speaking)speaking.onclick=()=>{const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const out=root.querySelector("#examResult");if(!SR){out.textContent="Trình duyệt chưa hỗ trợ nhận diện giọng nói.";return;}const rec=new SR();rec.lang=voices[lang.id]||"en-US";rec.onresult=e=>out.textContent="Bản nhận diện: "+e.results[0][0].transcript;rec.onerror=()=>out.textContent="Không nhận diện được giọng nói.";rec.start();out.textContent="Đang nghe...";};
+  root.querySelector("#llStart").onclick=()=>{if(!started){started=true;draw();return;}if(writing||speaking){root.querySelector("#llExamResult").textContent="Đã ghi nhận phần thực hành. Đây là tự đánh giá, chưa phải chấm điểm chính thức.";return;}const selected=root.querySelector('input[name="examChoice"]:checked');if(selected){root.querySelector("#llExamResult").textContent=Number(selected.value)===sample.correct?"Đáp án chính xác.":"Đáp án chưa chính xác.";return;}let score=0,answered=0;for(let i=0;i<5;i++){const v=root.querySelector('input[name="examQ'+i+'"]:checked');if(v){answered++;if(Number(v.value)===i)score++;}}root.querySelector("#llExamResult").textContent="Kết quả bài luyện: "+score+"/5 · Đã trả lời "+answered+"/5 câu.";};
+ }
+ draw();
 }
 function mountTutor(root,lang,onBack){
 root.innerHTML='<div class="ll-shell"><div class="ll-head"><button type="button" class="language-back" id="llBack">← '+esc(lang.name)+'</button></div><div class="ll-title"><h1>AI TUTOR</h1></div><section class="ll-content"><label>CHỦ ĐỀ HỌC<input id="llTutorTopic" placeholder="Nhập chủ đề cần hỗ trợ"></label><label>CÂU HỎI<textarea id="llTutorQuestion" rows="4" placeholder="Nhập câu hỏi"></textarea></label><button type="button" id="llTutorSend">GỬI CÂU HỎI</button><output id="llTutorResult"></output></section></div>';
