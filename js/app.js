@@ -708,8 +708,11 @@ function vMe(){
       (p.role==="pending"?`<p class="account-note">Tài khoản đã được tạo. Quyền truy cập các phân hệ sẽ được cấp sau khi quản trị viên xác nhận vai trò.</p>`:"")+
       `<button class="cta" id="out">Đăng xuất</button></section>`+
       (p.role==="admin"?`<section class="box account-admin"><h3>QUẢN LÝ THÀNH VIÊN</h3><p>Danh sách tài khoản giáo viên và học sinh trong hệ thống.</p><div id="memberList">Đang tải danh sách…</div></section>`:"");
-    $("#out").onclick=async()=>{
-      try{await EduverseAuth.signOut();}catch(e){toast(authError(e));}
+    $("#out").onclick=()=>{
+      $("#sheet").innerHTML='<div class="auth-sheet-head"><span class="auth-eyebrow">EDUVERSE ACCOUNT</span><h2>ĐĂNG XUẤT</h2><p>Bạn có chắc chắn muốn kết thúc phiên đăng nhập hiện tại?</p></div><div class="btns"><button class="no" id="keep" type="button">Ở lại</button><button class="ok" id="confirmOut" type="button">Đăng xuất</button></div>';
+      $("#modal").classList.add("show");
+      $("#keep").onclick=()=>$("#modal").classList.remove("show");
+      $("#confirmOut").onclick=async()=>{const b=$("#confirmOut");b.disabled=true;b.textContent="ĐANG ĐĂNG XUẤT…";try{await EduverseAuth.signOut();$("#modal").classList.remove("show");}catch(err){b.disabled=false;b.textContent="Đăng xuất";toast(authError(err));}};
     };
     if(p.role==="admin") loadAdminMembers();
   }else{
@@ -758,63 +761,30 @@ function authError(error){
   return m||"Đã xảy ra lỗi. Vui lòng thử lại.";
 }
 function auth(mode){
-  const reg=mode==="reg";
-  const reset=mode==="reset";
-  const update=mode==="update";
+  const reg=mode==="reg",reset=mode==="reset",update=mode==="update";
   const heading=reg?"TẠO TÀI KHOẢN":reset?"ĐẶT LẠI MẬT KHẨU":update?"ĐỔI MẬT KHẨU":"ĐĂNG NHẬP";
-  $("#sheet").innerHTML=`<div class="auth-sheet-head"><h2>${heading}</h2><p>${reg?"Đăng ký tài khoản EDUVERSE dùng chung cho hệ sinh thái.":reset?"Nhập email để nhận liên kết đặt lại mật khẩu.":update?"Nhập mật khẩu mới cho tài khoản của bạn.":"Đăng nhập bằng tài khoản EDUVERSE của bạn."}</p></div>`+
-    (reg?`<input id="fn" type="text" placeholder="Họ và tên" autocomplete="name" maxlength="80">`:"")+
-    (update?"":`<input id="fe" type="email" placeholder="Địa chỉ email" autocomplete="email" required>`)+
-    (reset?"":`<input id="fp" type="password" placeholder="${update?"Mật khẩu mới":"Mật khẩu"}" autocomplete="${reg||update?"new-password":"current-password"}" minlength="6" required>`)+
-    (reg||update?`<input id="fc" type="password" placeholder="Xác nhận mật khẩu" autocomplete="new-password" minlength="6" required>`:"")+
-    `<p class="auth-error" id="authError" role="alert"></p>`+
-    `<div class="auth-links">${!reg&&!reset?`<button type="button" id="forgot">Quên mật khẩu?</button>`:""}${reg?`<button type="button" id="toLogin">Đã có tài khoản? Đăng nhập</button>`:reset?`<button type="button" id="toLogin">Quay lại đăng nhập</button>`:!update?`<button type="button" id="toReg">Chưa có tài khoản? Đăng ký</button>`:""}</div>`+
-    `<div class="btns"><button class="no" id="c" type="button">Huỷ</button><button class="ok" id="s" type="button">${reg?"Tạo tài khoản":reset?"Gửi liên kết":update?"Cập nhật mật khẩu":"Đăng nhập"}</button></div>`;
-  $("#modal").classList.add("show");
-  $("#c").onclick=()=>$("#modal").classList.remove("show");
-  const errorBox=$("#authError");
-  const showError=msg=>{errorBox.textContent=msg;};
+  const intro=reg?"Tạo tài khoản EDUVERSE của bạn.":reset?"Nhập email để nhận liên kết đặt lại mật khẩu.":update?"Thiết lập mật khẩu mới cho tài khoản.":"Đăng nhập để tiếp tục.";
+  const field=(id,label,type,autocomplete)=>'<label class="auth-field" for="'+id+'"><span>'+label+'</span><input id="'+id+'" type="'+type+'" placeholder="'+label+'" autocomplete="'+autocomplete+'" required></label>';
+  $("#sheet").innerHTML='<div class="auth-glass-orbit" aria-hidden="true"></div><div class="auth-sheet-head"><span class="auth-eyebrow">EDUVERSE ACCOUNT</span><h2>'+heading+'</h2><p>'+intro+'</p></div>'+(reg?field("fn","Họ và tên","text","name"):"")+(update?"":field("fe","Địa chỉ email","email","email"))+(reset?"":'<label class="auth-field" for="fp"><span>'+(update?"Mật khẩu mới":"Mật khẩu")+'</span><span class="auth-password"><input id="fp" type="password" placeholder="Mật khẩu" autocomplete="'+(reg||update?"new-password":"current-password")+'" minlength="6" required><button type="button" class="auth-toggle" data-toggle="fp">Hiện</button></span></label>')+(reg||update?'<label class="auth-field" for="fc"><span>Xác nhận mật khẩu</span><span class="auth-password"><input id="fc" type="password" placeholder="Xác nhận mật khẩu" autocomplete="new-password" minlength="6" required><button type="button" class="auth-toggle" data-toggle="fc">Hiện</button></span></label>':"")+'<p class="auth-error" id="authError" role="alert" aria-live="polite"></p><div class="auth-links">'+(!reg&&!reset&&!update?'<button type="button" id="forgot">Quên mật khẩu?</button>':"")+(reg?'<button type="button" id="toLogin">Đã có tài khoản? Đăng nhập</button>':reset?'<button type="button" id="toLogin">Quay lại đăng nhập</button>':!update?'<button type="button" id="toReg">Tạo tài khoản mới</button>':"")+'</div><div class="btns"><button class="no" id="c" type="button">Đóng</button><button class="ok" id="s" type="button">'+(reg?"Tạo tài khoản":reset?"Gửi liên kết":update?"Cập nhật mật khẩu":"Đăng nhập")+'</button></div>';
+  $("#modal").classList.add("show");$("#c").onclick=()=>$("#modal").classList.remove("show");
+  const errorBox=$("#authError"),showError=msg=>{errorBox.textContent=msg;};
+  $("#sheet").querySelectorAll("[data-toggle]").forEach(t=>t.onclick=()=>{const i=$("#"+t.dataset.toggle),v=i.type==="password";i.type=v?"text":"password";t.textContent=v?"Ẩn":"Hiện";});
   if($("#forgot")) $("#forgot").onclick=()=>auth("reset");
   if($("#toLogin")) $("#toLogin").onclick=()=>auth("login");
   if($("#toReg")) $("#toReg").onclick=()=>auth("reg");
   $("#s").onclick=async()=>{
-    const button=$("#s");
-    const email=$("#fe")?.value.trim()||"";
-    const password=$("#fp")?.value||"";
-    const fullName=$("#fn")?.value.trim()||"";
-    if(!reset&&!update&&!email){showError("Hãy nhập địa chỉ email.");return;}
-    if(reg&&fullName.length<2){showError("Hãy nhập họ và tên.");return;}
-    if(!reset&&password.length<6){showError("Mật khẩu cần có ít nhất 6 ký tự.");return;}
-    if((reg||update)&&password!==$("#fc").value){showError("Mật khẩu xác nhận không khớp.");return;}
-    button.disabled=true;button.textContent="ĐANG XỬ LÝ…";showError("");
+    const b=$("#s"),email=$("#fe")?.value.trim()||"",password=$("#fp")?.value||"",fullName=$("#fn")?.value.trim()||"";
+    if(!reset&&!update&&!email){showError("Hãy nhập địa chỉ email.");$("#fe")?.focus();return;}
+    if(reg&&fullName.length<2){showError("Hãy nhập họ và tên.");$("#fn")?.focus();return;}
+    if(!reset&&password.length<6){showError("Mật khẩu cần có ít nhất 6 ký tự.");$("#fp")?.focus();return;}
+    if((reg||update)&&password!==$("#fc").value){showError("Mật khẩu xác nhận không khớp.");$("#fc").focus();return;}
+    b.disabled=true;b.textContent="ĐANG XỬ LÝ…";showError("");
     try{
-      if(update){
-        await EduverseAuth.updatePassword(password);
-        $("#modal").classList.remove("show");
-        toast("Đã cập nhật mật khẩu.");
-      }else if(reg){
-        const result=await EduverseAuth.signUp({fullName,email,password});
-        if(result.session){
-          $("#modal").classList.remove("show");
-          toast("Tạo tài khoản thành công.");
-        }else{
-          $("#modal").classList.remove("show");
-          toast("Đã gửi email xác minh. Hãy kiểm tra hộp thư.");
-        }
-      }else if(reset){
-        await EduverseAuth.resetPassword(email);
-        $("#modal").classList.remove("show");
-        toast("Đã gửi liên kết đặt lại mật khẩu.");
-      }else{
-        await EduverseAuth.signIn({email,password});
-        $("#modal").classList.remove("show");
-        toast("Đăng nhập thành công.");
-      }
-    }catch(e){
-      showError(authError(e));
-      button.disabled=false;
-      button.textContent=reg?"Tạo tài khoản":reset?"Gửi liên kết":update?"Cập nhật mật khẩu":"Đăng nhập";
-    }
+      if(update){await EduverseAuth.updatePassword(password);$("#modal").classList.remove("show");toast("Đã cập nhật mật khẩu.");}
+      else if(reg){const result=await EduverseAuth.signUp({fullName,email,password});$("#modal").classList.remove("show");toast(result.session?"Tạo tài khoản thành công.":"Đã gửi email xác minh. Hãy kiểm tra hộp thư.");}
+      else if(reset){await EduverseAuth.resetPassword(email);$("#modal").classList.remove("show");toast("Đã gửi liên kết đặt lại mật khẩu.");}
+      else{await EduverseAuth.signIn({email,password});$("#modal").classList.remove("show");toast("Đăng nhập thành công.");}
+    }catch(err){showError(authError(err));b.disabled=false;b.textContent=reg?"Tạo tài khoản":reset?"Gửi liên kết":update?"Cập nhật mật khẩu":"Đăng nhập";}
   };
 }
 loginButton.onclick=()=>auth(user?"login":"login");
