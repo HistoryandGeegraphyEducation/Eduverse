@@ -1440,3 +1440,10 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 .auth-glass-orbit{display:grid;place-items:center;width:66px;height:66px;border:0;border-radius:0;transform:none;background:transparent}
 .auth-glass-orbit:before,.auth-glass-orbit:after{display:none}
 .auth-brand-logo{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 5px rgba(24,42,110,.18))}
+
+
+/* Homepage header notification icon */
+.notification-bell{flex:none;width:38px;height:38px;display:grid;place-items:center;margin:0 4px 0 2px;border:1px solid rgba(255,255,255,.34);border-radius:50%;background:rgba(255,255,255,.13);color:#fff;box-shadow:0 3px 9px rgba(5,12,70,.18),inset 0 1px rgba(255,255,255,.18)}
+.notification-bell svg{display:block;width:21px;height:21px;filter:drop-shadow(0 1px 2px rgba(0,0,40,.22))}
+@media(min-width:600px){.notification-bell{width:42px;height:42px;margin-right:8px}.notification-bell svg{width:23px;height:23px}}
+@media(max-width:360px){.notification-bell{width:32px;height:32px;margin-right:1px}.notification-bell svg{width:18px;height:18px}}
