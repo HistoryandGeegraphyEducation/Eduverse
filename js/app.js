@@ -729,25 +729,19 @@ async function loadAdminMembers(){
   }catch(e){target.textContent=authError(e);}
 }
 // ===== TÀI KHOẢN DÙNG CHUNG EDUVERSE =====
-const accountEntry=$("#accountEntry");
-const accountLogoSlot=$("#accountLogoSlot");
-function buildStaticAccountLogo(){
-  if(!accountLogoSlot||accountLogoSlot.childElementCount) return;
+function buildStaticAuthLogo(){
+  const orbit=$("#sheet .auth-glass-orbit");
   const sourceLogo=document.querySelector(".brand>svg.logo");
-  if(!sourceLogo) return;
+  if(!orbit||!sourceLogo) return;
+  orbit.replaceChildren();
   const staticLogo=sourceLogo.cloneNode(true);
   staticLogo.classList.remove("logo");
-  staticLogo.classList.add("account-entry-logo");
+  staticLogo.classList.add("auth-brand-logo");
   staticLogo.setAttribute("aria-hidden","true");
   staticLogo.querySelectorAll("animate,animateMotion").forEach(node=>node.remove());
-  accountLogoSlot.appendChild(staticLogo);
+  orbit.appendChild(staticLogo);
 }
-if(accountEntry) accountEntry.addEventListener("click",showAccountMenu);
-function updateAuthHeader(){
-  if(!accountEntry) return;
-  accountEntry.setAttribute("aria-label",user?"Mở tài khoản":"Đăng nhập hoặc đăng ký");
-  accountEntry.setAttribute("title",user?"Tài khoản":"Đăng nhập hoặc đăng ký");
-}
+function updateAuthHeader(){}
 function showAccountMenu(){
   if(user){
     const p=userProfile||{};
@@ -785,7 +779,7 @@ function auth(mode){
   const intro=reg?"Tạo tài khoản EDUVERSE của bạn.":reset?"Nhập email để nhận liên kết đặt lại mật khẩu.":update?"Thiết lập mật khẩu mới cho tài khoản.":"Đăng nhập để tiếp tục.";
   const field=(id,label,type,autocomplete)=>'<label class="auth-field" for="'+id+'"><span>'+label+'</span><input id="'+id+'" type="'+type+'" placeholder="'+label+'" autocomplete="'+autocomplete+'" required></label>';
   $("#sheet").innerHTML='<div class="auth-glass-orbit" aria-hidden="true"></div><div class="auth-sheet-head"><span class="auth-eyebrow">EDUVERSE ACCOUNT</span><h2>'+heading+'</h2><p>'+intro+'</p></div>'+(reg?field("fn","Họ và tên","text","name"):"")+(update?"":field("fe","Địa chỉ email","email","email"))+(reset?"":'<label class="auth-field" for="fp"><span>'+(update?"Mật khẩu mới":"Mật khẩu")+'</span><span class="auth-password"><input id="fp" type="password" placeholder="Mật khẩu" autocomplete="'+(reg||update?"new-password":"current-password")+'" minlength="6" required><button type="button" class="auth-toggle" data-toggle="fp">Hiện</button></span></label>')+(reg||update?'<label class="auth-field" for="fc"><span>Xác nhận mật khẩu</span><span class="auth-password"><input id="fc" type="password" placeholder="Xác nhận mật khẩu" autocomplete="new-password" minlength="6" required><button type="button" class="auth-toggle" data-toggle="fc">Hiện</button></span></label>':"")+'<p class="auth-error" id="authError" role="alert" aria-live="polite"></p><div class="auth-links">'+(!reg&&!reset&&!update?'<button type="button" id="forgot">Quên mật khẩu?</button>':"")+(reg?'<button type="button" id="toLogin">Đã có tài khoản? Đăng nhập</button>':reset?'<button type="button" id="toLogin">Quay lại đăng nhập</button>':!update?'<button type="button" id="toReg">Tạo tài khoản mới</button>':"")+'</div><div class="btns"><button class="no" id="c" type="button">Đóng</button><button class="ok" id="s" type="button">'+(reg?"Tạo tài khoản":reset?"Gửi liên kết":update?"Cập nhật mật khẩu":"Đăng nhập")+'</button></div>';
-  $("#modal").classList.add("show");$("#c").onclick=()=>$("#modal").classList.remove("show");
+  $("#modal").classList.add("show");buildStaticAuthLogo();$("#c").onclick=()=>$("#modal").classList.remove("show");
   const errorBox=$("#authError"),showError=msg=>{errorBox.textContent=msg;};
   $("#sheet").querySelectorAll("[data-toggle]").forEach(t=>t.onclick=()=>{const i=$("#"+t.dataset.toggle),v=i.type==="password";i.type=v?"text":"password";t.textContent=v?"Ẩn":"Hiện";});
   if($("#forgot")) $("#forgot").onclick=()=>auth("reset");
