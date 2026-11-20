@@ -32,12 +32,12 @@ jobs:
         with:
           repository: HistoryandGeegraphyEducation/Career-Arena
           ref: main
-          path: ${{ runner.temp }}/career-arena-source
+          path: .career-arena-source
 
       - name: Copy Career Arena into EDUVERSE
         run: |
           mkdir -p career-arena
-          rsync -a --delete --exclude='.git' "${{ runner.temp }}/career-arena-source/" career-arena/
+          rsync -a --delete --exclude='.git' ".career-arena-source/" career-arena/
 
       - name: Commit mirrored Career Arena source
         env:
