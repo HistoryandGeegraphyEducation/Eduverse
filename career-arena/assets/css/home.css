@@ -1,19 +1,52 @@
-.hero{background-image:linear-gradient(90deg,rgba(3,20,59,.92),rgba(3,25,69,.62)),url("../images/hero.webp")} .hero .title{max-width:780px}.card{min-height:210px}.card .icon{filter:drop-shadow(0 0 12px #47dfff88)}
-.room-entry{margin:24px 0 32px;padding:22px clamp(16px,3vw,30px);border-color:rgba(91,224,255,.62)}
-.room-entry-main{display:flex;align-items:center;gap:12px}
-.room-entry-copy{flex:1;min-width:190px}
-.room-entry-copy h2{margin:6px 0;font-size:clamp(1.2rem,2.5vw,1.65rem)}
-.room-entry-copy p,.teacher-room-form p{margin:5px 0 0;color:#c6ddf7;font-size:.88rem;line-height:1.5}
-.room-code-form{display:flex;gap:8px;flex:1.1;max-width:560px}
-.room-code-form input,.teacher-room-form input{min-width:0;flex:1;border:1px solid #55c8f5;background:#041b49;color:#fff;border-radius:13px;padding:13px 15px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;outline:none}
+.home-wrap{width:min(1180px,calc(100% - 32px));padding-top:clamp(26px,5vw,68px);padding-bottom:clamp(36px,7vw,90px)}
+.topbar{min-height:76px}
+.back-to-eduverse{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 18px;border:1px solid rgba(93,230,255,.62);border-radius:13px;color:#e9fbff;font-size:.88rem;font-weight:800;letter-spacing:.025em;background:linear-gradient(110deg,rgba(11,105,174,.55),rgba(102,54,166,.48));box-shadow:0 0 20px rgba(53,220,255,.12);transition:transform .2s ease,filter .2s ease}
+.back-to-eduverse:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.hero{min-height:clamp(300px,36vw,470px);padding:clamp(26px,6vw,76px);background-image:linear-gradient(100deg,rgba(3,15,48,.92),rgba(8,25,68,.7)),url("../images/hero.webp");background-position:center;background-size:cover}
+.hero .title{max-width:900px;margin:0;font-size:clamp(2.2rem,6vw,5.2rem);line-height:1.08}
+.hero .actions{margin-top:30px}
+.hero .actions .btn{min-width:190px;min-height:50px}
+.room-entry{margin:22px 0 0;padding:clamp(18px,3vw,32px);border-color:rgba(91,224,255,.62)}
+.room-entry-main{display:flex;align-items:center;gap:14px}
+.room-entry-copy{flex:0 0 auto;min-width:210px}
+.room-entry-copy h2{margin:0;font-size:clamp(1.15rem,2.5vw,1.65rem)}
+.room-code-form{display:flex;gap:10px;flex:1;max-width:650px;margin-left:auto}
+.room-code-form input,.teacher-room-form input{width:100%;min-width:0;flex:1;border:1px solid #55c8f5;background:#041b49;color:#fff;border-radius:13px;padding:13px 15px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;outline:none}
 .room-code-form input:focus,.teacher-room-form input:focus{border-color:#ffe08b;box-shadow:0 0 0 3px #36caff25}
-.room-code-form input::placeholder,.teacher-room-form input::placeholder{color:#8fb8dd;letter-spacing:.08em}
-.teacher-entry-icon{flex:0 0 48px;width:48px;height:48px;border:1px solid #64ddff;border-radius:14px;background:linear-gradient(145deg,#0e75ca,#082e70);color:#fff;font-size:1.65rem;cursor:pointer;box-shadow:0 7px 20px #007bd533}
+.room-code-form input::placeholder,.teacher-room-form input::placeholder{color:#8fb8dd;letter-spacing:.06em}
+.teacher-entry-icon{flex:0 0 48px;width:48px;height:48px;border:1px solid #64ddff;border-radius:14px;background:linear-gradient(145deg,#0e75ca,#382b8c);color:#fff;font-size:1.55rem;cursor:pointer;box-shadow:0 7px 20px #007bd533}
 .teacher-entry-icon:hover,.teacher-entry-icon[aria-expanded="true"]{background:linear-gradient(145deg,#ffdc82,#ffad38);color:#09254d;border-color:#ffe5a0}
-.teacher-room-form{display:flex;align-items:center;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid #ffffff20}
-.teacher-room-form>div{flex:1}
-.teacher-room-form strong{font-size:.95rem}
-.teacher-room-form input{max-width:220px}
+.teacher-room-form{display:flex;align-items:center;gap:12px;margin-top:18px;padding-top:18px;border-top:1px solid #ffffff20}
+.teacher-room-form strong{flex:1;font-size:.95rem}
+.teacher-room-form input{max-width:280px}
 .room-entry-message{min-height:1.2em;margin:8px 0 0;color:#ffe08b;font-size:.84rem}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media(max-width:760px){.room-entry-main{display:grid;grid-template-columns:minmax(0,1fr) 48px}.room-entry-copy{grid-column:1/-1}.room-code-form{width:100%;max-width:none}.teacher-entry-icon{grid-column:2;grid-row:2}.teacher-room-form{display:grid;grid-template-columns:1fr}.teacher-room-form input{max-width:none;width:100%}}
+@media(max-width:760px){
+ .home-wrap{width:calc(100% - 24px);padding-top:20px}
+ .topbar{padding:10px 12px;gap:10px}
+ .brand{font-size:.8rem}
+ .back-to-eduverse{padding:9px 11px;font-size:.72rem;white-space:nowrap}
+ .hero{min-height:310px;padding:26px 20px;border-radius:18px}
+ .hero .title{font-size:clamp(2rem,9vw,3.4rem)}
+ .hero .actions{margin-top:23px}
+ .hero .actions .btn{width:100%}
+ .room-entry{padding:18px;border-radius:18px}
+ .room-entry-main{display:grid;grid-template-columns:minmax(0,1fr) 48px;gap:12px}
+ .room-entry-copy{grid-column:1/-1;min-width:0}
+ .room-code-form{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) auto;width:100%;max-width:none;margin:0}
+ .room-code-form input{font-size:16px;padding:12px 10px}
+ .room-code-form .btn{padding:12px 13px}
+ .teacher-entry-icon{grid-column:2;grid-row:3}
+ .teacher-room-form{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+ .teacher-room-form input{max-width:none}
+ .teacher-room-form .btn{width:100%}
+}
+@media(max-width:380px){
+ .topbar{padding-inline:9px}
+ .brand{font-size:.7rem;gap:7px}
+ .brand-mark{width:31px;height:31px}
+ .back-to-eduverse{font-size:.66rem;padding:8px 9px}
+ .room-code-form{grid-template-columns:minmax(0,1fr)}
+ .room-code-form .btn{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.back-to-eduverse{transition:none}}
