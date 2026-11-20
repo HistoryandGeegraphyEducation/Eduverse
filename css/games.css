@@ -1,0 +1,42 @@
+.main:has(.games-head){padding:18px 16px 26px;overflow:auto}
+.games-head{display:flex;align-items:center;gap:12px;margin:0 0 18px}
+.games-head h1{margin:0;color:var(--deep);font:800 22px/1.2 Arial,sans-serif;letter-spacing:.2px}
+.games-back{width:38px;height:38px;border-radius:12px;background:rgba(42,64,200,.1);color:var(--blue);font:30px/1 Arial,sans-serif}
+.games-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.games-card{min-height:132px;padding:17px 12px;border:1px solid rgba(42,64,200,.12);border-radius:18px;background:linear-gradient(145deg,#fff,#edf1ff);box-shadow:0 8px 20px rgba(26,40,110,.08);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#202d69;font:800 14px/1.25 Arial,sans-serif;text-align:center}
+.games-card:active{transform:scale(.98)}
+.games-icon{width:46px;height:46px;border-radius:14px;background:linear-gradient(145deg,#344cda,#1a00b0);display:grid;place-items:center;color:#fff;font:26px Arial,sans-serif}
+.games-panel{padding:17px;border-radius:18px;background:rgba(255,255,255,.88);box-shadow:0 8px 24px rgba(24,40,100,.08);margin-bottom:16px}
+.games-field{display:flex;flex-direction:column;gap:7px;margin:0 0 14px;color:#35436e;font:700 12px Arial,sans-serif}
+.games-field input,.games-field textarea{width:100%;min-height:45px;border:1px solid #d4dcef;border-radius:11px;padding:11px;background:#fff;color:#1b2861;font:15px Arial,sans-serif}
+.games-field textarea{min-height:82px;resize:vertical}
+.games-primary,.games-secondary{min-height:44px;border-radius:12px;padding:11px 17px;font:800 13px Arial,sans-serif}
+.games-primary{background:linear-gradient(135deg,var(--blue),var(--deep));color:white}
+.games-secondary{background:#e9edff;color:var(--deep);margin-top:12px}
+.games-actions{display:flex;gap:10px;margin-bottom:12px}
+.games-question{padding:24px 17px;margin:0 0 16px;border-radius:17px;background:#202d69;color:#fff;font:700 19px/1.45 Arial,sans-serif}
+.games-options{display:grid;gap:10px}
+.games-options button{min-height:52px;padding:12px;border:1px solid #d8def0;border-radius:13px;background:#fff;color:#26356f;text-align:left;font:600 15px/1.35 Arial,sans-serif}
+.games-options button.correct{background:#d9f4e4;border-color:#42a66a;color:#175b35}
+.games-options button.wrong{background:#ffe2e0;border-color:#d66;color:#8c2424}
+.games-options button:disabled{opacity:1}
+.games-progress,.memory-meta{display:flex;justify-content:space-between;margin:0 2px 12px;color:#33427b;font:800 13px Arial,sans-serif}
+.games-score{margin-top:14px;text-align:center;color:var(--blue);font:800 20px Arial,sans-serif}
+.games-result{text-align:center;padding:36px 12px;color:var(--deep);font:800 20px Arial,sans-serif}
+.games-result strong{display:block;font-size:42px;margin-bottom:12px}
+.memory-grid,.sudoku-grid,.maze-grid,.puzzle-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
+.memory-card{aspect-ratio:1;border-radius:13px;background:#344cda;color:white;font-size:26px}
+.memory-card.revealed{background:#e9edff;color:#1a2869}
+.sudoku-grid button,.maze-grid button,.puzzle-grid button{aspect-ratio:1;border-radius:9px;background:#e9edff;color:#202d69;font:800 20px Arial}
+.observe-row{display:flex;justify-content:space-around;padding:24px 5px;font-size:25px}
+.reaction-target{width:100%;min-height:180px;border-radius:18px;background:#3048c8;color:#fff;font:800 20px Arial}
+.idea-board,.station-list,.gallery-board{display:grid;gap:10px;margin-top:16px}
+.idea-card,.station-card,.gallery-card{padding:13px;border-radius:12px;background:#edf1ff;color:#24336c;font:600 14px/1.5 Arial,sans-serif}
+.station-card p,.gallery-card p{margin:7px 0}
+.station-card button{padding:8px 12px;border-radius:9px;background:#d9e1ff;color:#24336c}
+.station-card button.correct{background:#d9f4e4}
+.gallery-card textarea{width:100%;margin-top:8px;border:1px solid #ccd4eb;border-radius:8px;padding:8px}
+.room-code{text-align:center;color:var(--deep);font:900 42px Arial,sans-serif;letter-spacing:5px;padding:18px}
+.room-people{text-align:center;color:#43517d;font:700 14px Arial,sans-serif;margin-bottom:14px}
+.room-scores{margin-top:15px;font:600 14px Arial,sans-serif;color:#28366c}
+@media(min-width:520px){.games-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.games-card{min-height:150px}}
