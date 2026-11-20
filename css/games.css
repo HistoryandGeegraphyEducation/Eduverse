@@ -40,7 +40,3 @@
 .room-people{text-align:center;color:#43517d;font:700 14px Arial,sans-serif;margin-bottom:14px}
 .room-scores{margin-top:15px;font:600 14px Arial,sans-serif;color:#28366c}
 @media(min-width:520px){.games-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.games-card{min-height:150px}}
-
-.career-arena-frame{width:100%;height:min(1100px,calc(100dvh - 210px));min-height:680px;overflow:hidden;border:1px solid rgba(42,64,200,.18);border-radius:18px;background:#061b48;box-shadow:0 8px 24px rgba(24,40,100,.1)}
-.career-arena-frame iframe{display:block;width:100%;height:100%;border:0;background:#061b48}
-@media(max-width:600px){.career-arena-frame{height:82dvh;min-height:620px;border-radius:14px}}
