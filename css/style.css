@@ -1623,24 +1623,37 @@ body.notification-viewer-open{overflow:hidden}
 }
 
 
-/* Sequential entrance for notification route sections */
+/* Sequential right-to-left impact entrance for notification sections */
 @keyframes notificationSectionEnter{
-  from{opacity:0;transform:translate3d(0,22px,0) scale(.985)}
-  to{opacity:1;transform:translate3d(0,0,0) scale(1)}
+  0%{
+    opacity:0;
+    transform:translate3d(76px,0,0) scale(.94);
+  }
+  68%{
+    opacity:1;
+    transform:translate3d(-7px,0,0) scale(1.012);
+  }
+  84%{
+    transform:translate3d(3px,0,0) scale(.998);
+  }
+  100%{
+    opacity:1;
+    transform:translate3d(0,0,0) scale(1);
+  }
 }
 #notificationDocumentContent.is-opening > .route-section{
-  animation:notificationSectionEnter .48s cubic-bezier(.2,.75,.25,1) both;
+  animation:notificationSectionEnter 1s cubic-bezier(.18,.82,.25,1) both;
 }
 #notificationDocumentContent.is-opening > .route-section:nth-child(1){animation-delay:0ms}
-#notificationDocumentContent.is-opening > .route-section:nth-child(2){animation-delay:90ms}
-#notificationDocumentContent.is-opening > .route-section:nth-child(3){animation-delay:180ms}
-#notificationDocumentContent.is-opening > .route-section:nth-child(4){animation-delay:270ms}
-#notificationDocumentContent.is-opening > .route-section:nth-child(5){animation-delay:360ms}
-#notificationDocumentContent.is-opening > .route-section:nth-child(6){animation-delay:450ms}
-#notificationDocumentContent.is-opening > .route-section:nth-child(7){animation-delay:540ms}
-#notificationDocumentContent.is-opening > .route-section:nth-child(8){animation-delay:630ms}
-#notificationDocumentContent.is-opening > .route-section:nth-child(9){animation-delay:720ms}
-#notificationDocumentContent.is-opening > .route-section:nth-child(10){animation-delay:810ms}
+#notificationDocumentContent.is-opening > .route-section:nth-child(2){animation-delay:110ms}
+#notificationDocumentContent.is-opening > .route-section:nth-child(3){animation-delay:220ms}
+#notificationDocumentContent.is-opening > .route-section:nth-child(4){animation-delay:330ms}
+#notificationDocumentContent.is-opening > .route-section:nth-child(5){animation-delay:440ms}
+#notificationDocumentContent.is-opening > .route-section:nth-child(6){animation-delay:550ms}
+#notificationDocumentContent.is-opening > .route-section:nth-child(7){animation-delay:660ms}
+#notificationDocumentContent.is-opening > .route-section:nth-child(8){animation-delay:770ms}
+#notificationDocumentContent.is-opening > .route-section:nth-child(9){animation-delay:880ms}
+#notificationDocumentContent.is-opening > .route-section:nth-child(10){animation-delay:990ms}
 @media(prefers-reduced-motion:reduce){
   #notificationDocumentContent.is-opening > .route-section{animation:none}
 }
