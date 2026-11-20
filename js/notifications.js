@@ -139,6 +139,9 @@
       const date = (option.dataset.noticeTitle || "").match(/06\/11|13\/11|20\/11/)?.[0] || "";
       title.textContent = option.dataset.noticeTitle || "Lộ trình";
       body.innerHTML = routeContent[date] || "";
+      body.classList.remove("is-opening");
+      void body.offsetWidth;
+      body.classList.add("is-opening");
       closePanel();
       viewer.hidden = false;
       document.body.classList.add("notification-viewer-open");
