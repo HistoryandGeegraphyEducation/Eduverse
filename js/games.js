@@ -75,11 +75,10 @@ function render(){
   create.onclick=()=>connectRoom(true);
   join.onclick=()=>connectRoom(false);
   root.querySelectorAll('[data-open="quick"]').forEach(b=>b.onclick=()=>connectRoom(true));
-  root.querySelectorAll('[data-open="career"]').forEach(b=>b.onclick=()=>{view="career";render();});
+  root.querySelectorAll('[data-open="career"]').forEach(b=>b.onclick=()=>{window.location.href="career-arena/index.html";});
   return;
  }
  if(view==="room"){renderRoom();return;}
- if(view==="career"){shell("CAREER ARENA",'<div class="career-arena-frame"><iframe title="Career Arena – Đấu trường nghề nghiệp" src="https://historyandgeegraphyeducation.github.io/Career-Arena/room.html?embed=eduverse" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe></div>');return;}
  if(view==="entertain"){
   shell("TRÒ CHƠI GIẢI TRÍ",'<div class="games-grid">'+card("TRÍ NHỚ","▦","memory")+card("SUDOKU","▥","sudoku")+card("GHÉP HÌNH","▧","jigsaw")+card("MÊ CUNG","⌁","maze")+card("QUAN SÁT","◉","observe")+card("PHẢN XẠ","ϟ","reaction")+'</div>');
   root.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>startEntertainment(b.dataset.open));
