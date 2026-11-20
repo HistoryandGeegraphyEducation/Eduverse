@@ -1491,3 +1491,133 @@ body.notification-viewer-open{overflow:hidden}
 .notification-document-content .route-section li{padding:2px 0}
 .notification-document-content .route-section:last-child{margin-bottom:0}
 @media(max-width:600px){.notification-document-content .route-section{margin-bottom:18px;font-size:14px;line-height:1.65}.notification-document-content .route-section h3{font-size:16px}}
+
+
+/* EDUVERSE notification document — visual identity and stacking correction */
+#app > .notification-viewer{
+  z-index:1000;
+  isolation:isolate;
+}
+.notification-document{
+  border:1px solid rgba(224,190,112,.72);
+  border-radius:22px;
+  background:#f4f6fb;
+  box-shadow:0 28px 90px rgba(4,12,48,.46),0 0 0 5px rgba(255,255,255,.08);
+}
+.notification-document-header{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-height:76px;
+  padding:16px 20px;
+  border:0;
+  border-bottom:2px solid #c99b43;
+  background:linear-gradient(112deg,#101d56 0%,#1d3285 58%,#293fa5 100%);
+}
+.notification-document-header::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  width:220px;
+  height:220px;
+  right:34px;
+  top:-145px;
+  border:1px solid rgba(238,202,125,.38);
+  border-radius:50%;
+  box-shadow:0 0 0 16px rgba(238,202,125,.045),0 0 0 34px rgba(238,202,125,.035);
+}
+.notification-document-header::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  right:0;
+  bottom:0;
+  width:42%;
+  height:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,224,157,.9));
+}
+.notification-document-header h2{
+  position:relative;
+  color:#fff;
+  font:700 clamp(17px,2.2vw,22px)/1.3 "Times New Roman",Georgia,serif;
+  letter-spacing:.25px;
+  text-shadow:0 2px 8px rgba(0,0,0,.24);
+}
+.notification-document-close{
+  position:relative;
+  z-index:1;
+  width:40px;
+  height:40px;
+  border:1px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  box-shadow:inset 0 1px rgba(255,255,255,.18);
+}
+.notification-document-close:hover,
+.notification-document-close:focus-visible{
+  background:rgba(255,255,255,.24);
+  outline:2px solid rgba(255,226,166,.8);
+  outline-offset:2px;
+}
+.notification-document-content{
+  padding:clamp(16px,3vw,32px);
+  background:
+    radial-gradient(ellipse at 8% 0%,rgba(42,64,200,.055),transparent 38%),
+    linear-gradient(180deg,#f3f6fc 0%,#edf1f8 100%);
+  scrollbar-color:#9eaccd #e8edf6;
+}
+.notification-document-content .route-section{
+  max-width:920px;
+  margin:0 auto 16px;
+  padding:19px 21px 17px;
+  border:1px solid #dce3ef;
+  border-left:3px solid #c49a4a;
+  border-radius:13px;
+  background:rgba(255,255,255,.94);
+  box-shadow:0 4px 14px rgba(20,39,91,.055);
+  color:#29344e;
+  font:400 15px/1.75 Arial,sans-serif;
+}
+.notification-document-content .route-section h3{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 11px;
+  color:#172b70;
+  font:700 17px/1.4 "Times New Roman",Georgia,serif;
+}
+.notification-document-content .route-section h3::before{
+  content:"";
+  flex:none;
+  width:7px;
+  height:7px;
+  border:2px solid #c49a4a;
+  border-radius:2px;
+  transform:rotate(45deg);
+}
+.notification-document-content .route-section p{margin:0 0 10px}
+.notification-document-content .route-section p:last-child{margin-bottom:0}
+.notification-document-content .route-section strong{color:#1c347f;font-weight:700}
+.notification-document-content .route-section ul,
+.notification-document-content .route-section ol{
+  margin:7px 0 12px;
+  padding-left:24px;
+}
+.notification-document-content .route-section li{padding:3px 0}
+.notification-document-content .route-section li::marker{color:#b68a37}
+.notification-document-content .route-section:last-child{margin-bottom:0}
+@media(max-width:600px){
+  .notification-document{border-radius:17px}
+  .notification-document-header{min-height:62px;padding:11px 13px}
+  .notification-document-header h2{font-size:17px}
+  .notification-document-close{width:36px;height:36px}
+  .notification-document-content{padding:12px}
+  .notification-document-content .route-section{
+    margin-bottom:12px;
+    padding:15px 14px 14px;
+    border-radius:11px;
+    font-size:14px;
+    line-height:1.68;
+  }
+  .notification-document-content .route-section h3{font-size:16px;margin-bottom:9px}
+}
