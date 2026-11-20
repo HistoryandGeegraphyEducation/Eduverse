@@ -53,7 +53,7 @@ const techniques=[
 let root=null,view="home",group="",room=null,channel=null,role="",presence={},qIndex=0,score=0,answers=[],quizMode="",memory=[],flipped=[],matched=[],moves=0,brainIdeas=[],stations=[],jigsaw=[],claims=[],gallery=[],activeTechnique="";
 function shell(title,body,back=true){
  root.innerHTML='<div class="games-head">'+(back?'<button class="games-back" data-back>‹</button>':'')+'<h1>'+title+'</h1></div>'+body;
- const b=$ (root,"[data-back]"); if(b)b.onclick=()=>{if(view==="play"){view=group==="Trò chơi giải trí"?"entertain":"list";}else if(view==="list"||view==="entertain"||view==="techniques"||view==="rooms"){view="home";}else if(view==="room"){leaveRoom();view="rooms";}else{view="home";}render();};
+ const b=$ (root,"[data-back]"); if(b)b.onclick=()=>{if(view==="play"){view=group==="Trò chơi giải trí"?"entertain":"list";}else if(view==="career"){view="rooms";}else if(view==="list"||view==="entertain"||view==="techniques"||view==="rooms"){view="home";}else if(view==="room"){leaveRoom();view="rooms";}else{view="home";}render();};
 }
 function card(name,icon,action){return '<button class="games-card" data-open="'+esc(action)+'"><span class="games-icon">'+icon+'</span><b>'+name+'</b></button>';}
 function mount(el){root=el;view="home";group="";render();}
@@ -70,14 +70,16 @@ function render(){
   return;
  }
  if(view==="rooms"){
-  shell("TRÒ CHƠI TƯƠNG TÁC",'<div class="games-panel"><div class="games-actions"><button class="games-primary" id="createRoom">TẠO PHÒNG</button></div><div class="games-field"><label>MÃ PHÒNG</label><input id="roomCode" inputmode="numeric" maxlength="6"></div><button class="games-secondary" id="joinRoom">THAM GIA</button></div><div class="games-grid">'+card("ĐẤU TRƯỜNG KIẾN THỨC","✦","quick")+card("THỬ THÁCH ĐỒNG ĐỘI","♟","quick")+card("PHÒNG THOÁT HIỂM","⌑","quick")+card("NHẬP VAI TÌNH HUỐNG","◉","quick")+'</div>');
+  shell("TRÒ CHƠI TƯƠNG TÁC",'<div class="games-panel"><div class="games-actions"><button class="games-primary" id="createRoom">TẠO PHÒNG</button></div><div class="games-field"><label>MÃ PHÒNG</label><input id="roomCode" inputmode="numeric" maxlength="6"></div><button class="games-secondary" id="joinRoom">THAM GIA</button></div><div class="games-grid">'+card("CAREER ARENA","★","career")+card("ĐẤU TRƯỜNG KIẾN THỨC","✦","quick")+card("THỬ THÁCH ĐỒNG ĐỘI","♟","quick")+card("PHÒNG THOÁT HIỂM","⌑","quick")+card("NHẬP VAI TÌNH HUỐNG","◉","quick")+'</div>');
   const create=$ (root,"#createRoom"),join=$ (root,"#joinRoom");
   create.onclick=()=>connectRoom(true);
   join.onclick=()=>connectRoom(false);
   root.querySelectorAll('[data-open="quick"]').forEach(b=>b.onclick=()=>connectRoom(true));
+  root.querySelectorAll('[data-open="career"]').forEach(b=>b.onclick=()=>{view="career";render();});
   return;
  }
  if(view==="room"){renderRoom();return;}
+ if(view==="career"){shell("CAREER ARENA",'<div class="career-arena-frame"><iframe title="Career Arena – Đấu trường nghề nghiệp" src="https://historyandgeegraphyeducation.github.io/Career-Arena/room.html?embed=eduverse" loading="lazy" allow="autoplay; fullscreen" allowfullscreen></iframe></div>');return;}
  if(view==="entertain"){
   shell("TRÒ CHƠI GIẢI TRÍ",'<div class="games-grid">'+card("TRÍ NHỚ","▦","memory")+card("SUDOKU","▥","sudoku")+card("GHÉP HÌNH","▧","jigsaw")+card("MÊ CUNG","⌁","maze")+card("QUAN SÁT","◉","observe")+card("PHẢN XẠ","ϟ","reaction")+'</div>');
   root.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>startEntertainment(b.dataset.open));
