@@ -71,7 +71,6 @@ function render(){
  }
  if(view==="rooms"){
   shell("TRÒ CHƠI TƯƠNG TÁC",'<div class="games-panel"><div class="games-actions"><button class="games-primary" id="createRoom">TẠO PHÒNG</button></div><div class="games-field"><label>MÃ PHÒNG</label><input id="roomCode" inputmode="numeric" maxlength="6"></div><button class="games-secondary" id="joinRoom">THAM GIA</button></div><div class="games-grid">'+card("ĐẤU TRƯỜNG KIẾN THỨC","✦","quick")+card("THỬ THÁCH ĐỒNG ĐỘI","♟","quick")+card("PHÒNG THOÁT HIỂM","⌑","quick")+card("NHẬP VAI TÌNH HUỐNG","◉","quick")+'</div>');
-  $("#",root);
   const create=$ (root,"#createRoom"),join=$ (root,"#joinRoom");
   create.onclick=()=>connectRoom(true);
   join.onclick=()=>connectRoom(false);
@@ -159,13 +158,14 @@ function renderRoom(){
  if(!room)return;
  const people=Object.values(presence).flat();
  const list=quiz[group]||quiz["Địa lí"],q=list[qIndex];
- let body='<div class="room-code">'+room.code+'</div><div class="room-people">'+people.length+'</div>';
+ let body='<div class="room-code">'+room.code+'</div><div class="room-people">'+people.length+'</div><button class="games-secondary" id="exitRoom">RỜI PHÒNG</button>';
  if(role==="host"){
   body+='<button class="games-primary" id="startRoom">BẮT ĐẦU</button><button class="games-secondary" id="nextRoom">CÂU TIẾP</button><div class="room-scores">'+room.players.map(p=>'<p>'+esc(p.name||"Người chơi")+' · '+p.score+'</p>').join("")+'</div>';
  }else if(q){
   body+='<div class="games-question">'+esc(q[0])+'</div><div class="games-options">'+q[1].map((x,i)=>'<button data-room-answer="'+i+'">'+esc(x)+'</button>').join("")+'</div>';
  }else body+='<div class="games-result">ĐANG CHỜ GIÁO VIÊN</div>';
  shell("PHÒNG "+room.code,body,false);
+ const exit=$ (root,"#exitRoom");if(exit)exit.onclick=async()=>{await leaveRoom();view="rooms";render();};
  const start=$ (root,"#startRoom");if(start)start.onclick=async()=>{group=room.subject; qIndex=0;await channel.send({type:"broadcast",event:"start",payload:{subject:group}});await channel.send({type:"broadcast",event:"question",payload:{subject:group,index:0}});renderRoom();};
  const next=$ (root,"#nextRoom");if(next)next.onclick=async()=>{qIndex=(qIndex+1)%list.length;await channel.send({type:"broadcast",event:"question",payload:{subject:group,index:qIndex}});renderRoom();};
  root.querySelectorAll("[data-room-answer]").forEach(b=>b.onclick=async()=>{const v=+b.dataset.roomAnswer;await channel.send({type:"broadcast",event:"answer",payload:{name:"Người chơi",score:v===q[2]?1:0}});root.querySelectorAll("[data-room-answer]").forEach(x=>x.disabled=true);});
