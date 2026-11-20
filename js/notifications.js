@@ -38,6 +38,49 @@
         <h3>Mục tiêu chung</h3>
         <p>Cùng xây dựng và thử nghiệm những học liệu số có thể ứng dụng vào quá trình học tập, giảng dạy và chuẩn bị thực tập tốt nghiệp.</p>
       </section>
+    `,
+    "13/11": `
+      <section class="route-section">
+        <h3>Điều chỉnh phạm vi thử nghiệm</h3>
+        <p>Để tập trung nguồn lực và bảo đảm chất lượng trong quá trình phát triển, EDUVERSE sẽ thu hẹp phạm vi thử nghiệm ban đầu.</p>
+        <p><strong>Đối tượng thử nghiệm:</strong> Phạm vi được điều chỉnh từ sinh viên khóa 23 thành sinh viên khóa 2023–2027.</p>
+        <p><strong>Lĩnh vực triển khai:</strong> EDUVERSE tạm thời không triển khai các lĩnh vực Khoa học tự nhiên, Ngữ văn, Công nghệ, Giáo dục địa phương, Hoạt động trải nghiệm – hướng nghiệp và Giáo dục công dân (phần Kinh tế).</p>
+      </section>
+      <section class="route-section">
+        <h3>Kế hoạch thử nghiệm</h3>
+        <p><strong>Giai đoạn 1</strong></p>
+        <ul>
+          <li>00:00 ngày 01/12: Alpha Test.</li>
+          <li>00:00 ngày 02/12: Close Test.</li>
+        </ul>
+        <p><strong>Giai đoạn 2</strong></p>
+        <ul>
+          <li>00:00 ngày 28/01: Open Beta.</li>
+          <li>12:00 ngày 28/01: Close Beta.</li>
+        </ul>
+        <p><strong>Giai đoạn 3 – Dự kiến</strong></p>
+        <ul>
+          <li>Tháng 04: Beta Test V2.</li>
+          <li>Tháng 06: Beta Test V3.</li>
+        </ul>
+        <p>Các mốc thử nghiệm sẽ là cơ sở để nhóm đánh giá hệ thống, tiếp nhận phản hồi và điều chỉnh những nội dung cần thiết trước các giai đoạn tiếp theo.</p>
+      </section>
+      <section class="route-section">
+        <h3>Kế hoạch ra mắt và thời hạn hoạt động</h3>
+        <p>EDUVERSE dự kiến chính thức ra mắt vào tháng 09/2027. Thời gian hoạt động của phiên bản này dự kiến kết thúc vào tháng 09/2028.</p>
+        <p>Việc xác định thời hạn ngay từ đầu nhằm giúp nhóm chủ động xây dựng kế hoạch phát triển phù hợp với định hướng chương trình giáo dục và những thay đổi có thể diễn ra trong tương lai.</p>
+      </section>
+      <section class="route-section">
+        <h3>Định hướng phát triển tiếp theo</h3>
+        <p>Việc kết thúc hoạt động của EDUVERSE vào tháng 09/2028 không đồng nghĩa với việc toàn bộ dự án sẽ chấm dứt. Nhóm phát triển đưa ra mốc thời gian này dựa trên định hướng nghiên cứu chương trình và dự thảo của Bộ Giáo dục về chương trình sách giáo khoa mới. Khi có những thay đổi phù hợp, EDUVERSE có thể được xây dựng lại trong một phiên bản khác, với nội dung và cấu trúc được điều chỉnh tương ứng.</p>
+        <p>Ở giai đoạn phát triển thứ năm, nhóm dự kiến mở rộng dự án ra ngoài phạm vi mô phỏng kiến thức trong sách giáo khoa. Hiện tại, dự án đã nhận được sự quan tâm từ một số du học sinh tại Đức, Hà Lan, Pháp và Trung Quốc. Nhóm mong muốn có cơ hội hợp tác với các bạn để trao đổi kiến thức, chia sẻ kinh nghiệm và cùng hoàn thiện những sản phẩm giáo dục.</p>
+        <p>Bên cạnh các mô hình số, EDUVERSE cũng định hướng nghiên cứu và thử nghiệm những phương thức trình diễn, thực hành mới như hologram, hình ảnh lập thể, công nghệ 3D và các sản phẩm STEM quy mô lớn.</p>
+        <p>Mục tiêu của định hướng này là mở rộng khả năng học tập từ việc tiếp nhận kiến thức đến tư duy, khám phá và thực hành. Nội dung phát triển sẽ dựa trên những chủ đề mà người học muốn tìm hiểu, những vấn đề các em quan tâm và những sản phẩm các em mong muốn tự tay thực hiện.</p>
+      </section>
+      <section class="route-section">
+        <p>Những nội dung trên là lộ trình phát triển được nhóm xác định ở thời điểm hiện tại. Trong quá trình triển khai, các mốc thời gian và kế hoạch có thể được điều chỉnh tùy theo kết quả thử nghiệm và điều kiện thực tế.</p>
+        <p>Cảm ơn các bạn đã quan tâm, theo dõi và đồng hành cùng EDUVERSE.</p>
+      </section>
     `
   };
 
