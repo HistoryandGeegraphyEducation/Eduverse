@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -22,8 +22,35 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout EDUVERSE
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch complete Career Arena project
+        uses: actions/checkout@v4
+        with:
+          repository: HistoryandGeegraphyEducation/Career-Arena
+          ref: main
+          path: ${{ runner.temp }}/career-arena-source
+
+      - name: Copy Career Arena into EDUVERSE
+        run: |
+          mkdir -p career-arena
+          rsync -a --delete --exclude='.git' "${{ runner.temp }}/career-arena-source/" career-arena/
+
+      - name: Commit mirrored Career Arena source
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add career-arena
+          if ! git diff --cached --quiet; then
+            git commit -m "Integrate complete Career Arena project"
+            git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+            git push origin HEAD:main
+          fi
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
