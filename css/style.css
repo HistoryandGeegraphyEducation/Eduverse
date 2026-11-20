@@ -1436,23 +1436,7 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 @media(max-width:420px){#modal{padding:12px}#modal .sheet{padding:22px 19px;border-radius:22px}#modal .auth-sheet-head{margin-bottom:17px}#modal .auth-field input{height:46px}}
 
 
-/* ===== HEADER ACCOUNT ENTRY · Static EDUVERSE logo ===== */
-#app>.top{position:relative}
-#app>.top>.account-entry{
-  position:absolute;z-index:5;right:clamp(12px,3vw,30px);top:50%;
-  display:grid;place-items:center;width:66px;height:66px;padding:4px;
-  border:1px solid rgba(255,255,255,.48);border-radius:19px;
-  background:rgba(14,31,126,.32);box-shadow:0 5px 16px rgba(8,18,78,.24),inset 0 1px rgba(255,255,255,.28);
-  transform:translateY(-50%);cursor:pointer;transition:background .18s,transform .18s;
-}
-#app>.top>.account-entry:active{transform:translateY(-50%) scale(.96)}
-.account-entry-logo{display:block;width:100%;height:100%;filter:drop-shadow(0 2px 4px rgba(0,0,0,.24))}
-#app>.top>.brand{padding-right:84px}
-@media(min-width:820px){
-  #app>.top>.account-entry{right:30px;width:76px;height:76px}
-  #app>.top>.brand{padding-right:110px}
-}
-@media(max-width:600px){
-  #app>.top>.account-entry{right:12px;width:54px;height:54px;border-radius:15px}
-  #app>.top>.brand{padding-right:70px}
-}
+/* Static EDUVERSE logo inside the authentication glass panel */
+.auth-glass-orbit{display:grid;place-items:center;width:66px;height:66px;border:0;border-radius:0;transform:none;background:transparent}
+.auth-glass-orbit:before,.auth-glass-orbit:after{display:none}
+.auth-brand-logo{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 5px rgba(24,42,110,.18))}
