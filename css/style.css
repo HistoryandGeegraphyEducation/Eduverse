@@ -1403,7 +1403,7 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 
 /* ===== EDUVERSE AUTH · Glass interface using existing brand palette ===== */
 #modal{background:rgba(12,24,76,.42);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);padding:16px}
-#modal .sheet{position:relative;isolation:isolate;overflow:hidden;width:min(100%,430px);max-height:min(88dvh,760px);padding:clamp(22px,5vw,30px);border:1px solid rgba(255,255,255,.72);border-radius:26px;background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(238,243,255,.76));box-shadow:0 24px 70px rgba(12,24,92,.28),inset 0 1px rgba(255,255,255,.9);color:var(--deep);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+#modal .sheet{position:relative;isolation:isolate;overflow:hidden;width:min(100%,430px);max-height:min(88dvh,760px);padding:clamp(22px,5vw,30px);border:1px solid rgba(255,255,255,.72);border-radius:26px;background:linear-gradient(145deg,rgba(255,255,255,.80),rgba(238,243,255,.68));box-shadow:0 24px 70px rgba(12,24,92,.28),inset 0 1px rgba(255,255,255,.9);color:var(--deep);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
 #modal .sheet:before,#modal .sheet:after{content:"";position:absolute;z-index:-1;pointer-events:none;border-radius:50%;filter:blur(1px)}
 #modal .sheet:before{width:190px;height:190px;right:-90px;top:-105px;background:radial-gradient(circle,rgba(73,99,220,.18),transparent 70%)}
 #modal .sheet:after{width:160px;height:160px;left:-95px;bottom:-100px;background:radial-gradient(circle,rgba(80,130,190,.16),transparent 70%)}
@@ -1431,6 +1431,6 @@ button:focus-visible{outline:3px solid #ffd23f;outline-offset:2px}
 #modal .sheet .btns .ok{background:linear-gradient(135deg,var(--blue),var(--deep));color:#fff;box-shadow:0 7px 16px rgba(35,55,160,.2)}
 #modal .sheet .btns .no{background:rgba(255,255,255,.58);border-color:rgba(72,91,151,.2);color:#43516d}
 #modal .sheet .btns button:disabled{opacity:.6;cursor:wait}
-.account-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.72);background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(237,243,255,.72));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 12px 30px rgba(25,48,110,.12),inset 0 1px rgba(255,255,255,.9)}
+.account-card{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.72);background:linear-gradient(145deg,rgba(255,255,255,.76),rgba(237,243,255,.66));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 12px 30px rgba(25,48,110,.12),inset 0 1px rgba(255,255,255,.9)}
 .account-card .cta{min-width:150px;border-radius:13px}
 @media(max-width:420px){#modal{padding:12px}#modal .sheet{padding:22px 19px;border-radius:22px}#modal .auth-sheet-head{margin-bottom:17px}#modal .auth-field input{height:46px}}
