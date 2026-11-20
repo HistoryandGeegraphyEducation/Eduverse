@@ -113,6 +113,6 @@
 
   window.EduverseAuth={
     init,signUp,signIn,signOut,resetPassword,updatePassword,
-    listProfiles,onChange,getProfile
+    listProfiles,onChange,getProfile,getRealtimeClient: getClient
   };
 })();
