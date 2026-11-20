@@ -708,12 +708,7 @@ function vMe(){
       (p.role==="pending"?`<p class="account-note">Tài khoản đã được tạo. Quyền truy cập các phân hệ sẽ được cấp sau khi quản trị viên xác nhận vai trò.</p>`:"")+
       `<button class="cta" id="out">Đăng xuất</button></section>`+
       (p.role==="admin"?`<section class="box account-admin"><h3>QUẢN LÝ THÀNH VIÊN</h3><p>Danh sách tài khoản giáo viên và học sinh trong hệ thống.</p><div id="memberList">Đang tải danh sách…</div></section>`:"");
-    $("#out").onclick=()=>{
-      $("#sheet").innerHTML='<div class="auth-sheet-head"><span class="auth-eyebrow">EDUVERSE ACCOUNT</span><h2>ĐĂNG XUẤT</h2><p>Bạn có chắc chắn muốn kết thúc phiên đăng nhập hiện tại?</p></div><div class="btns"><button class="no" id="keep" type="button">Ở lại</button><button class="ok" id="confirmOut" type="button">Đăng xuất</button></div>';
-      $("#modal").classList.add("show");
-      $("#keep").onclick=()=>$("#modal").classList.remove("show");
-      $("#confirmOut").onclick=async()=>{const b=$("#confirmOut");b.disabled=true;b.textContent="ĐANG ĐĂNG XUẤT…";try{await EduverseAuth.signOut();$("#modal").classList.remove("show");}catch(err){b.disabled=false;b.textContent="Đăng xuất";toast(authError(err));}};
-    };
+    $("#out").onclick=confirmLogout;
     if(p.role==="admin") loadAdminMembers();
   }else{
     main.innerHTML=`<div class="crumb"><span>CÁ NHÂN</span></div>`+
@@ -734,22 +729,46 @@ async function loadAdminMembers(){
   }catch(e){target.textContent=authError(e);}
 }
 // ===== TÀI KHOẢN DÙNG CHUNG EDUVERSE =====
-const loginButton=$("#bLogin");
-const registerButton=$("#bReg");
-const loginButtonMarkup=loginButton.innerHTML;
+const accountEntry=$("#accountEntry");
+const accountLogoSlot=$("#accountLogoSlot");
+if(accountEntry&&accountLogoSlot){
+  const sourceLogo=document.querySelector(".brand>svg.logo");
+  if(sourceLogo){
+    const staticLogo=sourceLogo.cloneNode(true);
+    staticLogo.classList.remove("logo");
+    staticLogo.classList.add("account-entry-logo");
+    staticLogo.setAttribute("aria-hidden","true");
+    staticLogo.querySelectorAll("animate,animateMotion").forEach(node=>node.remove());
+    accountLogoSlot.appendChild(staticLogo);
+  }
+  accountEntry.addEventListener("click",showAccountMenu);
+}
 function updateAuthHeader(){
+  if(!accountEntry) return;
+  accountEntry.setAttribute("aria-label",user?"Mở tài khoản":"Đăng nhập hoặc đăng ký");
+  accountEntry.setAttribute("title",user?"Tài khoản":"Đăng nhập hoặc đăng ký");
+}
+function showAccountMenu(){
   if(user){
-    loginButton.innerHTML='<span aria-hidden="true">👤</span> TÀI KHOẢN';
-    loginButton.setAttribute("aria-label","Mở tài khoản");
-    registerButton.hidden=true;
-    loginButton.onclick=()=>{S.tab="me";render();};
+    const p=userProfile||{};
+    $("#sheet").innerHTML='<div class="auth-sheet-head"><span class="auth-eyebrow">EDUVERSE ACCOUNT</span><h2>TÀI KHOẢN</h2><p>'+esc(p.full_name||user)+'</p><p>'+esc(p.email||"")+'</p></div><div class="btns"><button class="no" id="openProfile" type="button">Thông tin tài khoản</button><button class="ok" id="menuLogout" type="button">Đăng xuất</button></div>';
+    $("#modal").classList.add("show");
+    $("#openProfile").onclick=()=>{$("#modal").classList.remove("show");S.tab="me";render();};
+    $("#menuLogout").onclick=confirmLogout;
   }else{
-    loginButton.innerHTML=loginButtonMarkup;
-    loginButton.removeAttribute("aria-label");
-    registerButton.hidden=false;
-    loginButton.onclick=()=>auth("login");
+    $("#sheet").innerHTML='<div class="auth-sheet-head"><span class="auth-eyebrow">EDUVERSE ACCOUNT</span><h2>TÀI KHOẢN</h2><p>Đăng nhập hoặc tạo tài khoản EDUVERSE.</p></div><div class="btns"><button class="no" id="menuLogin" type="button">Đăng nhập</button><button class="ok" id="menuRegister" type="button">Đăng ký</button></div>';
+    $("#modal").classList.add("show");
+    $("#menuLogin").onclick=()=>auth("login");
+    $("#menuRegister").onclick=()=>auth("reg");
   }
 }
+function confirmLogout(){
+  $("#sheet").innerHTML='<div class="auth-sheet-head"><span class="auth-eyebrow">EDUVERSE ACCOUNT</span><h2>ĐĂNG XUẤT</h2><p>Bạn có chắc chắn muốn kết thúc phiên đăng nhập hiện tại?</p></div><div class="btns"><button class="no" id="keep" type="button">Ở lại</button><button class="ok" id="confirmOut" type="button">Đăng xuất</button></div>';
+  $("#modal").classList.add("show");
+  $("#keep").onclick=()=>$("#modal").classList.remove("show");
+  $("#confirmOut").onclick=async()=>{const b=$("#confirmOut");b.disabled=true;b.textContent="ĐANG ĐĂNG XUẤT…";try{await EduverseAuth.signOut();$("#modal").classList.remove("show");}catch(err){b.disabled=false;b.textContent="Đăng xuất";toast(authError(err));}};
+}
+
 function authError(error){
   const m=String(error?.message||error||"");
   if(/Invalid login credentials/i.test(m)) return "Email hoặc mật khẩu không chính xác.";
@@ -787,8 +806,6 @@ function auth(mode){
     }catch(err){showError(authError(err));b.disabled=false;b.textContent=reg?"Tạo tài khoản":reset?"Gửi liên kết":update?"Cập nhật mật khẩu":"Đăng nhập";}
   };
 }
-loginButton.onclick=()=>auth(user?"login":"login");
-registerButton.onclick=()=>auth("reg");
 $("#modal").onclick=e=>{
   if(e.target.id==="modal") $("#modal").classList.remove("show");
 };
