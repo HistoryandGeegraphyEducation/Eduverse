@@ -690,10 +690,8 @@ function vLanguages(){
   });
 }
 function vPractice(){
-  main.innerHTML=`<div class="crumb"><span>LUYỆN TẬP</span></div>`+
-    `<div class="box">🎮 Trò chơi ôn tập`+
-    `<p>Câu đố, ô chữ và thi đấu kiến thức sẽ có ở bản cập nhật tiếp theo.</p>`+
-    `</div>`;
+  if(window.EduverseGames){EduverseGames.mount(main);return;}
+  main.innerHTML="";
 }
 function vMe(){
   const roleNames={admin:"QUẢN TRỊ VIÊN",teacher:"GIÁO VIÊN",student:"HỌC SINH",pending:"CHƯA ĐƯỢC PHÂN QUYỀN"};
