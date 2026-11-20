@@ -1481,3 +1481,13 @@ body.notification-viewer-open{overflow:hidden}
 @keyframes notificationDocumentOpen{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:none}}
 @media(max-width:600px){.notification-viewer{padding:3vh 3vw;padding-top:max(3vh,env(safe-area-inset-top));padding-bottom:max(3vh,env(safe-area-inset-bottom))}.notification-document{width:94vw;height:94vh;height:94dvh;border-radius:15px}.notification-document-header{min-height:54px;padding:9px 12px}.notification-document-close{width:35px;height:35px}.notification-document-content{padding:14px}}
 @media(prefers-reduced-motion:reduce){.notification-document{animation:none}}
+
+
+/* Notification route document typography */
+.notification-document-content .route-section{max-width:900px;margin:0 auto 22px;color:#26324f;font:400 15px/1.7 Arial,sans-serif}
+.notification-document-content .route-section h3{margin:0 0 8px;color:#1a287e;font:700 17px/1.35 Arial,sans-serif}
+.notification-document-content .route-section p{margin:0 0 9px}
+.notification-document-content .route-section ol{margin:8px 0 0;padding-left:24px}
+.notification-document-content .route-section li{padding:2px 0}
+.notification-document-content .route-section:last-child{margin-bottom:0}
+@media(max-width:600px){.notification-document-content .route-section{margin-bottom:18px;font-size:14px;line-height:1.65}.notification-document-content .route-section h3{font-size:16px}}
