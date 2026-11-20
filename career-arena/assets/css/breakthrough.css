@@ -1,0 +1,15 @@
+.round-banner{background-image:linear-gradient(90deg,#061b48e8,#061b4860),url("../images/breakthrough.webp")}.question h2{color:#ffe08b}.question p{line-height:1.7}
+/* Tarot-style draw card for the selected scenario */
+.breakthrough-tarot-card{position:relative;width:126px;height:184px;margin:2px auto 20px;perspective:1000px;filter:drop-shadow(0 15px 22px rgba(0,0,0,.42))}
+.breakthrough-tarot-face{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-around;padding:13px 10px;border-radius:13px;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:2px solid #d8b45f;overflow:hidden;text-align:center}
+.breakthrough-tarot-face:before{content:"";position:absolute;inset:6px;border:1px solid rgba(255,224,139,.5);border-radius:8px;pointer-events:none}
+.breakthrough-tarot-front{color:#ffe6a0;background:radial-gradient(circle at 50% 30%,#375b83,#101a3c 68%,#080f29);box-shadow:inset 0 0 26px rgba(255,214,116,.12)}
+.breakthrough-tarot-back{color:#ffe6a0;background:repeating-linear-gradient(45deg,rgba(255,220,133,.07) 0 2px,transparent 2px 8px),radial-gradient(circle at 50% 40%,#77552a,#18213d 70%,#080f29);transform:rotateY(180deg);box-shadow:inset 0 0 28px rgba(255,214,116,.18)}
+.breakthrough-tarot-card.is-flipped{animation:tarotFlip 1.05s cubic-bezier(.2,.72,.22,1) both}
+.tarot-ornament{font-size:1.15rem;color:#ffe08b;text-shadow:0 0 12px rgba(255,211,106,.8)}
+.breakthrough-tarot-face strong{position:relative;max-width:100%;font-size:.76rem;line-height:1.35;letter-spacing:.09em}
+.breakthrough-tarot-face small{position:relative;color:#f5dba0;font-size:.62rem;letter-spacing:.13em}
+.tarot-question{font-family:Georgia,serif;font-size:3.8rem;line-height:1;color:#ffe08b;text-shadow:0 0 20px rgba(255,211,106,.45)}
+.tarot-seal{font-size:2rem;color:#ffe08b}
+@keyframes tarotFlip{0%{transform:rotateY(0) scale(.92)}48%{transform:rotateY(95deg) scale(1.04)}100%{transform:rotateY(180deg) scale(1)}}
+@media(prefers-reduced-motion:reduce){.breakthrough-tarot-card.is-flipped{animation:none;transform:rotateY(180deg)}}

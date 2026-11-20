@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="864" viewBox="0 0 1536 864">
+  <rect width="1536" height="864" fill="#080d2b"/>
+  <g fill="none" stroke="#29416c" stroke-width="1" opacity=".58">
+    <path d="M0 0V864"/><path d="M96 0V864"/><path d="M192 0V864"/><path d="M288 0V864"/><path d="M384 0V864"/><path d="M480 0V864"/><path d="M576 0V864"/><path d="M672 0V864"/><path d="M768 0V864"/><path d="M864 0V864"/><path d="M960 0V864"/><path d="M1056 0V864"/><path d="M1152 0V864"/><path d="M1248 0V864"/><path d="M1344 0V864"/><path d="M1440 0V864"/><path d="M1536 0V864"/>
+    <path d="M0 0H1536"/><path d="M0 96H1536"/><path d="M0 192H1536"/><path d="M0 288H1536"/><path d="M0 384H1536"/><path d="M0 480H1536"/><path d="M0 576H1536"/><path d="M0 672H1536"/><path d="M0 768H1536"/><path d="M0 864H1536"/>
+  </g>
+  <path d="M192 0H384L720 721H580Z" fill="#12465a" opacity=".30"/>
+  <path d="M1152 0H1344L960 721H800Z" fill="#54216d" opacity=".28"/>
+  <path d="M1040 0H1328L1536 208" fill="none" stroke="#a44cff" stroke-width="3" opacity=".95"/>
+  <path d="M0 656L208 864H520" fill="none" stroke="#29d9f4" stroke-width="3" opacity=".92"/>
+</svg>

@@ -1,0 +1,13 @@
+BỘ TÀI NGUYÊN ẢNH SLIDE – CHỦ ĐỀ 8: KHÁM PHÁ THẾ GIỚI NGHỀ NGHIỆP
+
+Cấu trúc:
+01_Nen_chung: ảnh nền gameshow tổng thể và bản gốc đầy đủ.
+02_Bo_anh_hoat_dong_10_muc: 10 khung hoạt động được tách từ ảnh ghép thứ hai.
+03_Bo_anh_vong_va_hoat_dong: 9 khung được tách từ ảnh ghép thứ ba.
+04_Bo_anh_vong_va_tai_nguyen: 11 khung được tách từ ảnh ghép thứ tư.
+
+Lưu ý:
+- Ảnh gốc đầy đủ được giữ nguyên trong từng thư mục để đối chiếu và bảo toàn bố cục tổng thể.
+- Các ảnh PNG được tách theo ranh giới khung nhìn thấy trong ảnh ghép; không phóng đại hoặc vẽ lại nội dung.
+- Một số khung có viền/nhãn tiêu đề vốn nằm sát mép; phần đó được giữ lại để không làm mất chi tiết.
+- Nếu cần dùng một khung làm nền slide, có thể đặt ảnh vừa khít trang chiếu 16:9 hoặc cắt theo bố cục riêng trong PowerPoint.

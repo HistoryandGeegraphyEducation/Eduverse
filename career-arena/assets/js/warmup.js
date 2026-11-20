@@ -1,0 +1,1 @@
+document.getElementById('saveWarmup').addEventListener('click',()=>{const v=['jobs','same','diff'].map(id=>document.getElementById(id).value.trim());document.getElementById('warmMsg').textContent=v.every(Boolean)?'Đã ghi nhận phần chia sẻ của đội. Hãy cử đại diện trình bày.':'Đội hãy hoàn thành cả ba ô trước khi lưu.';if(v.every(Boolean))GameSound.success();});
