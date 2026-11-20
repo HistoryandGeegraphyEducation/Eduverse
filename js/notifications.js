@@ -81,6 +81,33 @@
         <p>Những nội dung trên là lộ trình phát triển được nhóm xác định ở thời điểm hiện tại. Trong quá trình triển khai, các mốc thời gian và kế hoạch có thể được điều chỉnh tùy theo kết quả thử nghiệm và điều kiện thực tế.</p>
         <p>Cảm ơn các bạn đã quan tâm, theo dõi và đồng hành cùng EDUVERSE.</p>
       </section>
+    `,
+    "20/11": `
+      <section class="route-section">
+        <h3>Điều chỉnh phạm vi và nội dung triển khai</h3>
+        <p>Sau khi trao đổi và thống nhất với các bạn du học sinh tại Pháp và Vương quốc Anh, nhóm phát triển quyết định đưa Khoa học tự nhiên trở lại phạm vi dự án với tên gọi <strong>KHOA HỌC VÀ VĨ MÔ</strong>.</p>
+        <p>Nội dung không chỉ giới hạn ở kiến thức bắt buộc trong chương trình học. Nhóm định hướng mở rộng sang quá trình hình thành, phát triển của khoa học và cách các thành tựu khoa học đi vào đời sống. Kiến thức Khoa học tự nhiên sẽ được liên hệ giữa lý thuyết và thực tiễn theo từng khối lớp; trong đó, lịch sử khoa học được chú trọng, đặc biệt là những đóng góp của các nhà khoa học và thành tựu gắn với lịch sử khoa học Pháp.</p>
+        <p>Một số lĩnh vực như Quang học, Điện học, Tốc độ, Vật lý lượng tử... sẽ được tách thành những không gian nghiên cứu chuyên sâu, không gộp hoàn toàn vào nội dung học tập theo khối lớp.</p>
+        <p>Nhóm cũng đưa một phần nội dung Giáo dục công dân trở lại dự án với tên gọi <strong>PHÁP LUẬT VÀ TRIẾT HỌC</strong>. Các nội dung về thế giới quan, lý luận và pháp luật sẽ được phân định với nội dung đạo đức để người học có thể tiếp cận từng lĩnh vực rõ ràng hơn.</p>
+        <p>Lĩnh vực Tiếng Anh được mở rộng thành <strong>NGÔN NGỮ</strong>, dự kiến gồm tiếng Anh, tiếng Pháp, tiếng Đức và các ngôn ngữ khác. Dự án khuyến khích người học tiếp cận nhiều ngôn ngữ; trong các giai đoạn sau, nhóm sẽ tìm kiếm cơ hội hợp tác để hỗ trợ việc học và ôn luyện các chứng chỉ ngoại ngữ.</p>
+        <p>Tiếng Việt cũng được đưa vào không gian này. Khác với môn Ngữ văn, nội dung tập trung vào tiếng Việt và quá trình phát triển của ngôn ngữ, từ giai đoạn trước chữ Quốc ngữ đến tiếng Việt hiện đại.</p>
+      </section>
+      <section class="route-section">
+        <h3>Tiến độ và kế hoạch thử nghiệm</h3>
+        <p>Các mốc trong lộ trình đã công bố ngày 13/11 hiện được giữ nguyên, trừ trường hợp phát sinh vấn đề cần điều chỉnh. Trong quá trình phát triển, nhóm ghi nhận nhiều tính năng vẫn còn lỗi nghiêm trọng. Đây là khó khăn ảnh hưởng trực tiếp đến tiến độ và tạo thêm áp lực cho kế hoạch thử nghiệm.</p>
+        <p>Nhóm sẽ tiếp tục rà soát, khắc phục lỗi và kiểm tra độ ổn định của hệ thống trước các mốc đã đề ra.</p>
+      </section>
+      <section class="route-section">
+        <h3>Những khó khăn trong giai đoạn phát triển</h3>
+        <p>Ở giai đoạn 5, nhóm đang gặp một số thách thức về kỹ thuật. Nguyên nhân chủ yếu là dự án chưa có định hướng thiết kế đủ sâu và nhóm còn thiếu kinh nghiệm trong việc lựa chọn, xây dựng môi trường lập trình phù hợp với những sản phẩm dự kiến phát triển. Nhóm sẽ tiếp tục nghiên cứu và tìm phương án xử lý trong quá trình triển khai.</p>
+      </section>
+      <section class="route-section">
+        <h3>Giai đoạn 6 – Hoàn thiện nền tảng hệ thống</h3>
+        <p>Ở giai đoạn 6, nhóm đặt mục tiêu hoàn thiện hệ thống <strong>DỮ LIỆU LƯU TRỮ NGƯỜI DÙNG</strong> và <strong>KHÔNG GIAN HỆ THỐNG</strong> do dự án tự xây dựng. Đây là phần nền tảng cần được hoàn thiện để những người tham gia thử nghiệm đầu tiên có thể tiếp cận một sản phẩm ở mức tối thiểu, với các thành phần cốt lõi đủ để sử dụng và đánh giá.</p>
+      </section>
+      <section class="route-section">
+        <p>Những nội dung trên phản ánh tình hình và định hướng của nhóm tại thời điểm cập nhật ngày 20/11. Lộ trình có thể được điều chỉnh nếu quá trình triển khai phát sinh vấn đề cần xử lý.</p>
+      </section>
     `
   };
 
