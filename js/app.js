@@ -731,18 +731,18 @@ async function loadAdminMembers(){
 // ===== TÀI KHOẢN DÙNG CHUNG EDUVERSE =====
 const accountEntry=$("#accountEntry");
 const accountLogoSlot=$("#accountLogoSlot");
-if(accountEntry&&accountLogoSlot){
+function buildStaticAccountLogo(){
+  if(!accountLogoSlot||accountLogoSlot.childElementCount) return;
   const sourceLogo=document.querySelector(".brand>svg.logo");
-  if(sourceLogo){
-    const staticLogo=sourceLogo.cloneNode(true);
-    staticLogo.classList.remove("logo");
-    staticLogo.classList.add("account-entry-logo");
-    staticLogo.setAttribute("aria-hidden","true");
-    staticLogo.querySelectorAll("animate,animateMotion").forEach(node=>node.remove());
-    accountLogoSlot.appendChild(staticLogo);
-  }
-  accountEntry.addEventListener("click",showAccountMenu);
+  if(!sourceLogo) return;
+  const staticLogo=sourceLogo.cloneNode(true);
+  staticLogo.classList.remove("logo");
+  staticLogo.classList.add("account-entry-logo");
+  staticLogo.setAttribute("aria-hidden","true");
+  staticLogo.querySelectorAll("animate,animateMotion").forEach(node=>node.remove());
+  accountLogoSlot.appendChild(staticLogo);
 }
+if(accountEntry) accountEntry.addEventListener("click",showAccountMenu);
 function updateAuthHeader(){
   if(!accountEntry) return;
   accountEntry.setAttribute("aria-label",user?"Mở tài khoản":"Đăng nhập hoặc đăng ký");
@@ -1244,6 +1244,9 @@ document.querySelectorAll("nav button").forEach(b=>
     }
   }catch(e){}
 })();
+
+// Sao chép logo sau khi phần bản đồ Trái Đất đã được dựng, giữ nguyên trạng thái hình ảnh nhưng bỏ chuyển động.
+buildStaticAccountLogo();
 
 // Khôi phục đúng màn hình khi tải lại hoặc dùng nút Back/Forward của trình duyệt.
 window.addEventListener("popstate",()=>{
