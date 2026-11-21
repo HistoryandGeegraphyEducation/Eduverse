@@ -552,3 +552,5 @@ body[data-round-theme="reflex"] .round-banner,body[data-round-theme="link"] .rou
 .team-brand-line .team-swatch{width:9px;height:26px;border-radius:8px;background:var(--team-accent,#43d9ff)}
 .pending-info .member-progress-line{color:#bfe9ff;font-size:.72rem}
 @media(max-width:420px){.student-identity-avatar{width:48px;height:48px;flex-basis:48px}}
+
+.breakthrough-scenario-image{display:block;width:100%;max-height:340px;object-fit:contain;margin:0 0 16px;border-radius:12px;background:rgba(0,0,0,.18)}
