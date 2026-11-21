@@ -1954,3 +1954,98 @@ button:focus-visible,summary:focus-visible,.subj:focus-visible,.gpill:focus-visi
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* ===== EDUVERSE GLASS UI · Navigation and account dialogs ===== */
+#nav .rmenu{
+  background:linear-gradient(145deg,rgba(42,30,77,.82),rgba(14,11,29,.78));
+  border:1px solid rgba(201,194,227,.34);
+  box-shadow:0 22px 58px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 34px rgba(139,124,199,.10);
+  -webkit-backdrop-filter:blur(24px) saturate(145%);
+  backdrop-filter:blur(24px) saturate(145%);
+}
+#nav .rmenu>button.ri{
+  border:1px solid rgba(201,194,227,.32);
+  background:rgba(201,194,227,.10);
+  color:#f5f1ff;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 5px 16px rgba(0,0,0,.18);
+}
+#nav .rmenu>button.ri svg{filter:drop-shadow(0 1px 2px rgba(0,0,0,.24))}
+#nav .rmenu>button.ri:focus-visible{outline:2px solid #c9c2e3;outline-offset:4px}
+#nav .rind{
+  background:linear-gradient(145deg,#31e77b,#16b95c);
+  border:1px solid rgba(255,255,255,.62);
+  box-shadow:0 0 0 5px rgba(49,231,123,.13),0 0 26px rgba(49,231,123,.48),inset 0 1px 0 rgba(255,255,255,.55);
+}
+#nav .rclose{
+  background:linear-gradient(145deg,rgba(90,59,140,.96),rgba(42,30,77,.96));
+  border:1px solid rgba(201,194,227,.5);
+  color:#fff;
+  box-shadow:0 9px 24px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.22);
+}
+#nav .rclose svg{stroke:#fff}
+#modal{
+  background:rgba(8,6,20,.58);
+  -webkit-backdrop-filter:blur(12px) saturate(135%);
+  backdrop-filter:blur(12px) saturate(135%);
+}
+#modal .sheet{
+  color:#f6f2ff;
+  border:1px solid rgba(201,194,227,.42);
+  background:linear-gradient(145deg,rgba(58,43,91,.88),rgba(21,16,39,.86));
+  box-shadow:0 26px 72px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 38px rgba(139,124,199,.10);
+  -webkit-backdrop-filter:blur(26px) saturate(145%);
+  backdrop-filter:blur(26px) saturate(145%);
+}
+#modal .sheet:before{
+  display:block;
+  background:radial-gradient(circle,rgba(139,124,199,.24),transparent 70%);
+}
+#modal .sheet:after{
+  display:block;
+  background:radial-gradient(circle,rgba(90,59,140,.22),transparent 70%);
+}
+#modal .auth-sheet-head h2,#modal .sheet h2{color:#fff}
+#modal .auth-eyebrow{color:#c9c2e3}
+#modal .auth-sheet-head p{color:#e0daef}
+#modal .auth-field{color:#e9e3f5}
+#modal .auth-field input,.sheet input{
+  color:#fff;
+  background:rgba(14,11,29,.54);
+  border:1px solid rgba(201,194,227,.42);
+  box-shadow:inset 0 1px 4px rgba(0,0,0,.18);
+}
+#modal .auth-field input::placeholder{color:rgba(224,218,239,.62)}
+#modal .auth-field input:focus{
+  color:#fff;
+  background:rgba(14,11,29,.78);
+  border-color:#c9c2e3;
+  box-shadow:0 0 0 3px rgba(139,124,199,.24),0 0 18px rgba(139,124,199,.12);
+}
+#modal .auth-toggle{
+  color:#f6f2ff;
+  background:rgba(139,124,199,.24);
+  border:1px solid rgba(201,194,227,.24);
+}
+#modal .auth-links button{color:#d7ccff}
+#modal .auth-error{color:#ffaaa9}
+#modal .sheet .btns .ok{
+  color:#fff;
+  background:linear-gradient(135deg,#7659b5,#4a347d);
+  border:1px solid rgba(220,211,255,.46);
+  box-shadow:0 8px 20px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.2);
+}
+#modal .sheet .btns .no{
+  color:#f4efff;
+  background:rgba(201,194,227,.12);
+  border:1px solid rgba(201,194,227,.38);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
+}
+#modal .sheet .btns button:focus-visible,#modal .auth-links button:focus-visible,#modal .auth-toggle:focus-visible{
+  outline:2px solid #d8ccff;
+  outline-offset:3px;
+}
+@media(hover:hover){
+  #nav .rmenu>button.ri:hover{background:rgba(201,194,227,.20);border-color:rgba(220,211,255,.68)}
+  #modal .sheet .btns button:hover{filter:brightness(1.12)}
+}
