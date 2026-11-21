@@ -2062,7 +2062,8 @@ button:focus-visible,summary:focus-visible,.subj:focus-visible,.gpill:focus-visi
 .stage::after{
   content:"";
   position:absolute;
-  inset:0;
+  inset:0 0 auto;
+  height:133%;
   z-index:0;
   pointer-events:none;
   background-repeat:no-repeat;
