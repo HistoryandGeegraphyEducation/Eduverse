@@ -183,6 +183,8 @@ function render(){
 
   main.scrollTop=0;
   main.className="main";
+  main.dataset.domain = S.tab==="cat" ? (S.csub||"general") : (S.subj||"general");
+  main.dataset.area = S.part||"";
 
   const d=depthOf();
   main.dataset.dir=d>prevDepth?"f":d<prevDepth?"b":"n";
