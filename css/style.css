@@ -2049,3 +2049,75 @@ button:focus-visible,summary:focus-visible,.subj:focus-visible,.gpill:focus-visi
   #nav .rmenu>button.ri:hover{background:rgba(201,194,227,.20);border-color:rgba(220,211,255,.68)}
   #modal .sheet .btns button:hover{filter:brightness(1.12)}
 }
+
+/* ===== EDUVERSE CONVERGING LIGHT LINES ===== */
+/* Two restrained cyan/violet line pairs converge, pause, then retract upward. */
+.stage{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background:var(--ev-ink);
+}
+.stage::before,
+.stage::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background-repeat:no-repeat;
+  background-size:100% 100%;
+  opacity:0;
+  transform:translate3d(0,-105%,0);
+  will-change:transform,opacity;
+}
+.stage::before{
+  background-image:
+    linear-gradient(151deg,transparent 49.55%,rgba(30,205,246,.30) 49.82%,rgba(30,205,246,.30) 50.18%,transparent 50.45%),
+    linear-gradient(29deg,transparent 49.55%,rgba(164,116,255,.28) 49.82%,rgba(164,116,255,.28) 50.18%,transparent 50.45%);
+  filter:blur(1.2px);
+  animation:eduverse-faint-converge 16s ease-in-out infinite;
+}
+.stage::after{
+  background-image:
+    linear-gradient(151deg,transparent 49.25%,rgba(29,205,255,.88) 49.72%,rgba(29,205,255,.88) 50.28%,transparent 50.75%),
+    linear-gradient(29deg,transparent 49.25%,rgba(174,126,255,.84) 49.72%,rgba(174,126,255,.84) 50.28%,transparent 50.75%);
+  filter:drop-shadow(0 0 5px rgba(40,190,255,.22)) drop-shadow(0 0 5px rgba(157,105,255,.20));
+  animation:eduverse-clear-converge 16s ease-in-out infinite;
+  animation-delay:1s;
+}
+.main{
+  position:relative;
+  z-index:1;
+  background:transparent;
+}
+.main:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.25;
+  background-image:
+    linear-gradient(rgba(139,124,199,.10) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(139,124,199,.10) 1px,transparent 1px);
+  background-size:34px 34px;
+}
+@keyframes eduverse-faint-converge{
+  0%,100%{opacity:0;transform:translate3d(0,-105%,0)}
+  5%{opacity:.42}
+  18.75%{opacity:.42;transform:translate3d(0,0,0)}
+  50%{opacity:.42;transform:translate3d(0,0,0)}
+  68.75%{opacity:0;transform:translate3d(0,-105%,0)}
+}
+@keyframes eduverse-clear-converge{
+  0%,100%{opacity:0;transform:translate3d(0,-105%,0)}
+  6.25%{opacity:.9}
+  25%{opacity:.9;transform:translate3d(0,0,0)}
+  56.25%{opacity:.9;transform:translate3d(0,0,0)}
+  75%{opacity:0;transform:translate3d(0,-105%,0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .stage::before,.stage::after{animation:none;opacity:0;transform:none}
+}
+
