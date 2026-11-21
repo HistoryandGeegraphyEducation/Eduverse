@@ -1240,7 +1240,7 @@ document.querySelectorAll("nav button").forEach(b=>
 })();
 
 // Sao chép logo sau khi phần bản đồ Trái Đất đã được dựng, giữ nguyên trạng thái hình ảnh nhưng bỏ chuyển động.
-buildStaticAccountLogo();
+buildStaticAuthLogo();
 
 // Khôi phục đúng màn hình khi tải lại hoặc dùng nút Back/Forward của trình duyệt.
 window.addEventListener("popstate",()=>{
