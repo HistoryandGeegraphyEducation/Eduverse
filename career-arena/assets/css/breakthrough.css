@@ -13,3 +13,5 @@
 .tarot-seal{font-size:2rem;color:#ffe08b}
 @keyframes tarotFlip{0%{transform:rotateY(0) scale(.92)}48%{transform:rotateY(95deg) scale(1.04)}100%{transform:rotateY(180deg) scale(1)}}
 @media(prefers-reduced-motion:reduce){.breakthrough-tarot-card.is-flipped{animation:none;transform:rotateY(180deg)}}
+
+.case-image{display:block;width:100%;max-height:420px;object-fit:cover;margin:16px 0 20px;border:1px solid #2a79b5;border-radius:14px;background:#071a3b}@media(max-width:760px){.case-image{max-height:280px}}
