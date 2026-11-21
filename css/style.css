@@ -2049,3 +2049,55 @@ button:focus-visible,summary:focus-visible,.subj:focus-visible,.gpill:focus-visi
   #nav .rmenu>button.ri:hover{background:rgba(201,194,227,.20);border-color:rgba(220,211,255,.68)}
   #modal .sheet .btns button:hover{filter:brightness(1.12)}
 }
+
+
+/* ===== EDUVERSE MOTION GRID BACKGROUND ===== */
+/* Recreated with CSS shapes and gradients; no video or extracted video frames. */
+.stage{
+  position:relative;
+  isolation:isolate;
+  background:#07132e;
+}
+.stage::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(73,119,190,.105) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(73,119,190,.105) 1px,transparent 1px),
+    linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
+  background-size:26px 26px,26px 26px,100% 100%;
+  opacity:.9;
+}
+.stage::after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  pointer-events:none;
+  inset:-8% -340px;
+  opacity:.88;
+  background-image:
+    linear-gradient(63deg,transparent 0 43%,rgba(0,198,246,.96) 43.2% 49.8%,transparent 50%),
+    linear-gradient(117deg,transparent 0 43%,rgba(151,83,255,.94) 43.2% 49.8%,transparent 50%),
+    linear-gradient(63deg,transparent 0 15%,rgba(24,83,147,.22) 15.2% 22%,transparent 22.2%),
+    linear-gradient(117deg,transparent 0 75%,rgba(92,63,155,.22) 75.2% 82%,transparent 82.2%);
+  background-size:340px 100%;
+  background-repeat:repeat-x;
+  animation:eduverse-chevron-drift 13s linear infinite;
+  will-change:transform;
+}
+.main{
+  position:relative;
+  z-index:1;
+  background:transparent;
+}
+.main::before{display:none}
+@keyframes eduverse-chevron-drift{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-340px,0,0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .stage::after{animation:none;transform:none}
+}
