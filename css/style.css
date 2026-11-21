@@ -2052,7 +2052,7 @@ button:focus-visible,summary:focus-visible,.subj:focus-visible,.gpill:focus-visi
 
 
 /* ===== EDUVERSE MOTION GRID BACKGROUND ===== */
-/* Recreated with CSS shapes and gradients; no video or extracted video frames. */
+/* Subtle ambient light sweep over the grid; no solid chevrons or video. */
 .stage{
   position:relative;
   isolation:isolate;
@@ -2065,28 +2065,27 @@ button:focus-visible,summary:focus-visible,.subj:focus-visible,.gpill:focus-visi
   inset:0;
   pointer-events:none;
   background:
-    linear-gradient(rgba(73,119,190,.105) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(73,119,190,.105) 1px,transparent 1px),
-    linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.12));
+    linear-gradient(rgba(73,119,190,.085) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(73,119,190,.085) 1px,transparent 1px),
+    linear-gradient(rgba(0,0,0,.10),rgba(0,0,0,.10));
   background-size:26px 26px,26px 26px,100% 100%;
-  opacity:.9;
 }
 .stage::after{
   content:"";
   position:absolute;
   z-index:0;
+  inset:-12% -25%;
   pointer-events:none;
-  inset:-8% -340px;
-  opacity:.88;
-  background-image:
-    linear-gradient(63deg,transparent 0 43%,rgba(0,198,246,.96) 43.2% 49.8%,transparent 50%),
-    linear-gradient(117deg,transparent 0 43%,rgba(151,83,255,.94) 43.2% 49.8%,transparent 50%),
-    linear-gradient(63deg,transparent 0 15%,rgba(24,83,147,.22) 15.2% 22%,transparent 22.2%),
-    linear-gradient(117deg,transparent 0 75%,rgba(92,63,155,.22) 75.2% 82%,transparent 82.2%);
-  background-size:340px 100%;
-  background-repeat:repeat-x;
-  animation:eduverse-chevron-drift 13s linear infinite;
-  will-change:transform;
+  opacity:.56;
+  filter:blur(34px);
+  background:
+    radial-gradient(ellipse 19% 66% at 14% 50%,rgba(0,198,246,.20),transparent 72%),
+    radial-gradient(ellipse 17% 64% at 43% 48%,rgba(151,83,255,.17),transparent 74%),
+    radial-gradient(ellipse 24% 72% at 75% 52%,rgba(0,145,220,.13),transparent 76%);
+  background-size:180% 100%;
+  background-position:0% 50%;
+  animation:eduverse-soft-light-sweep 22s ease-in-out infinite alternate;
+  will-change:background-position;
 }
 .main{
   position:relative;
@@ -2094,10 +2093,10 @@ button:focus-visible,summary:focus-visible,.subj:focus-visible,.gpill:focus-visi
   background:transparent;
 }
 .main::before{display:none}
-@keyframes eduverse-chevron-drift{
-  from{transform:translate3d(0,0,0)}
-  to{transform:translate3d(-340px,0,0)}
+@keyframes eduverse-soft-light-sweep{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
 }
 @media(prefers-reduced-motion:reduce){
-  .stage::after{animation:none;transform:none}
+  .stage::after{animation:none;background-position:50% 50%}
 }
