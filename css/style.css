@@ -1813,3 +1813,24 @@ body{font-family:Inter,"Segoe UI",Arial,sans-serif;font-weight:500}
   .logo,.subj,.gpill,.tool,.simrow,#nav button{animation:none!important;transition:none!important}
 }
 /* Unslop skill adaptation credit: Damir Sokolovsky, heydamir/unslop, CC BY 4.0 */
+
+
+/* Subject identities on the EDUVERSE overview */
+.subjects .subj[data-s="lsdl"]{--domain-accent:#8B7CC7;--domain-surface:#2A1E4D}
+.subjects .subj[data-s="khtn"]{--domain-accent:#C9C2E3;--domain-surface:#25203D}
+.subjects .subj[data-s="gdcd"]{--domain-accent:#B8A9DB;--domain-surface:#29213F}
+.subjects .subj[data-s="toan"]{--domain-accent:#8B7CC7;--domain-surface:#211B39}
+.subjects .subj[data-s="nv"]{--domain-accent:#C9C2E3;--domain-surface:#302744}
+.subjects .subj[data-s="nn"]{--domain-accent:#A99BE0;--domain-surface:#251D43}
+.subjects .subj[data-s="gddp"]{--domain-accent:#A99BE0;--domain-surface:#29213F}
+.subjects .subj[data-s="hdtn"]{--domain-accent:#C9C2E3;--domain-surface:#28223D}
+.subjects .subj[data-s="tin"]{--domain-accent:#8B7CC7;--domain-surface:#1C1930}
+.subjects .subj[data-s="cn"]{--domain-accent:#A99BE0;--domain-surface:#25203D}
+.subjects .subj[data-s="am"]{--domain-accent:#C9C2E3;--domain-surface:#302448}
+.subjects .subj[data-s="mt"]{--domain-accent:#B9A9E7;--domain-surface:#302448}
+.subjects .subj[data-s="khtn"]:before{width:4px}
+.subjects .subj[data-s="toan"]:before{width:2px;top:8px;bottom:8px}
+.subjects .subj[data-s="nv"]:before{width:3px;top:8px;bottom:8px}
+.subjects .subj[data-s="tin"]:before{width:4px;top:8px;bottom:8px}
+.subjects .subj[data-s="am"]:before{width:2px;top:18px;bottom:18px}
+.subjects .subj[data-s="mt"]:before{width:5px;top:18px;bottom:18px}
