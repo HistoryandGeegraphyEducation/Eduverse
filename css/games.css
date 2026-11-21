@@ -40,3 +40,24 @@
 .room-people{text-align:center;color:#43517d;font:700 14px Arial,sans-serif;margin-bottom:14px}
 .room-scores{margin-top:15px;font:600 14px Arial,sans-serif;color:#28366c}
 @media(min-width:520px){.games-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.games-card{min-height:150px}}
+
+
+/* EDUVERSE games — palette alignment */
+.main:has(.games-head){background:var(--ev-ink);color:var(--ev-text)}
+.games-head h1{color:var(--ev-text);font-family:Inter,"Segoe UI",Arial,sans-serif}
+.games-back{background:var(--ev-plum);color:var(--ev-paper);border:1px solid var(--ev-line)}
+.games-card,.games-panel,.idea-card,.station-card,.gallery-card{background:var(--ev-plum);border:1px solid var(--ev-line);box-shadow:none;color:var(--ev-text)}
+.games-card{border-radius:12px;font-family:Inter,"Segoe UI",Arial,sans-serif}
+.games-icon{background:var(--ev-violet);border-radius:10px}
+.games-field{color:var(--ev-paper)}
+.games-field input,.games-field textarea,.gallery-card textarea{background:#171229;border:1px solid var(--ev-line);color:var(--ev-text)}
+.games-primary{background:var(--ev-violet);color:#fff;box-shadow:none}
+.games-secondary{background:var(--ev-slate);color:var(--ev-text)}
+.games-question{background:var(--ev-plum);border:1px solid var(--ev-line)}
+.games-options button{background:#21183B;border-color:var(--ev-line);color:var(--ev-text)}
+.games-options button.correct{background:#233B37;border-color:#527F70;color:#D9F1E8}
+.games-options button.wrong{background:#472A3A;border-color:#A96A87;color:#F3DCE7}
+.games-progress,.memory-meta,.games-score,.games-result,.room-code,.room-people,.room-scores{color:var(--ev-paper)}
+.memory-card,.sudoku-grid button,.maze-grid button,.puzzle-grid button{background:var(--ev-violet);color:#fff}
+.memory-card.revealed{background:var(--ev-paper);color:var(--ev-ink)}
+.station-card button{background:var(--ev-slate);color:var(--ev-text)}
