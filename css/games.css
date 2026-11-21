@@ -61,3 +61,40 @@
 .memory-card,.sudoku-grid button,.maze-grid button,.puzzle-grid button{background:var(--ev-violet);color:#fff}
 .memory-card.revealed{background:var(--ev-paper);color:var(--ev-ink)}
 .station-card button{background:var(--ev-slate);color:var(--ev-text)}
+
+
+/* Games responsive layout — compact phones through desktop */
+.main:has(.games-head){min-width:0}
+.games-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.games-card{min-width:0;overflow-wrap:anywhere}
+.games-panel,.games-question,.games-options,.idea-board,.station-list,.gallery-board{min-width:0}
+.games-options button{overflow-wrap:anywhere;white-space:normal}
+.games-actions{flex-wrap:wrap}
+.games-actions button{flex:1 1 140px}
+@media(min-width:600px){
+  .main:has(.games-head){padding:26px clamp(22px,4vw,52px) 36px}
+  .games-head h1{font-size:clamp(24px,3vw,34px)}
+  .games-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .games-card{min-height:170px;padding:22px 16px;font-size:15px}
+  .games-icon{width:54px;height:54px;font-size:29px}
+  .games-panel{padding:22px}
+  .games-question{font-size:clamp(20px,2vw,25px);padding:28px}
+  .games-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .memory-grid,.sudoku-grid,.maze-grid,.puzzle-grid{max-width:720px;gap:12px;margin:18px auto}
+}
+@media(min-width:900px){
+  .games-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+  .games-panel{max-width:1180px;margin-left:auto;margin-right:auto}
+  .games-question,.games-options,.games-progress,.games-actions{max-width:1100px;margin-left:auto;margin-right:auto}
+  .games-question{margin-bottom:18px}
+  .games-options button{min-height:60px;padding:16px 18px}
+}
+@media(max-width:380px){
+  .games-grid{gap:7px}
+  .games-card{min-height:116px;padding:12px 7px;font-size:12px}
+  .games-icon{width:38px;height:38px;font-size:22px}
+  .games-panel{padding:12px}
+  .games-question{padding:17px 13px;font-size:16px}
+  .games-options button{font-size:13px;min-height:46px;padding:10px}
+  .memory-grid,.sudoku-grid,.maze-grid,.puzzle-grid{gap:5px}
+}
