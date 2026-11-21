@@ -1834,3 +1834,123 @@ body{font-family:Inter,"Segoe UI",Arial,sans-serif;font-weight:500}
 .subjects .subj[data-s="tin"]:before{width:4px;top:8px;bottom:8px}
 .subjects .subj[data-s="am"]:before{width:2px;top:18px;bottom:18px}
 .subjects .subj[data-s="mt"]:before{width:5px;top:18px;bottom:18px}
+
+
+/* EDUVERSE responsive layout system — phone, tablet, laptop and wide desktop */
+html{min-height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{min-height:100dvh;overscroll-behavior-y:none}
+#app{width:100%;max-width:100%;min-height:100dvh;height:100dvh;overflow:hidden}
+.top{width:100%;z-index:5}
+.main{min-width:0;min-height:0;overscroll-behavior:contain;scrollbar-gutter:stable}
+.main img,.main video,.main canvas{max-width:100%}
+button,.subj,.gpill,.tool,.row,.gcard,.games-card{min-width:0}
+button:focus-visible,summary:focus-visible,.subj:focus-visible,.gpill:focus-visible,.tool:focus-visible,.row:focus-visible{
+  outline:2px solid var(--ev-paper);outline-offset:3px
+}
+.subjects,.grades,.gcards,.tools,.simlist,.games-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.subjects{align-items:stretch}
+.subj{min-width:0;overflow-wrap:anywhere}
+.gpill{min-width:0}
+.panel,.sheet,.box,.row,.chap{min-width:0;overflow-wrap:anywhere}
+#nav{flex:none;position:relative;z-index:8;padding-bottom:max(7px,env(safe-area-inset-bottom))}
+#nav button{flex:none}
+@media(min-width:600px){
+  #app{box-shadow:0 0 0 1px rgba(201,194,227,.08)}
+  .brand{padding:16px 24px 18px}
+  .auth{max-width:760px;margin:0 auto;padding:12px 24px}
+  .main{padding:28px clamp(22px,4vw,52px) 36px}
+  .hd{margin-left:calc(-1 * clamp(22px,4vw,52px));margin-right:calc(-1 * clamp(22px,4vw,52px));padding-left:clamp(22px,4vw,52px);padding-right:clamp(22px,4vw,52px)}
+  .subjects{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .grades{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .gcards,.tools{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .title{font-size:clamp(30px,4vw,46px);margin-bottom:28px}
+  .subj{min-height:88px;font-size:14px}
+  .gpill{min-height:84px}
+  .panel{padding:18px}
+  #nav{justify-content:center;gap:clamp(24px,5vw,64px);height:76px;padding-top:10px}
+}
+@media(min-width:900px){
+  #app{max-width:none;margin:0 auto}
+  .top{display:grid;grid-template-columns:minmax(280px,1fr) minmax(360px,520px);align-items:center;padding:0 clamp(28px,5vw,80px)}
+  .brand{border-bottom:0;padding:18px 0;max-width:560px}
+  .brand:after{display:none}
+  .auth{width:100%;max-width:520px;margin:0;padding:12px 0;justify-content:flex-end}
+  .pill-auth{flex:0 1 auto;min-width:132px}
+  .main{padding:34px clamp(34px,6vw,100px) 46px}
+  .hd{margin-left:calc(-1 * clamp(34px,6vw,100px));margin-right:calc(-1 * clamp(34px,6vw,100px));padding:16px clamp(34px,6vw,100px)}
+  .subjects{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+  .grades{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+  .gcards,.tools{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .subj{min-height:96px;padding:16px;font-size:14px}
+  .subj .e{width:42px;height:42px}
+  .gpill{min-height:92px}
+  .title{font-size:clamp(36px,3.2vw,54px);margin-bottom:32px}
+  .t1{font-size:clamp(24px,2vw,34px)}
+  .t2{font-size:clamp(28px,2.5vw,40px)}
+  .sec{max-width:1240px;margin-left:auto;margin-right:auto;width:100%}
+  .hd{max-width:none}
+  .panel{padding:22px}
+  .chap>summary{padding:16px 18px}
+  .lesson{padding:14px 18px}
+  #nav{gap:42px;height:82px}
+}
+@media(min-width:1440px){
+  .main{padding-left:max(100px,calc((100vw - 1320px)/2));padding-right:max(100px,calc((100vw - 1320px)/2))}
+  .hd{padding-left:max(100px,calc((100vw - 1320px)/2));padding-right:max(100px,calc((100vw - 1320px)/2))}
+}
+@media(max-width:599px){
+  .brand{gap:8px}
+  .logo{width:44px;height:44px}
+  .name{font-size:clamp(19px,6vw,25px)}
+  .tag{font-size:clamp(12px,3.8vw,16px)}
+  .auth{gap:8px}
+  .pill-auth{min-width:0;padding:9px 7px;font-size:clamp(12px,3.7vw,15px)}
+  .pill-auth svg{width:17px;height:17px}
+  .main{padding:18px 13px 26px}
+  .hd{margin-left:-13px;margin-right:-13px;padding:12px 13px}
+  .subjects{gap:9px}
+  .subj{min-height:70px;padding:10px 8px;font-size:12px;gap:7px}
+  .subj .e{width:30px;height:30px;font-size:17px}
+  .grades{gap:10px}
+  .gpill{min-height:68px;padding:8px 10px}
+  .gpill .gt{font-size:clamp(16px,5vw,21px)}
+  .gpill .gi{width:30px;height:30px}
+  .gcards,.tools{gap:8px}
+  .gcard{padding:14px 8px;font-size:17px}
+  .tool{padding:10px}
+  .panel{padding:10px}
+  .chap>summary{font-size:14px;padding:12px}
+  .lesson{font-size:14px;padding:11px 12px}
+  #nav{gap:clamp(8px,4vw,20px);height:calc(64px + env(safe-area-inset-bottom,0));padding-left:8px;padding-right:8px}
+  #nav button{width:40px;height:40px}
+  #nav button.on{width:46px;height:46px}
+}
+@media(max-width:360px){
+  .brand{padding-left:7px;padding-right:7px}
+  .logo{width:38px;height:38px}
+  .name{font-size:18px}
+  .tag{font-size:11px}
+  .subjects{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .subj{font-size:11px;min-height:64px}
+  .subj .e{width:26px;height:26px}
+  .pill-auth{font-size:11px}
+  #nav{gap:6px}
+  #nav button{width:36px;height:36px}
+  #nav button.on{width:42px;height:42px}
+}
+@media(orientation:landscape) and (max-height:520px){
+  .top{display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+  .brand{padding:7px 0;gap:7px}
+  .logo{width:36px;height:36px}
+  .name{font-size:18px}
+  .tag{font-size:12px}
+  .auth{margin:0;padding:6px 0;gap:7px}
+  .pill-auth{padding:7px 9px;font-size:12px}
+  .main{padding-top:14px;padding-bottom:16px}
+  #nav{height:54px;padding-top:5px;padding-bottom:5px}
+  #nav button{width:36px;height:36px}
+  #nav button.on{width:40px;height:40px;margin:0}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
