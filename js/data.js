@@ -2,8 +2,8 @@
 // ===== DỮ LIỆU =====
 const SUBJECTS = [
   {id:"lsdl", n:"LỊCH SỬ VÀ ĐỊA LÍ", e:"🏛️", live:true},
-  {id:"khtn", n:"KHOA HỌC TỰ NHIÊN", e:"🔬"},
-  {id:"gdcd", n:"GIÁO DỤC CÔNG DÂN", e:"⚖️"},
+  {id:"khtn", n:"KHOA HỌC VÀ VĨ MÔ", e:"🔬"},
+  {id:"gdcd", n:"PHÁP LUẬT VÀ TRIẾT HỌC", e:"⚖️"},
   {id:"toan", n:"TOÁN", e:"➗"},
   {id:"nv",   n:"NGỮ VĂN", e:"📖"},
   {id:"nn",   n:"NGOẠI NGỮ", e:"🌐", live:true},
