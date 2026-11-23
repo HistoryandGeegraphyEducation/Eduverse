@@ -21,7 +21,7 @@ const sounds=[
 ];
 const genres=["Nhạc hiện đại","Nhạc cổ điển","Nhạc dân ca","Jazz","Rock","Nhạc phim"];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let audio=null,active=new Map(),selected="piano",sound="grand",genre=genres[0],octave=4,returnToHome=()=>{};
+let audio=null,active=new Map(),selected="",sound="grand",genre=genres[0],octave=4,returnToHome=()=>{};
 const midiName=n=>["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"][n%12]+(Math.floor(n/12)-1);
 const isBlack=n=>[1,3,6,8,10].includes(n%12);
 function context(){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;if(!audio)audio=new AC();if(audio.state==="suspended")audio.resume();return audio;}
@@ -57,7 +57,7 @@ function bindKeys(root,id){
 const keyMap={z:0,s:1,x:2,d:3,c:4,v:5,g:6,b:7,h:8,n:9,j:10,m:11,",":12,l:13,".":14,";":15,"/":16,q:12,"2":13,w:14,"3":15,e:16,r:17,"5":18,t:19,"6":20,y:21,"7":22,u:23,i:24};
 function bindComputer(root,id){
  const down=e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key.toLowerCase();if(!(k in keyMap))return;if(/input|select|textarea/i.test(e.target.tagName))return;const n=(id==="piano"?12*(octave+1):60)+keyMap[k];if(!active.has(n)){tone(n,id);const el=root.querySelector('[data-note="'+n+'"]');if(el)el.classList.add("pressed");}};
- const up=e=>{const k=e.key.toLowerCase();if(!(k in keyMap))return;const n=(id==="piano"?48:60)+keyMap[k];release(n);const el=root.querySelector('[data-note="'+n+'"]');if(el)el.classList.remove("pressed");};
+ const up=e=>{const k=e.key.toLowerCase();if(!(k in keyMap))return;const n=(id==="piano"?12*(octave+1):60)+keyMap[k];release(n);const el=root.querySelector('[data-note="'+n+'"]');if(el)el.classList.remove("pressed");};
  window.addEventListener("keydown",down);window.addEventListener("keyup",up);
  return()=>{window.removeEventListener("keydown",down);window.removeEventListener("keyup",up);};
 }
