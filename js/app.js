@@ -39,11 +39,11 @@ function readRoute(){
   }
   if(S.tab==="cat"){
     const csub=p.get("csub");
-    if(csub==="nn"||Object.prototype.hasOwnProperty.call(SIMS,csub)) S.csub=csub;
+    if(csub==="nn"||csub==="am"||Object.prototype.hasOwnProperty.call(SIMS,csub)) S.csub=csub;
     if(S.csub==="nn") readLanguageRoute(p);
     if(S.csub){
       const croom=p.get("croom");
-      if((SIMS[S.csub]||[]).some(x=>x.type===croom)) S.croom=croom;
+      if((S.csub==="am"&&croom==="NHẠC CỤ")||(SIMS[S.csub]||[]).some(x=>x.type===croom)) S.croom=croom;
       if(S.croom){
         const csim=p.get("csim");
         if((SIMS[S.csub]||[]).some(x=>x.id===csim&&x.type===S.croom)) S.csim=csim;
@@ -455,6 +455,9 @@ function vCat(){
   main.className="main lessons";
 
   if(S.csub==="nn") return vLanguages();
+  if(S.csub==="am"&&S.croom==="NHẠC CỤ"&&window.renderMusicRoom){
+    return window.renderMusicRoom(main,()=>{S.croom=null;S.csim=null;render();});
+  }
   if(S.csub){
     return S.csim?vSim():(
       S.croom?vSimList():vRooms()
@@ -512,6 +515,7 @@ function vCat(){
 // ===== PHÂN PHÒNG THEO TAG HỌC LIỆU =====
 function vRooms(){
   const roomTypes={
+    "Phòng nhạc cụ":"NHẠC CỤ",
     "Phòng mô phỏng":"MÔ PHỎNG",
     "Phòng trưng bày":"TRƯNG BÀY",
     "Phòng bảo tàng":"BẢO TÀNG",
@@ -527,9 +531,9 @@ function vRooms(){
     `</div><div class="tools">`+
     ROOMS[S.csub].map(t=>{
       const type=roomTypes[t.n];
-      const count=type
-        ?sims.filter(s=>s.type===type).length
-        :0;
+      const count=type==="NHẠC CỤ"
+        ?13
+        :type?sims.filter(s=>s.type===type).length:0;
 
       return `<button class="tool" data-type="${esc(type||"")}" `+
         `${count?"":"disabled"}>`+
