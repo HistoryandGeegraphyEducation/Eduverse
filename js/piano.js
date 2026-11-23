@@ -85,8 +85,9 @@ function instrumentView(root,id){
 }
 function listView(root,onBack){
  cleanup();cleanup=()=>{};
+ returnToHome=onBack;
  const groups=["Phím","Dây","Hơi","Gõ"];
- root.innerHTML='<div class="ev-music-head"><button class="ev-back" type="button" data-exit>←</button><div><div class="ev-eyebrow">EDUVERSE · KHÔNG GIAN ÂM NHẠC</div><h1>NHẠC CỤ</h1></div></div>'+
+ root.innerHTML='<div class="ev-music-head"><button class="ev-back" type="button" data-exit>←</button><div><div class="ev-eyebrow">EDUVERSE · KHÔNG GIAN ÂM NHẠC</div><h1>PHÒNG NHẠC CỤ</h1></div></div>'+
  '<button class="ev-featured-piano" type="button" data-instrument="piano"><span class="ev-feature-icon">🎹</span><span><strong>PIANO 88 KEYS</strong><small>52 phím trắng · 36 phím đen</small></span><span class="ev-open-arrow">↗</span></button>'+
  groups.map(g=>'<section class="ev-instrument-group"><h2>'+g.toUpperCase()+'</h2><div class="ev-instrument-grid">'+instruments.filter(x=>x.group===g&&x.id!=="piano").map(x=>'<button class="ev-instrument-card" type="button" data-instrument="'+x.id+'"><span>'+x.icon+'</span><strong>'+esc(x.name)+'</strong><small>'+esc(x.en)+'</small></button>').join("")+'</div></section>').join("");
  root.querySelector("[data-exit]").onclick=()=>{cleanup();selected="";if(typeof onBack==="function")onBack();};
