@@ -43,7 +43,7 @@ function release(midi){const o=active.get(midi);if(!o)return;try{o.gain.gain.can
 function keyMarkup(start,count){
  const notes=Array.from({length:count},(_,i)=>start+i),whites=notes.filter(n=>!isBlack(n)),whiteIndex=new Map();whites.forEach((n,i)=>whiteIndex.set(n,i));
  const white=whites.map(n=>'<button type="button" class="ev-key white" data-note="'+n+'" aria-label="'+midiName(n)+'"><span>'+((n%12===0)?midiName(n):"")+'</span></button>').join("");
- const black=notes.filter(isBlack).map(n=>{const prev=n-1,ix=whiteIndex.get(prev);return '<button type="button" class="ev-key black" data-note="'+n+'" style="left:calc('+((ix+1)*100/whites.length)+'% - 0.36%)" aria-label="'+midiName(n)+'"></button>';}).join("");
+ const black=notes.filter(isBlack).map(n=>{const prev=n-1,ix=whiteIndex.get(prev);return '<button type="button" class="ev-key black" data-note="'+n+'" style="left:calc('+((ix+1)*100/whites.length)+'% - 0.575%)" aria-label="'+midiName(n)+'"></button>';}).join("");
  return '<div class="ev-keybed" style="--white-count:'+whites.length+'">'+white+black+'</div>';
 }
 function bindKeys(root,id){
