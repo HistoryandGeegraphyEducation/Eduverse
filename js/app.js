@@ -39,7 +39,7 @@ function readRoute(){
   }
   if(S.tab==="cat"){
     const csub=p.get("csub");
-    if(csub==="nn"||Object.prototype.hasOwnProperty.call(SIMS,csub)) S.csub=csub;
+    if(csub==="nn"||csub==="am"||Object.prototype.hasOwnProperty.call(SIMS,csub)) S.csub=csub;
     if(S.csub==="nn") readLanguageRoute(p);
     if(S.csub){
       const croom=p.get("croom");
@@ -449,6 +449,7 @@ function vCat(){
   main.className="main lessons";
 
   if(S.csub==="nn") return vLanguages();
+  if(S.csub==="am") return vMusicInstrumentRoom();
   if(S.csub){
     return S.csim?vSim():(
       S.croom?vSimList():vRooms()
@@ -501,6 +502,46 @@ function vCat(){
       render();
     }
   );
+}
+
+// ===== DANH MỤC NHẠC CỤ =====
+function vMusicInstrumentRoom(){
+  main.className="main lessons music-space";
+  const instruments=[
+    {name:"Piano",icon:"🎹"},
+    {name:"Kèn saxophone",icon:"🎷"},
+    {name:"Kèn trumpet",icon:"🎺"},
+    {name:"Kèn trombone",icon:"🪊"},
+    {name:"Đàn guitar",icon:"🎸"},
+    {name:"Đàn banjo",icon:"🪕"},
+    {name:"Đàn violin",icon:"🎻"},
+    {name:"Đàn harp",icon:"🪉"},
+    {name:"Trống dài",icon:"🪘"},
+    {name:"Bộ trống",icon:"🥁"},
+    {name:"Maracas",icon:"🪇"},
+    {name:"Sáo flute",icon:"🪈"},
+    {name:"Đàn accordion",icon:"🪗"}
+  ];
+
+  main.innerHTML=
+    '<div class="hd"><h1 class="t1">ÂM NHẠC</h1><button class="back" id="musicBack">← Quay lại</button></div>'+
+    '<section class="music-catalog">'+
+    '<h2 class="music-catalog-title">NHẠC CỤ</h2>'+
+    '<div class="music-instrument-grid">'+
+    instruments.map((item,i)=>
+      '<article class="music-instrument-card">'+
+      '<span class="music-instrument-icon">'+item.icon+'</span>'+
+      '<span class="music-instrument-name">'+esc(item.name)+'</span>'+
+      '</article>'
+    ).join("")+
+    '</div></section>';
+
+  $("#musicBack").onclick=()=>{
+    S.csub=null;
+    S.croom=null;
+    S.csim=null;
+    render();
+  };
 }
 
 // ===== PHÂN PHÒNG THEO TAG HỌC LIỆU =====
