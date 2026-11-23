@@ -43,7 +43,8 @@ function readRoute(){
     if(S.csub==="nn") readLanguageRoute(p);
     if(S.csub){
       const croom=p.get("croom");
-      if((SIMS[S.csub]||[]).some(x=>x.type===croom)) S.croom=croom;
+      if(S.csub==="am"&&croom==="PIANO") S.croom=croom;
+      else if((SIMS[S.csub]||[]).some(x=>x.type===croom)) S.croom=croom;
       if(S.croom){
         const csim=p.get("csim");
         if((SIMS[S.csub]||[]).some(x=>x.id===csim&&x.type===S.croom)) S.csim=csim;
@@ -100,6 +101,7 @@ function languageFlag(id){
 
 const $=s=>document.querySelector(s);
 const main=$("#main");
+let curSim=null;
 
 const esc=s=>String(s??"").replace(
   /[&<>"]/g,
@@ -449,7 +451,7 @@ function vCat(){
   main.className="main lessons";
 
   if(S.csub==="nn") return vLanguages();
-  if(S.csub==="am") return vMusicInstrumentRoom();
+  if(S.csub==="am") return S.croom==="PIANO"?vPiano():vMusicInstrumentRoom();
   if(S.csub){
     return S.csim?vSim():(
       S.croom?vSimList():vRooms()
@@ -529,12 +531,15 @@ function vMusicInstrumentRoom(){
     '<h2 class="music-catalog-title">NHẠC CỤ</h2>'+
     '<div class="music-instrument-grid">'+
     instruments.map((item,i)=>
-      '<article class="music-instrument-card">'+
+      '<button type="button" class="music-instrument-card" data-instrument="'+(i===0?"piano":"") +'" '+(i===0?"":"disabled") +'>'+
       '<span class="music-instrument-icon">'+item.icon+'</span>'+
       '<span class="music-instrument-name">'+esc(item.name)+'</span>'+
-      '</article>'
+      '</button>'
     ).join("")+
     '</div></section>';
+
+  const pianoCard=main.querySelector('[data-instrument="piano"]');
+  if(pianoCard) pianoCard.onclick=()=>{S.croom="PIANO";render();};
 
   $("#musicBack").onclick=()=>{
     S.csub=null;
@@ -542,6 +547,13 @@ function vMusicInstrumentRoom(){
     S.csim=null;
     render();
   };
+}
+
+function vPiano(){
+  main.className="main lessons piano-space";
+  main.innerHTML='<div class="piano-shell" id="pianoRoot"></div>';
+  if(window.EduversePiano) curSim=EduversePiano.mount($("#pianoRoot"),()=>{S.croom=null;render();});
+  else $("#pianoRoot").innerHTML='<div class="piano-load-error">Không thể tải mô-đun Piano.</div>';
 }
 
 // ===== PHÂN PHÒNG THEO TAG HỌC LIỆU =====
