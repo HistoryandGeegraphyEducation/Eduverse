@@ -43,7 +43,7 @@ function release(midi){const o=active.get(midi);if(!o)return;try{o.gain.gain.can
 function keyMarkup(start,count){
  const notes=Array.from({length:count},(_,i)=>start+i),whites=notes.filter(n=>!isBlack(n)),whiteIndex=new Map();whites.forEach((n,i)=>whiteIndex.set(n,i));
  const white=whites.map(n=>'<button type="button" class="ev-key white" data-note="'+n+'" aria-label="'+midiName(n)+'"><span>'+((n%12===0)?midiName(n):"")+'</span></button>').join("");
- const black=notes.filter(isBlack).map(n=>{const prev=n-1,ix=whiteIndex.get(prev);return '<button type="button" class="ev-key black" data-note="'+n+'" style="left:calc('+((ix+.5)*100/whites.length)+'% - 0.36%)" aria-label="'+midiName(n)+'"></button>';}).join("");
+ const black=notes.filter(isBlack).map(n=>{const prev=n-1,ix=whiteIndex.get(prev);return '<button type="button" class="ev-key black" data-note="'+n+'" style="left:calc('+((ix+1)*100/whites.length)+'% - 0.36%)" aria-label="'+midiName(n)+'"></button>';}).join("");
  return '<div class="ev-keybed" style="--white-count:'+whites.length+'">'+white+black+'</div>';
 }
 function bindKeys(root,id){
@@ -56,7 +56,7 @@ function bindKeys(root,id){
 }
 const keyMap={z:0,s:1,x:2,d:3,c:4,v:5,g:6,b:7,h:8,n:9,j:10,m:11,",":12,l:13,".":14,";":15,"/":16,q:12,"2":13,w:14,"3":15,e:16,r:17,"5":18,t:19,"6":20,y:21,"7":22,u:23,i:24};
 function bindComputer(root,id){
- const down=e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key.toLowerCase();if(!(k in keyMap))return;if(/input|select|textarea/i.test(e.target.tagName))return;const n=(id==="piano"?48:60)+keyMap[k];if(!active.has(n)){tone(n,id);const el=root.querySelector('[data-note="'+n+'"]');if(el)el.classList.add("pressed");}};
+ const down=e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const k=e.key.toLowerCase();if(!(k in keyMap))return;if(/input|select|textarea/i.test(e.target.tagName))return;const n=(id==="piano"?12*(octave+1):60)+keyMap[k];if(!active.has(n)){tone(n,id);const el=root.querySelector('[data-note="'+n+'"]');if(el)el.classList.add("pressed");}};
  const up=e=>{const k=e.key.toLowerCase();if(!(k in keyMap))return;const n=(id==="piano"?48:60)+keyMap[k];release(n);const el=root.querySelector('[data-note="'+n+'"]');if(el)el.classList.remove("pressed");};
  window.addEventListener("keydown",down);window.addEventListener("keyup",up);
  return()=>{window.removeEventListener("keydown",down);window.removeEventListener("keyup",up);};
@@ -83,17 +83,17 @@ function instrumentView(root,id){
  root.querySelector("#ev-genre").onchange=e=>genre=e.target.value;
  bindKeys(root,id);cleanup=bindComputer(root,id);
 }
-function listView(root){
+function listView(root,onBack){
  cleanup();cleanup=()=>{};
  const groups=["Phím","Dây","Hơi","Gõ"];
- root.innerHTML='<div class="ev-music-head"><div><div class="ev-eyebrow">EDUVERSE · KHÔNG GIAN ÂM NHẠC</div><h1>NHẠC CỤ</h1></div></div>'+
+ root.innerHTML='<div class="ev-music-head"><button class="ev-back" type="button" data-exit>←</button><div><div class="ev-eyebrow">EDUVERSE · KHÔNG GIAN ÂM NHẠC</div><h1>NHẠC CỤ</h1></div></div>'+
  '<button class="ev-featured-piano" type="button" data-instrument="piano"><span class="ev-feature-icon">🎹</span><span><strong>PIANO 88 KEYS</strong><small>52 phím trắng · 36 phím đen</small></span><span class="ev-open-arrow">↗</span></button>'+
  groups.map(g=>'<section class="ev-instrument-group"><h2>'+g.toUpperCase()+'</h2><div class="ev-instrument-grid">'+instruments.filter(x=>x.group===g&&x.id!=="piano").map(x=>'<button class="ev-instrument-card" type="button" data-instrument="'+x.id+'"><span>'+x.icon+'</span><strong>'+esc(x.name)+'</strong><small>'+esc(x.en)+'</small></button>').join("")+'</div></section>').join("");
- root.querySelectorAll("[data-instrument]").forEach(b=>b.onclick=()=>{selected=b.dataset.instrument;if(selected==="piano")pianoView(root);else instrumentView(root,selected);});
+ root.querySelector("[data-exit]").onclick=()=>{cleanup();selected="";if(typeof onBack==="function")onBack();};\n root.querySelectorAll("[data-instrument]").forEach(b=>b.onclick=()=>{selected=b.dataset.instrument;if(selected==="piano")pianoView(root);else instrumentView(root,selected);});
 }
 window.renderMusicRoom=function(main,onBack){
  if(selected==="piano")return pianoView(main);
  if(selected&&selected!=="")return instrumentView(main,selected);
- listView(main);
+ listView(main,onBack);
 };
 })();
