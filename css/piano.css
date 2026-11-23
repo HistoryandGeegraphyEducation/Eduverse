@@ -15,7 +15,7 @@
 .ev-key{position:relative;flex:0 0 calc(100% / var(--white-count));height:100%;padding:0;border:1px solid #a8a4b1;border-radius:0 0 5px 5px;cursor:pointer;touch-action: none}
 .ev-key.white{z-index:1;background:linear-gradient(180deg,#fff 0%,#f5f3f8 82%,#d8d4df 100%);box-shadow:inset 0 -5px 0 rgba(40,30,60,.08)}
 .ev-key.white span{position:absolute;bottom:7px;left:0;right:0;color:#777184;font-size:9px;pointer-events:none}
-.ev-key.black{position:absolute;top:0;z-index:2;width:1.42%;height:61%;border:1px solid #090711;border-radius:0 0 4px 4px;background:linear-gradient(90deg,#171323,#05040a 70%,#292333);box-shadow:0 5px 6px rgba(0,0,0,.42)}
+.ev-key.black{position:absolute;top:0;z-index:2;width:1.15%;height:61%;border:1px solid #090711;border-radius:0 0 4px 4px;background:linear-gradient(90deg,#171323,#05040a 70%,#292333);box-shadow:0 5px 6px rgba(0,0,0,.42)}
 .ev-key.pressed,.ev-key.white.pressed{background:#bcb0e8;box-shadow:inset 0 -4px 0 rgba(60,40,100,.22)}
 .ev-key.black.pressed{background:#8067bb}
 .ev-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:1440px;margin:16px auto 0;padding:16px;border:1px solid rgba(201,194,227,.25);border-radius:16px;background:rgba(42,30,77,.56)}
