@@ -222,6 +222,7 @@ function setHdh(){
 }
 
 function vHome(){
+  if(S.subj==="am"&&window.renderMusicRoom) return window.renderMusicRoom(main,()=>{S.subj=null;render();});
   if(S.subj==="nn") return vLanguages();
   if(S.subj==="lsdl"&&S.grade) return vLessons();
   if(S.subj==="lsdl") return vGrades();
@@ -245,6 +246,11 @@ function vHome(){
   );
 }
 function openSubject(id){
+  if(id==="am"){
+    S.tab="home";S.subj="am";S.grade=null;
+    render();
+    return;
+  }
   if(id==="nn"){
     S.tab="home";S.subj="nn";S.grade=null;
     S.language=null;S.langMode=null;S.langItem=null;
