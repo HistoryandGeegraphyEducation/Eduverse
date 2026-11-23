@@ -8,7 +8,7 @@ let libPromise=null;
 function library(){if(window.Soundfont)return Promise.resolve(window.Soundfont);if(libPromise)return libPromise;libPromise=new Promise((ok,no)=>{const s=document.createElement("script");s.src=CDN;s.async=true;s.onload=()=>window.Soundfont?ok(window.Soundfont):no(Error("Soundfont missing"));s.onerror=()=>no(Error("Soundfont load failed"));document.head.appendChild(s);});return libPromise;}
 function mount(root,onBack){
  let dead=false,ctx=null,inst=null,voiceIndex=0,volume=.78,sustain=false,transpose=0,octave=0;
- const held=new Map(),computer=new Map();
+ const held=new Map(),computer=new Map(),sustained=new Set();
  const name=m=>N[m%12]+(Math.floor(m/12)-1),black=m=>[1,3,6,8,10].includes(m%12);
  function whiteBefore(m){let n=0;for(let i=21;i<m;i++)if(!black(i))n++;return n;}
  function keys(){let whites=[],blacks=[];for(let m=21;m<=108;m++)(black(m)?blacks:whites).push(m);
@@ -29,7 +29,7 @@ function mount(root,onBack){
   try{const sf=await library();if(dead)return;const ac=audio();const next=await sf.instrument(ac,VOICES[i][2],{soundfont:"FluidR3_GM",format:"mp3"});if(dead||voiceIndex!==i)return;inst=next;msg.textContent="Sẵn sàng · "+VOICES[i][0];}catch(e){msg.textContent="Không tải được âm sắc. Kiểm tra kết nối mạng và chọn lại.";}
  }
  function press(m){if(dead||held.has(m))return;let ac;try{ac=audio();}catch(e){root.querySelector("#message").textContent=e.message;return;}const note=m+transpose+octave*12;held.set(m,note);const el=root.querySelector('[data-midi="'+m+'"]');if(el)el.classList.add("pressed");if(inst)try{inst.play(note,ac.currentTime,{gain:volume});}catch(e){}}
- function release(m){if(!held.has(m))return;const note=held.get(m);held.delete(m);const el=root.querySelector('[data-midi="'+m+'"]');if(el)el.classList.remove("pressed");if(!sustain&&inst&&inst.stop&&ctx)try{inst.stop(note,ctx.currentTime);}catch(e){}}
+ function release(m){if(!held.has(m))return;const note=held.get(m);held.delete(m);const el=root.querySelector('[data-midi="'+m+'"]');if(el)el.classList.remove("pressed");if(sustain){sustained.add(note);}else if(inst&&inst.stop&&ctx)try{inst.stop(note,ctx.currentTime);}catch(e){}}
  function releaseAll(){Array.from(held.keys()).forEach(release);computer.clear();}
  function bind(){
   root.querySelector("#back").onclick=()=>{destroy();onBack();};
@@ -37,7 +37,7 @@ function mount(root,onBack){
   root.querySelectorAll("[data-genre]").forEach(b=>b.onclick=()=>{root.querySelectorAll("[data-genre]").forEach(x=>x.classList.toggle("active",x===b));const g=GENRES[+b.dataset.genre];root.querySelector("#message").textContent="Thể loại: "+g[0]+" · Nhịp gợi ý "+g[1]+" BPM";});
   root.querySelectorAll("[data-midi]").forEach(b=>{const m=+b.dataset.midi;b.addEventListener("pointerdown",e=>{e.preventDefault();try{b.setPointerCapture(e.pointerId);}catch(_){}press(m);});b.addEventListener("pointerup",()=>release(m));b.addEventListener("pointercancel",()=>release(m));b.addEventListener("lostpointercapture",()=>release(m));b.addEventListener("contextmenu",e=>e.preventDefault());});
   root.querySelector("#volume").oninput=e=>{volume=+e.target.value/100;root.querySelector("#volValue").textContent=e.target.value+"%";};
-  root.querySelector("#sustain").onclick=e=>{sustain=!sustain;e.currentTarget.setAttribute("aria-pressed",String(sustain));e.currentTarget.classList.toggle("active",sustain);e.currentTarget.querySelector("b").textContent=sustain?"BẬT":"TẮT";if(!sustain)releaseAll();};
+  root.querySelector("#sustain").onclick=e=>{sustain=!sustain;e.currentTarget.setAttribute("aria-pressed",String(sustain));e.currentTarget.classList.toggle("active",sustain);e.currentTarget.querySelector("b").textContent=sustain?"BẬT":"TẮT";if(!sustain){if(inst&&inst.stop&&ctx)for(const note of sustained)try{inst.stop(note,ctx.currentTime);}catch(e){}sustained.clear();releaseAll();}};
   const step=(id,fn)=>root.querySelector(id).onclick=fn;
   step("#od",()=>{octave=Math.max(-3,octave-1);root.querySelector("#ov").textContent=octave;});step("#ou",()=>{octave=Math.min(3,octave+1);root.querySelector("#ov").textContent=octave;});
   step("#td",()=>{transpose=Math.max(-12,transpose-1);root.querySelector("#tv").textContent=transpose;});step("#tu",()=>{transpose=Math.min(12,transpose+1);root.querySelector("#tv").textContent=transpose;});
@@ -47,7 +47,7 @@ function mount(root,onBack){
   const up=e=>{const k=e.key.toLowerCase();if(computer.has(k)){release(computer.get(k));computer.delete(k);}};
   window.addEventListener("keydown",down);window.addEventListener("keyup",up);window.addEventListener("blur",releaseAll);root._pianoDown=down;root._pianoUp=up;
  }
- function destroy(){if(dead)return;dead=true;releaseAll();window.removeEventListener("keydown",root._pianoDown);window.removeEventListener("keyup",root._pianoUp);window.removeEventListener("blur",releaseAll);inst=null;}
+ function destroy(){if(dead)return;if(inst&&inst.stop&&ctx){for(const note of sustained)try{inst.stop(note,ctx.currentTime);}catch(e){}sustained.clear();}dead=true;releaseAll();window.removeEventListener("keydown",root._pianoDown);window.removeEventListener("keyup",root._pianoUp);window.removeEventListener("blur",releaseAll);inst=null;}
  render();return {destroy};
 }
 window.EduversePiano={mount};
