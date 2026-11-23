@@ -21,7 +21,7 @@ const sounds=[
 ];
 const genres=["Nhạc hiện đại","Nhạc cổ điển","Nhạc dân ca","Jazz","Rock","Nhạc phim"];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-let audio=null,active=new Map(),selected="piano",sound="grand",genre=genres[0],octave=4;
+let audio=null,active=new Map(),selected="piano",sound="grand",genre=genres[0],octave=4,returnToHome=()=>{};
 const midiName=n=>["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"][n%12]+(Math.floor(n/12)-1);
 const isBlack=n=>[1,3,6,8,10].includes(n%12);
 function context(){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;if(!audio)audio=new AC();if(audio.state==="suspended")audio.resume();return audio;}
@@ -66,7 +66,7 @@ function pianoView(root){
  '<section class="ev-piano-stage"><div class="ev-instrument-mark">🎹 <span>88 KEYS</span></div><div class="ev-key-scroll">'+keyMarkup(21,88)+'</div></section>'+
  '<section class="ev-controls"><div class="ev-control"><label for="ev-sound">Âm sắc</label><select id="ev-sound">'+sounds.map(([v,l])=>'<option value="'+v+'" '+(v===sound?"selected":"")+'>'+l+'</option>').join("")+'</select></div><div class="ev-control"><label for="ev-genre">Thể loại</label><select id="ev-genre">'+genres.map(g=>'<option '+(g===genre?"selected":"")+'>'+g+'</option>').join("")+'</select></div><div class="ev-control ev-octave"><label>Quãng phím máy tính</label><div><button type="button" data-oct="-1">−</button><span>'+octave+'</span><button type="button" data-oct="1">+</button></div></div></section>'+
  '<div class="ev-computer-note">Bàn phím máy tính: Z–M và Q–U</div>';
- root.querySelector("[data-back]").onclick=()=>{cleanup();selected="";window.renderMusicRoom(root,()=>{});};
+ root.querySelector("[data-back]").onclick=()=>{cleanup();selected="";listView(root,returnToHome);};
  root.querySelector("#ev-sound").onchange=e=>sound=e.target.value;
  root.querySelector("#ev-genre").onchange=e=>genre=e.target.value;
  root.querySelectorAll("[data-oct]").forEach(b=>b.onclick=()=>{octave=Math.max(1,Math.min(7,octave+Number(b.dataset.oct)));const label=root.querySelector(".ev-octave span");label.textContent=octave;});
@@ -79,7 +79,7 @@ function instrumentView(root,id){
  '<section class="ev-other-instrument"><div class="ev-big-icon">'+item.icon+'</div><div><h2>'+esc(item.name)+'</h2><p>'+esc(item.desc)+'</p></div></section>'+
  '<section class="ev-play-area"><div class="ev-key-scroll">'+keyMarkup(60,25)+'</div></section>'+
  '<section class="ev-controls"><div class="ev-control"><label for="ev-genre">Thể loại</label><select id="ev-genre">'+genres.map(g=>'<option '+(g===genre?"selected":"")+'>'+g+'</option>').join("")+'</select></div><div class="ev-control"><label>Quãng phím máy tính</label><span class="ev-control-static">C4–C6</span></div></section>';
- root.querySelector("[data-back]").onclick=()=>{cleanup();selected="";listView(root);};
+ root.querySelector("[data-back]").onclick=()=>{cleanup();selected="";listView(root,returnToHome);};
  root.querySelector("#ev-genre").onchange=e=>genre=e.target.value;
  bindKeys(root,id);cleanup=bindComputer(root,id);
 }
