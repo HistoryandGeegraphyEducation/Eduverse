@@ -1,0 +1,26 @@
+.ev-music-head{display:flex;align-items:center;gap:16px;max-width:1440px;margin:0 auto 26px;color:#f7f3ff}
+.ev-music-head h1{margin:3px 0 0;font-size:clamp(25px,3vw,38px);letter-spacing:.045em}
+.ev-eyebrow{font-size:11px;letter-spacing:.18em;color:#bdb1e7;font-weight:700}
+.ev-back{width:42px;height:42px;border:1px solid rgba(201,194,227,.32);border-radius:12px;background:rgba(90,59,140,.28);color:#fff;font-size:22px;cursor:pointer}
+.ev-featured-piano{display:flex;align-items:center;gap:18px;width:100%;max-width:1440px;min-height:112px;margin:0 auto 30px;padding:20px 24px;border:1px solid rgba(201,194,227,.45);border-radius:18px;background:linear-gradient(115deg,rgba(90,59,140,.48),rgba(42,30,77,.72));color:#fff;text-align:left;cursor:pointer}
+.ev-feature-icon{font-size:42px}.ev-featured-piano strong,.ev-featured-piano small{display:block}.ev-featured-piano strong{font-size:18px;letter-spacing:.06em}.ev-featured-piano small{margin-top:6px;color:#d2c9e8;font-size:13px}.ev-open-arrow{margin-left:auto;font-size:24px;color:#d9d0f3}
+.ev-instrument-group{max-width:1440px;margin:26px auto 0}.ev-instrument-group h2{margin:0 0 12px;color:#c9c2e3;font-size:12px;letter-spacing:.16em}
+.ev-instrument-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ev-instrument-card{min-height:112px;padding:15px 12px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;border:1px solid rgba(201,194,227,.22);border-radius:14px;background:rgba(42,30,77,.62);color:#f7f3ff;text-align:left;cursor:pointer}
+.ev-instrument-card>span{font-size:26px;margin-bottom:4px}.ev-instrument-card strong{font-size:14px}.ev-instrument-card small{font-size:11px;color:#bdb1d6}
+.ev-piano-stage{max-width:1440px;margin:0 auto;padding:18px 18px 22px;border:1px solid rgba(201,194,227,.28);border-radius:18px;background:linear-gradient(155deg,rgba(42,30,77,.88),rgba(14,11,29,.94));box-shadow:0 18px 42px rgba(0,0,0,.22)}
+.ev-instrument-mark{display:flex;justify-content:space-between;align-items:center;margin:0 0 14px;color:#d8d0ed;font-size:23px}.ev-instrument-mark span{font-size:10px;letter-spacing:.18em}
+.ev-key-scroll{width:100%;overflow-x:auto;overflow-y:hidden;padding:0 0 8px;overscroll-behavior-x:contain}
+.ev-keybed{position:relative;display:flex;height:clamp(150px,22vw,230px);min-width:980px;width:100%;user-select:none;touch-action:pan-x}
+.ev-key{position:relative;flex:0 0 calc(100% / var(--white-count));height:100%;padding:0;border:1px solid #a8a4b1;border-radius:0 0 5px 5px;cursor:pointer;touch-action: none}
+.ev-key.white{z-index:1;background:linear-gradient(180deg,#fff 0%,#f5f3f8 82%,#d8d4df 100%);box-shadow:inset 0 -5px 0 rgba(40,30,60,.08)}
+.ev-key.white span{position:absolute;bottom:7px;left:0;right:0;color:#777184;font-size:9px;pointer-events:none}
+.ev-key.black{position:absolute;top:0;z-index:2;width:1.42%;height:61%;border:1px solid #090711;border-radius:0 0 4px 4px;background:linear-gradient(90deg,#171323,#05040a 70%,#292333);box-shadow:0 5px 6px rgba(0,0,0,.42)}
+.ev-key.pressed,.ev-key.white.pressed{background:#bcb0e8;box-shadow:inset 0 -4px 0 rgba(60,40,100,.22)}
+.ev-key.black.pressed{background:#8067bb}
+.ev-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:1440px;margin:16px auto 0;padding:16px;border:1px solid rgba(201,194,227,.25);border-radius:16px;background:rgba(42,30,77,.56)}
+.ev-control{display:flex;flex-direction:column;gap:8px;color:#eee9f8}.ev-control label{font-size:11px;color:#c9c2e3;letter-spacing:.08em}.ev-control select{width:100%;min-height:42px;padding:0 12px;border:1px solid rgba(201,194,227,.34);border-radius:9px;background:#1b1530;color:#fff;font:inherit}
+.ev-octave>div{display:flex;align-items:center;gap:12px}.ev-octave button{width:38px;height:38px;border:1px solid rgba(201,194,227,.34);border-radius:8px;background:rgba(139,124,199,.22);color:#fff;font-size:20px}.ev-computer-note{max-width:1440px;margin:10px auto;color:#a99fc3;font-size:11px}
+.ev-other-instrument{max-width:1440px;margin:0 auto 18px;padding:22px;display:flex;align-items:center;gap:18px;border:1px solid rgba(201,194,227,.28);border-radius:16px;background:rgba(42,30,77,.65);color:#fff}.ev-big-icon{font-size:48px}.ev-other-instrument h2{margin:0 0 5px;font-size:20px}.ev-other-instrument p{margin:0;color:#c9c2e3;font-size:13px}.ev-play-area{max-width:1440px;margin:auto;padding:16px;border:1px solid rgba(201,194,227,.25);border-radius:16px;background:rgba(14,11,29,.65)}.ev-control-static{min-height:42px;display:flex;align-items:center;color:#fff}
+@media(max-width:700px){.ev-instrument-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.ev-instrument-card{min-height:100px}.ev-controls{grid-template-columns:1fr;padding:13px}.ev-piano-stage{padding:12px 10px}.ev-keybed{height:165px;min-width:1080px}.ev-featured-piano{min-height:94px;padding:15px}.ev-music-head{margin-bottom:18px}}
+@media(min-width:1024px){#main>.ev-music-head,#main>.ev-featured-piano,#main>.ev-instrument-group,#main>.ev-piano-stage,#main>.ev-controls,#main>.ev-computer-note,#main>.ev-other-instrument,#main>.ev-play-area{width:100%;max-width:1440px;margin-left:auto;margin-right:auto}}
