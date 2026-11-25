@@ -1,0 +1,16 @@
+/* EDUVERSE · Dashboard responsive refinements */
+.dashboard-page{background:transparent!important}
+.dashboard{max-width:1440px;margin:0 auto;color:#f6f2ff}
+.dashboard-title{white-space:normal}
+.dashboard-carousel{grid-auto-columns:minmax(230px,1fr)}
+.dashboard-card{white-space:normal}
+@media(max-width:760px){
+ .dashboard-head{display:block;margin-bottom:18px}
+ .dashboard-date{display:block;margin-top:10px}
+ .dashboard-hero{grid-template-columns:1fr;min-height:0;padding:22px}
+ .dashboard-orbit{width:170px;margin:12px auto 0}
+ .dashboard-carousel{grid-auto-columns:minmax(78%,1fr)}
+ .dashboard-lower{grid-template-columns:1fr}
+ .dashboard-section{margin-top:24px}
+}
+@media(prefers-reduced-motion:reduce){.dashboard-card,.dashboard-card-go{transition:none!important}}
