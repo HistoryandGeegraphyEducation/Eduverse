@@ -2646,3 +2646,25 @@ button:focus-visible,summary:focus-visible,.subj:focus-visible,.gpill:focus-visi
 @media(prefers-reduced-motion:reduce){
   .dashboard-card,.dashboard-card-go,#nav,#nav .rtoggle,#app>.stage>.main{transition:none!important}
 }
+
+
+/* ===== FIX: khôi phục nút mở menu điều hướng trên điện thoại ===== */
+@media(max-width:819px){
+  #nav>.rtoggle{
+    display:grid!important;
+    place-items:center!important;
+    flex:0 0 46px!important;
+    width:46px!important;
+    height:46px!important;
+    min-height:46px!important;
+    margin:0!important;
+    padding:0!important;
+    border-radius:50%!important;
+    opacity:1;
+    pointer-events:auto;
+  }
+  #nav.ropen>.rtoggle{
+    opacity:0;
+    pointer-events:none;
+  }
+}
