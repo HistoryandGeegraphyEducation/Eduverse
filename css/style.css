@@ -2567,7 +2567,8 @@ button:focus-visible,summary:focus-visible,.subj:focus-visible,.gpill:focus-visi
     background:rgba(139,124,199,.18)!important;color:#f5f1ff!important;
     box-shadow:none!important;transition:transform .25s ease,background .2s ease!important;
   }
-  #nav>.rtoggle svg{width:22px!important;height:22px!important}
+  #nav>.rtoggle svg{width:22px!important;height:22px!important;transition:transform .28s cubic-bezier(.2,.8,.2,1)!important}
+  #app.nav-expanded #nav>.rtoggle svg{transform:rotate(45deg)}
   #app>.stage>.main{padding-left:clamp(132px,12vw,176px)!important;transition:padding-left .28s ease}
   #app.nav-expanded>#nav{width:224px!important;padding-left:16px!important;padding-right:16px!important}
   #app.nav-expanded>.stage>.main{padding-left:clamp(258px,22vw,300px)!important}
