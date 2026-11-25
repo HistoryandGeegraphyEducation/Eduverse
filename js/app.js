@@ -366,16 +366,28 @@ function vLessons(){
 }
 
 function vLearn(){
+  if(window.renderDashboard){
+    window.renderDashboard(main,{
+      openCategory(id){
+        S.tab="cat";S.csub=id;S.croom=null;S.csim=null;
+        render();
+      },
+      openHome(){
+        S.tab="home";S.subj=null;S.grade=null;
+        render();
+      },
+      openPractice(){
+        S.tab="practice";render();
+      }
+    });
+    return;
+  }
   main.innerHTML=`<div class="crumb"><span>HỌC TẬP</span></div>`+
     `<div class="box">🏛️ LỊCH SỬ VÀ ĐỊA LÍ – LỚP 6`+
     `<p>Các bài Lịch sử và Địa lí lớp 6.</p>`+
     `<button class="cta" id="go">Vào học</button></div>`;
-
   $("#go").onclick=()=>{
-    S.tab="home";
-    S.subj="lsdl";
-    S.grade=6;
-    render();
+    S.tab="home";S.subj="lsdl";S.grade=6;render();
   };
 }
 // ===== DANH SÁCH HỌC LIỆU THEO PHÒNG =====
@@ -942,7 +954,20 @@ document.querySelectorAll("nav button").forEach(b=>
     if(o) rest();
   };
 
-  tog.addEventListener("click",()=>setOpen(true));
+  tog.addEventListener("click",()=>{
+    if(window.matchMedia("(min-width:1024px)").matches){
+      const expanded=!nav.classList.contains("nav-expanded");
+      nav.classList.toggle("nav-expanded",expanded);
+      document.querySelector("#app")?.classList.toggle("nav-expanded",expanded);
+      tog.setAttribute("aria-expanded",String(expanded));
+      tog.setAttribute("aria-label",expanded?"Thu gọn điều hướng":"Mở rộng điều hướng");
+      tog.innerHTML=expanded
+        ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>'
+        :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>';
+      return;
+    }
+    setOpen(true);
+  });
   close.addEventListener("click",()=>{
     setOpen(false);
     tog.focus({preventScroll:true});
