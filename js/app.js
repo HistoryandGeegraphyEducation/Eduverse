@@ -961,9 +961,6 @@ document.querySelectorAll("nav button").forEach(b=>
       document.querySelector("#app")?.classList.toggle("nav-expanded",expanded);
       tog.setAttribute("aria-expanded",String(expanded));
       tog.setAttribute("aria-label",expanded?"Thu gọn điều hướng":"Mở rộng điều hướng");
-      tog.innerHTML=expanded
-        ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>'
-        :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>';
       return;
     }
     setOpen(true);
